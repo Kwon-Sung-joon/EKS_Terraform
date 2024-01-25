@@ -3,7 +3,7 @@ resource "aws_eks_cluster" "eks-cluster" {
   role_arn = var.eks-cluster-role
   version  = var.eks-cluster-version
   vpc_config {
-    subnet_ids              = [var.subnet_id1, var.subnet_id2]
+    subnet_ids              = var.subnet_ids
     endpoint_private_access = true
     endpoint_public_access  = true
   }

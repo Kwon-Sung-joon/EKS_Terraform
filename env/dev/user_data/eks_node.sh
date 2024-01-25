@@ -31,4 +31,5 @@ set -ex
 /etc/eks/bootstrap.sh ${CLUSTER-NAME} \
   --b64-cluster-ca  ${B64-CLUSTER-CA}\
   --apiserver-endpoint  ${APISERVER-ENDPOINT}\
-  --dns-cluster-ip  ${DNS-CLUSTER-IP}
+  --dns-cluster-ip  ${DNS-CLUSTER-IP}\
+  --container-runtime containerd

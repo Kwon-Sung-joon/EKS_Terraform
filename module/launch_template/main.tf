@@ -6,3 +6,7 @@ resource "aws_launch_template" "ec2_lt" {
   vpc_security_group_ids      = var.vpc_security_group_ids
   user_data              = var.user_data
 }
+
+output "id" {
+  value = aws_launch_template.ec2_lt.id
+}

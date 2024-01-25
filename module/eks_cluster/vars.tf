@@ -1,5 +1,7 @@
-variable "subnet_id1" {}
-variable "subnet_id2" {}
+
+variable "subnet_ids" {
+  type = list(string)
+}
 variable "alltag" {}
 variable "eks-cluster-role" {}
 variable "eks-cluster-version" {}

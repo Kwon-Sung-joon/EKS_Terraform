@@ -68,36 +68,45 @@ module "private_subnet_rtb_nat" {
   subnet_ids = [module.private_subnet1.subnet_id, module.private_subnet2.subnet_id]
   alltag     = var.alltag
 }
-
-
-
 module "eks_cluster" {
   source            = "../../module/eks_cluster"
-  subnet_id1        = module.public_subnet1.subnet_id
-  subnet_id2        = module.public_subnet2.subnet_id
+  subnet_ids        = [module.public_subnet1.subnet_id,
+    module.public_subnet2.subnet_id,
+    module.private_subnet1.subnet_id,
+    module.private_subnet2.subnet_id]
   alltag            = var.alltag
   service_ipv4_cidr = var.eks_cluster_service_ipv4_cidr
   depends_on = [
     module.eks_cluster_iam_role
   ]
-  eks-cluster-role    = module.eks_node_group_iam_role.iam_role
+  eks-cluster-role    = module.eks_cluster_iam_role.iam_role
   eks-cluster-version = 1.26
 }
+resource "aws_security_group_rule" "eks_cluster_sg" {
+  type              = "ingress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  cidr_blocks       = [var.vpc_cidr]
+  security_group_id = module.eks_cluster.cluster_sg_id
+  depends_on = [module.eks_cluster]
+}
 
-/*
 module "eks_node_groups" {
   source       = "../../module/eks_node_groups"
   alltag       = var.alltag
   cluster_name = module.eks_cluster.cluster_name
-  subnet_id1   = module.public_subnet1.subnet_id
-  subnet_id2   = module.public_subnet2.subnet_id
-  node_types   = var.node_types
+  subnet_ids        = [module.private_subnet1.subnet_id,module.private_subnet2.subnet_id]
+ // node_types   = var.node_types
   depends_on = [
-    module.eks_node_group_iam_role
+    module.eks_node_group_iam_role, aws_security_group_rule.eks_cluster_sg
   ]
   eks-ng-role = module.eks_node_group_iam_role.iam_role
+  desired     = 1
+  max         = 4
+  min = 0
+  lt_id = module.eks_node_lt.id
 }
-*/
 /*
 module "ecr_repos" {
   source         = "../../module/ecr"
@@ -136,10 +145,21 @@ module "eks_node_lt" {
   lt_ec2_type = "t3.medium"
   lt_image_id = "ami-06aaf7c21e7e74e2a"
   lt_name     = "${var.alltag}-eks-ng-lt"
+
+
   user_data = base64encode(templatefile("${path.module}/user_data/eks_node.sh", { CLUSTER-NAME = module.eks_cluster.cluster_name,
     B64-CLUSTER-CA     = module.eks_cluster.kubeconfig-certificate-authority-data,
     APISERVER-ENDPOINT = module.eks_cluster.endpoint,
   DNS-CLUSTER-IP = cidrhost(var.eks_cluster_service_ipv4_cidr, 10) }))
-  vpc_security_group_ids = ["sg-0270a092998227588"]
-  depends_on             = [module.eks_cluster]
+  vpc_security_group_ids = [module.eks_node_sg.id]
+  depends_on             = [module.eks_cluster, module.eks_node_sg]
+}
+
+module "eks_node_sg" {
+  source = "../../module/sg"
+  alltag  = "ksj-eks-node"
+  sg_desc = "ksj-eks-node-sg"
+  sg_name = "ksj-eks-node-sg"
+  vpc_id  = module.vpc.vpc_id
+  depends_on = [module.vpc]
 }

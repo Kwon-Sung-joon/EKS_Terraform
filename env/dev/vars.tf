@@ -5,11 +5,11 @@ data "aws_availability_zones" "available" {
 variable "alltag" {
   description = "name"
 }
-
+/*
 variable "node_types" {
   description = "insert eks node types"
 }
-
+*/
 
 variable "vpc_cidr" {
   description = "VPC CIDR BLOCK : x.x.x.x/x"
