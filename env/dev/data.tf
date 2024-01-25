@@ -21,8 +21,8 @@ data "aws_iam_policy_document" "eks_node_group_role" {
 data "template_file" "eks_userdata" {
   template = "./user_data/eks_node.sh"
   vars = {
-    B64-CLUSTER-CA = module.eks_cluster.kubeconfig-certificate-authority-data
+    B64-CLUSTER-CA     = module.eks_cluster.kubeconfig-certificate-authority-data
     APISERVER-ENDPOINT = module.eks_cluster.endpoint
-    DNS-CLUSTER-IP = cidrhost(var.vpc_cidr, 10)
+    DNS-CLUSTER-IP     = cidrhost(var.vpc_cidr, 10)
   }
 }
