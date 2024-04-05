@@ -11,3 +11,4 @@ variable "public_or_private" {
     false = "private"
   }
 }
+

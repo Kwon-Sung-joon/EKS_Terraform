@@ -4,14 +4,36 @@ module "vpc" {
   vpc_cidr = var.vpc_cidr
   alltag   = var.alltag
 }
-
+/*
 module "nat_gw" {
   source        = "../../module/nat"
   alltag        = var.alltag
   public_subnet = module.public_subnet1.subnet_id
   depends_on    = [module.vpc, module.public_subnet1]
 }
+*/
 
+module "subnets" {
+  source = "../../module/subnets"
+  for_each = tomap({
+    pub1={
+      vpc_id=module.vpc.vpc_id
+      subnet_cidr="192.168.0.0/24"
+      subnet_az=data.aws_availability_zones.available.names["0"]
+      is_public=true
+      alltag=var.alltag
+    }
+    pub2={
+      vpc_id=module.vpc.vpc_id
+      subnet_cidr="192.168.1.0/24"
+      subnet_az=data.aws_availability_zones.available.names["2"]
+      is_public=true
+      alltag=var.alltag
+    }
+  })
+  subnet_config=each.value
+}
+/*
 module "public_subnet1" {
   source             = "../../module/subnet"
   vpc_id             = module.vpc.vpc_id
@@ -20,7 +42,6 @@ module "public_subnet1" {
   is_public          = true
   alltag             = var.alltag
 }
-
 module "public_subnet2" {
   source = "../../module/subnet"
 
@@ -30,7 +51,6 @@ module "public_subnet2" {
   is_public          = true
   alltag             = var.alltag
 }
-
 module "private_subnet1" {
   source = "../../module/subnet"
 
@@ -40,8 +60,6 @@ module "private_subnet1" {
   is_public          = false
   alltag             = var.alltag
 }
-
-
 module "private_subnet2" {
   source = "../../module/subnet"
 
@@ -51,8 +69,8 @@ module "private_subnet2" {
   is_public          = false
   alltag             = var.alltag
 }
-
-
+*/
+/*
 module "public_subnet_rtb_igw" {
   source     = "../../module/rtb_igw"
   vpc_id     = module.vpc.vpc_id
@@ -60,7 +78,8 @@ module "public_subnet_rtb_igw" {
   subnet_ids = [module.public_subnet1.subnet_id, module.public_subnet2.subnet_id]
   alltag     = var.alltag
 }
-
+*/
+/*
 module "private_subnet_rtb_nat" {
   source     = "../../module/rtb_nat"
   vpc_id     = module.vpc.vpc_id
@@ -83,8 +102,6 @@ module "eks_cluster" {
   eks-cluster-version = 1.26
   vpc_cidr = var.vpc_cidr
 }
-
-
 module "eks_node_groups" {
   source       = "../../module/eks_node_groups"
   alltag       = var.alltag
@@ -100,6 +117,46 @@ module "eks_node_groups" {
   min = 0
   lt_id = module.eks_node_lt.id
 }
+
+module "eks_cluster_iam_role" {
+  source             = "../../module/iam_role"
+  name               = "${var.alltag}-eks-cluster-role"
+  tag_name           = "${var.alltag}-IAM-ROLE-EKS-CLUSTER"
+  assume_role_policy = data.aws_iam_policy_document.eks_cluster_role.json
+  mgd_policies       = var.mgd_policies_for_eks_cluster
+
+}
+module "eks_node_group_iam_role" {
+  source             = "../../module/iam_role"
+  name               = "${var.alltag}-eks-nodegroup-role"
+  tag_name           = "${var.alltag}-IAM-ROLE-EKS-NODEGROUP"
+  assume_role_policy = data.aws_iam_policy_document.eks_node_group_role.json
+  mgd_policies       = var.mgd_policies_for_eks_node_group
+}
+module "eks_node_lt" {
+  source      = "../../module/launch_template"
+  lt_ec2_type = "t3.medium"
+  lt_image_id = "ami-06aaf7c21e7e74e2a"
+  lt_name     = "${var.alltag}-eks-ng-lt"
+
+
+  user_data = base64encode(templatefile("${path.module}/user_data/eks_node.sh", { CLUSTER-NAME = module.eks_cluster.cluster_name,
+    B64-CLUSTER-CA     = module.eks_cluster.kubeconfig-certificate-authority-data,
+    APISERVER-ENDPOINT = module.eks_cluster.endpoint,
+  DNS-CLUSTER-IP = cidrhost(var.eks_cluster_service_ipv4_cidr, 10) }))
+  vpc_security_group_ids = [module.eks_node_sg.id]
+  depends_on             = [module.eks_cluster, module.eks_node_sg]
+}
+module "eks_node_sg" {
+  source = "../../module/sg"
+  alltag  = "ksj-eks-node"
+  sg_desc = "ksj-eks-node-sg"
+  sg_name = "ksj-eks-node-sg"
+  vpc_id  = module.vpc.vpc_id
+  depends_on = [module.vpc]
+}
+*/
+
 /*
 module "ecr_repos" {
   source         = "../../module/ecr"
@@ -116,43 +173,3 @@ module "bastion" {
   user_data    = "./user_data/install_docker.sh"
 }
 */
-module "eks_cluster_iam_role" {
-  source             = "../../module/iam_role"
-  name               = "${var.alltag}-eks-cluster-role"
-  tag_name           = "${var.alltag}-IAM-ROLE-EKS-CLUSTER"
-  assume_role_policy = data.aws_iam_policy_document.eks_cluster_role.json
-  mgd_policies       = var.mgd_policies_for_eks_cluster
-
-}
-
-module "eks_node_group_iam_role" {
-  source             = "../../module/iam_role"
-  name               = "${var.alltag}-eks-nodegroup-role"
-  tag_name           = "${var.alltag}-IAM-ROLE-EKS-NODEGROUP"
-  assume_role_policy = data.aws_iam_policy_document.eks_node_group_role.json
-  mgd_policies       = var.mgd_policies_for_eks_node_group
-}
-
-module "eks_node_lt" {
-  source      = "../../module/launch_template"
-  lt_ec2_type = "t3.medium"
-  lt_image_id = "ami-06aaf7c21e7e74e2a"
-  lt_name     = "${var.alltag}-eks-ng-lt"
-
-
-  user_data = base64encode(templatefile("${path.module}/user_data/eks_node.sh", { CLUSTER-NAME = module.eks_cluster.cluster_name,
-    B64-CLUSTER-CA     = module.eks_cluster.kubeconfig-certificate-authority-data,
-    APISERVER-ENDPOINT = module.eks_cluster.endpoint,
-  DNS-CLUSTER-IP = cidrhost(var.eks_cluster_service_ipv4_cidr, 10) }))
-  vpc_security_group_ids = [module.eks_node_sg.id]
-  depends_on             = [module.eks_cluster, module.eks_node_sg]
-}
-
-module "eks_node_sg" {
-  source = "../../module/sg"
-  alltag  = "ksj-eks-node"
-  sg_desc = "ksj-eks-node-sg"
-  sg_name = "ksj-eks-node-sg"
-  vpc_id  = module.vpc.vpc_id
-  depends_on = [module.vpc]
-}
