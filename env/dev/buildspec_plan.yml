@@ -8,5 +8,4 @@ phases:
       - terraform init
   build:
     commands:
-      - cd ./env/dev/
       - terraform plan
