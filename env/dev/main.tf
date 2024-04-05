@@ -24,9 +24,6 @@ output "subent_ids1" {
     for k, subnet in module.subnets : k => subnet.subnet_id
   }
 }
-output "subnet_ids" {
-  value = module.subnets.subnet_id
-}
 /*
 module "public_subnet1" {
   source             = "../../module/subnet"
