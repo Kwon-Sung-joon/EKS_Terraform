@@ -31,9 +31,24 @@ module "subnets" {
       is_public=true
       alltag=var.alltag
     }
+    pri2={
+      vpc_id=module.vpc.vpc_id
+      subnet_cidr="192.168.2.0/24"
+      subnet_az=data.aws_availability_zones.available.names[1]
+      is_public=true
+      alltag=var.alltag
+    }
+    pri2={
+      vpc_id=module.vpc.vpc_id
+      subnet_cidr="192.168.3.0/24"
+      subnet_az=data.aws_availability_zones.available.names[3]
+      is_public=true
+      alltag=var.alltag
+    }
   })
   subnet_config=each.value
 }
+
 /*
 module "public_subnet1" {
   source             = "../../module/subnet"
