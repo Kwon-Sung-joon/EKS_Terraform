@@ -5,7 +5,7 @@ phases:
       - pwd
       - ls -al
       - cd ./env/dev/
-      - terraform init
   build:
     commands:
+      - terraform init
       - terraform plan
