@@ -81,16 +81,9 @@ module "eks_cluster" {
   ]
   eks-cluster-role    = module.eks_cluster_iam_role.iam_role
   eks-cluster-version = 1.26
+  vpc_cidr = var.vpc_cidr
 }
-resource "aws_security_group_rule" "eks_cluster_sg" {
-  type              = "ingress"
-  from_port         = 0
-  to_port           = 0
-  protocol          = "-1"
-  cidr_blocks       = [var.vpc_cidr]
-  security_group_id = module.eks_cluster.cluster_sg_id
-  depends_on = [module.eks_cluster]
-}
+
 
 module "eks_node_groups" {
   source       = "../../module/eks_node_groups"
@@ -99,7 +92,7 @@ module "eks_node_groups" {
   subnet_ids        = [module.private_subnet1.subnet_id,module.private_subnet2.subnet_id]
  // node_types   = var.node_types
   depends_on = [
-    module.eks_node_group_iam_role, aws_security_group_rule.eks_cluster_sg
+    module.eks_node_group_iam_role
   ]
   eks-ng-role = module.eks_node_group_iam_role.iam_role
   desired     = 1

@@ -6,3 +6,4 @@ variable "alltag" {}
 variable "eks-cluster-role" {}
 variable "eks-cluster-version" {}
 variable "service_ipv4_cidr" {}
+variable "vpc_cidr" {}
