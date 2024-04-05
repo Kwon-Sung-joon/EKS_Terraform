@@ -61,13 +61,14 @@ variable "subnets" {
 
 
 locals {
-  pub1={
+  pub1=tomap({
     vpc_id=module.vpc.vpc_id
     subnet_cidr="192.168.0.0/24"
     subnet_az=data.aws_availability_zones.available.names[0]
     is_public=true
     alltag=var.alltag
-  }
+
+  })
   pub2={
     vpc_id=module.vpc.vpc_id
     subnet_cidr="192.168.1.0/24"
