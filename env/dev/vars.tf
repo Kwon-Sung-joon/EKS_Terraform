@@ -58,8 +58,6 @@ variable "subnets" {
   }))
   default = {}
 }
-
-
 locals {
   subnets={
     pub1={
