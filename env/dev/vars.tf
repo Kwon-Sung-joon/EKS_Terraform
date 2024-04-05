@@ -17,17 +17,6 @@ variable "vpc_cidr" {
   default     = "192.168.0.0/16"
 }
 
-variable "subnets" {
-  type = map(object({
-    vpc_id = string
-    subnet_cidr=string
-    subnet_az = number
-    is_public = bool
-    alltag = any
-  }))
-
-}
-
 variable "public_subnet1_cidr" {
   description = "Public Subnet CIDR BLOCK : x.x.x.x/x"
   default     = "192.168.0.0/24"
