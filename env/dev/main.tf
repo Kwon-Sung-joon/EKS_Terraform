@@ -64,15 +64,15 @@ module "private_subnet2" {
   alltag             = var.alltag
 }
 */
-/*
+
 module "public_subnet_rtb_igw" {
   source     = "../../module/rtb_igw"
   vpc_id     = module.vpc.vpc_id
   igw_id     = module.vpc.igw_id
-  subnet_ids = [module.public_subnet1.subnet_id, module.public_subnet2.subnet_id]
+  subnet_ids = [module.subnets.subnet_id["pub1"],module.subnets.subnet_id["pub2"]]
   alltag     = var.alltag
 }
-*/
+
 /*
 module "private_subnet_rtb_nat" {
   source     = "../../module/rtb_nat"
