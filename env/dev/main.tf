@@ -19,14 +19,11 @@ module "subnets" {
   for_each = merge(var.subnets,local.subnets)
   subnet_config=each.value
 }
-
-output "subent_ids" {
+output "subent_ids1" {
   value = {
     for k, subnet in module.subnets : k => subnet.subnet_id
   }
 }
-
-
 /*
 module "public_subnet1" {
   source             = "../../module/subnet"
@@ -69,7 +66,7 @@ module "public_subnet_rtb_igw" {
   source     = "../../module/rtb_igw"
   vpc_id     = module.vpc.vpc_id
   igw_id     = module.vpc.igw_id
-  subnet_ids = [module.subnets.subnet_id["pub1"],module.subnets.subnet_id["pub2"]]
+  subnet_ids = [module.subnets.subnet_id]
   alltag     = var.alltag
 }
 
