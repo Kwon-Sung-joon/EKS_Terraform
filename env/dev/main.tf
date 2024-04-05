@@ -20,6 +20,13 @@ module "subnets" {
   subnet_config=each.value
 }
 
+output "subent_ids" {
+  value = {
+    for k, subnet in module.subnets : k => subnet.subnet_id
+  }
+}
+
+
 /*
 module "public_subnet1" {
   source             = "../../module/subnet"

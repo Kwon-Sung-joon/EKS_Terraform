@@ -113,7 +113,6 @@ variable "mgd_policies_for_eks_cluster" {
     "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController",
   ]
 }
-
 variable "mgd_policies_for_eks_node_group" {
   type = set(string)
   default = [
@@ -124,7 +123,6 @@ variable "mgd_policies_for_eks_node_group" {
     "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess",
   ]
 }
-
 variable "eks_cluster_service_ipv4_cidr" {
   default = "10.100.0.0/16"
 }
