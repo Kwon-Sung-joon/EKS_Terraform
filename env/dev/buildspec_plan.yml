@@ -2,9 +2,9 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - cd env/dev/
+      - cd .env/dev/
       - terraform init
   build:
     commands:
-      - cd env/dev/
+      - cd .env/dev/
       - terraform plan
