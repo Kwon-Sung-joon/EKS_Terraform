@@ -16,8 +16,8 @@ module "nat_gw" {
 
 module "subnets" {
   source = "../../module/subnets"
-  for_each = merge(var.subnets,local.pri1,local.pri2,local.pub1,local.pub2)
-  subnet_config=each.key
+  for_each = merge(map(var.subnets,local.pri1,local.pri2,local.pub1,local.pub2))
+  subnet_config=each.value
 }
 
 /*
