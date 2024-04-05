@@ -4,6 +4,7 @@ data "aws_availability_zones" "available" {
 
 variable "alltag" {
   description = "name"
+  default = "test"
 }
 /*
 variable "node_types" {
