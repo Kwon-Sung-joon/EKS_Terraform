@@ -3,9 +3,8 @@ resource "aws_subnet" "subnet" {
   cidr_block              = var.subnet_config.public_subnet_cidr
   availability_zone       = var.subnet_config.public_subnet_az
   map_public_ip_on_launch = var.subnet_config.is_public
-
   tags = {
-    Name = "${var.subnet_config.alltag}-subnet-${var.subnet_config.public_or_private[var.subnet_config.is_public]}"
- Owner = "ksj"
+    Name = "${var.subnet_config.alltag}-subnet-${var.public_or_private[var.subnet_config.is_public]}"
+    Owner = "ksj"
   }
 }

@@ -22,6 +22,7 @@ module "subnets" {
       subnet_az=data.aws_availability_zones.available.names["0"]
       is_public=true
       alltag=var.alltag
+      public_or_private="public"
     }
     pub2={
       vpc_id=module.vpc.vpc_id
