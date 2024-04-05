@@ -18,6 +18,7 @@ data "aws_iam_policy_document" "eks_node_group_role" {
   }
 }
 
+/*
 data "template_file" "eks_userdata" {
   template = "./user_data/eks_node.sh"
   vars = {
@@ -26,3 +27,4 @@ data "template_file" "eks_userdata" {
     DNS-CLUSTER-IP     = cidrhost(var.vpc_cidr, 10)
   }
 }
+*/
