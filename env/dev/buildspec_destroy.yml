@@ -5,4 +5,5 @@ phases:
       - cd ./env/dev/
   build:
     commands:
+      - terraform init
       - terraform destroy --auto-approve
