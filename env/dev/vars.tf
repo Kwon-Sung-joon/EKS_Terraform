@@ -50,12 +50,11 @@ variable "private_subnet2_az" {
 
 variable "subnets" {
   type=map(object({
-    vpc_id=string
-    subnet_cidr=string
-    subnet_az=string
+    vpc_id=any
+    subnet_cidr=any
+    subnet_az=any
     is_public=bool
     alltag=any
-    public_or_private=string
   }))
   default = {}
 }
