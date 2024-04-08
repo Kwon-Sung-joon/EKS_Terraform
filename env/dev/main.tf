@@ -19,7 +19,7 @@ module "subnets" {
   for_each = merge(var.subnets,local.subnets)
   subnet_config=each.value
 }
-output "subent_ids1" {
+output "subnet_ids" {
   value = {
     for k, subnet in module.subnets : k => subnet.subnet_id
   }
