@@ -13,16 +13,15 @@ module "nat_gw" {
 }
 */
 
-
 module "subnets" {
   source = "../../module/subnets"
   for_each = merge(var.subnets,local.subnets)
   subnet_config=each.value
 }
 output "subnet_ids" {
-  value = {
-    for k, subnet in module.subnets : k => subnet.subnet_id
-  }
+  value = [
+    for subnet in module.subnets :subnet.subnet_id
+  ]
 }
 /*
 module "public_subnet1" {
