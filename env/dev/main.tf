@@ -19,7 +19,7 @@ module "subnets" {
   subnet_config=each.value
 }
 output "subnet_ids" {
-  value = module.subnets.*.subnet_id
+  value =[ for subnet in module.subnets : subnet.subnet_id ]
 }
 /*
 module "public_subnet1" {
