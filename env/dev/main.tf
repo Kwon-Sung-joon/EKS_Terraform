@@ -32,7 +32,7 @@ output "pri_subnet_ids" {
 
 */
 output "pub_subnet_ids" {
-  value = module.pub_subnets.subnet_id
+  value = flatten(module.pub_subnets.subnet_id)
 }
 /*
 module "public_subnet1" {
