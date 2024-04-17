@@ -13,14 +13,23 @@ module "nat_gw" {
 }
 */
 
-module "subnets" {
+module "pub_subnets" {
   source = "../../module/subnets"
-  for_each = merge(var.subnets,local.subnets)
+  for_each = merge(var.subnets,local.pub_subnets)
   subnet_config=each.value
 }
-output "subnet_ids" {
-  value =[ for subnet in module.subnets : subnet.subnet_id ]
+module "pri_subnets" {
+  source = "../../module/subnets"
+  for_each = merge(var.subnets,local.pri_subnets)
+  subnet_config=each.value
 }
+output "pub_subnet_ids" {
+  value =[ for subnet in module.pub_subnets : subnet.subnet_id ]
+}
+output "pri_subnet_ids" {
+  value =[ for subnet in module.pri_subnets : subnet.subnet_id ]
+}
+
 /*
 module "public_subnet1" {
   source             = "../../module/subnet"
