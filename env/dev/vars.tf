@@ -65,14 +65,14 @@ locals {
       subnet_cidr = "192.168.0.0/24"
       subnet_az   = data.aws_availability_zones.available.names[0]
       is_public   = true
-      alltag      = var.alltag
+      alltag      = "pub1"
     }
     pub2 = {
       vpc_id      = module.vpc.vpc_id
       subnet_cidr = "192.168.1.0/24"
       subnet_az   = data.aws_availability_zones.available.names[2]
       is_public   = true
-      alltag      = var.alltag
+      alltag      = "pub2"
     }
   }
   pri_subnets= {
@@ -81,14 +81,14 @@ locals {
       subnet_cidr = "192.168.2.0/24"
       subnet_az   = data.aws_availability_zones.available.names[1]
       is_public   = false
-      alltag      = var.alltag
+      alltag      = "pri1"
     }
     pri2 = {
       vpc_id      = module.vpc.vpc_id
       subnet_cidr = "192.168.3.0/24"
       subnet_az   = data.aws_availability_zones.available.names[3]
       is_public   = false
-      alltag      = var.alltag
+      alltag      = "pri2"
     }
   }
 }
