@@ -116,7 +116,7 @@ module "eks_node_groups" {
 */
 module "iam_roles" {
   source             = "../../module/iam_role"
-  for_each = merge(var.iam_roles)
+  for_each = var.iam_roles
   iam_role_config=each.value
 }
 
