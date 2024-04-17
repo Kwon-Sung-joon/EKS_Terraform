@@ -60,18 +60,27 @@ locals {
 }
 
 variable "iam_role_eks_cluster" {
-  name = "IAM_ROLE_EKS_CLUSTER"
-  tag_name = "IAM_ROLE_EKS_CLUSTER"
-  assume_role_policy = data.aws_iam_policy_document.eks_cluster_role.json
-  mgd_policies =  [
-    "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy",
-    "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController",
-  ]
+  type = object({
+    name = string
+    tag_name = string
+    assume_role_policy= any
+    mgd_policies = list(string)
+  }
+    )
+  default = {
+    name = "IAM_ROLE_EKS_CLUSTER"
+    tag_name = "IAM_ROLE_EKS_CLUSTER"
+    assume_role_policy = data.aws_iam_policy_document.eks_cluster_role.json
+    mgd_policies =  [
+      "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy",
+      "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController",
+    ]
+  }
 }
 
 variable "iam_role_eks_node_group_role" {
-  name = "IAM_ROLE_EKS_NODE_GRUOP"
-  tag_name = "IAM_ROLE_EKS_NODE_GRUOP"
+  name = "IAM_ROLE_EKS_NODE_GROUP"
+  tag_name = "IAM_ROLE_EKS_NODE_GROUP"
   assume_role_policy = data.aws_iam_policy_document.eks_node_group_role.json
   mgd_policies = [
     "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
