@@ -60,22 +60,13 @@ locals {
 }
 
 variable "iam_role_eks_cluster" {
-  type = object({
-    name = string
-    tag_name = string
-    assume_role_policy= any
-    mgd_policies = list(string)
-  }
-    )
-  default = {
     name = "IAM_ROLE_EKS_CLUSTER"
     tag_name = "IAM_ROLE_EKS_CLUSTER"
     assume_role_policy = data.aws_iam_policy_document.eks_cluster_role.json
     mgd_policies =  [
       "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy",
       "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController",
-    ]
-  }
+      ]
 }
 
 variable "iam_role_eks_node_group_role" {

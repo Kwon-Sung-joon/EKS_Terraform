@@ -78,7 +78,10 @@ module "eks_node_groups" {
 */
 module "eks_cluster_iam_role" {
   source             = "../../module/iam_role"
-  iam_role_config = var.iam_role_eks_cluster
+  name = var.iam_role_eks_cluster.name
+  tag_name = var.iam_role_eks_cluster.tag_name
+  assume_role_policy = var.iam_role_eks_cluster.assume_role_policy
+  mgd_policies = var.iam_role_eks_cluster.mgd_policies
 }
 
 
