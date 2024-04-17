@@ -23,7 +23,7 @@ module "pri_subnets" {
   subnet_config=each.value
 }
 output "pub_subnet_ids" {
-  value =module.pub_subnets.*.subnet_id
+  value = string([ for subnet in module.pub_subnets : subnet.subnet_id])
 }
 output "pri_subnet_ids" {
   value =[ for subnet in module.pri_subnets : subnet.subnet_id ]
