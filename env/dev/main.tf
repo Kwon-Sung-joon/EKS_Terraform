@@ -29,43 +29,6 @@ output "pub_subnet_ids" {
 output "pri_subnet_ids" {
   value = flatten([for subnet_info in values(module.pri_subnets) : subnet_info.subnet_id])
 }
-/*
-module "public_subnet1" {
-  source             = "../../module/subnet"
-  vpc_id             = module.vpc.vpc_id
-  public_subnet_cidr = var.public_subnet1_cidr
-  public_subnet_az   = data.aws_availability_zones.available.names["${var.public_subnet1_az}"]
-  is_public          = true
-  alltag             = var.alltag
-}
-module "public_subnet2" {
-  source = "../../module/subnet"
-
-  vpc_id             = module.vpc.vpc_id
-  public_subnet_cidr = var.public_subnet2_cidr
-  public_subnet_az   = data.aws_availability_zones.available.names["${var.public_subnet2_az}"]
-  is_public          = true
-  alltag             = var.alltag
-}
-module "private_subnet1" {
-  source = "../../module/subnet"
-
-  vpc_id             = module.vpc.vpc_id
-  public_subnet_cidr = var.private_subnet1_cidr
-  public_subnet_az   = data.aws_availability_zones.available.names["${var.private_subnet1_az}"]
-  is_public          = false
-  alltag             = var.alltag
-}
-module "private_subnet2" {
-  source = "../../module/subnet"
-
-  vpc_id             = module.vpc.vpc_id
-  public_subnet_cidr = var.private_subnet2_cidr
-  public_subnet_az   = data.aws_availability_zones.available.names["${var.private_subnet2_az}"]
-  is_public          = false
-  alltag             = var.alltag
-}
-*/
 module "public_subnet_rtb_igw" {
   source     = "../../module/rtb_igw"
   vpc_id     = module.vpc.vpc_id
@@ -73,7 +36,6 @@ module "public_subnet_rtb_igw" {
   subnet_ids = flatten([for subnet_info in values(module.pub_subnets) : subnet_info.subnet_id])
   alltag     = var.alltag
 }
-
 /*
 module "private_subnet_rtb_nat" {
   source     = "../../module/rtb_nat"
@@ -114,10 +76,9 @@ module "eks_node_groups" {
   lt_id = module.eks_node_lt.id
 }
 */
-module "iam_roles" {
+module "eks_cluster_iam_role" {
   source             = "../../module/iam_role"
-  for_each = var.iam_roles
-  iam_role_config=each.value
+  iam_role_config = var.iam_role_eks_cluster
 }
 
 
