@@ -59,28 +59,29 @@ locals {
   }
 }
 
-variable "iam_roles" {
-  type = map(object({
-    name               = string
-    tag_name           = string
+variable "iam_roles"{
+  type=map(object({
+    name=string
+    tag_name=string
     assume_role_policy = any
-    mgd_policies       = any
+    mgd_policies = any
   }))
   default = {
-    EKS_CLUSTER_ROLE = {
-      name               = "TEST"
-      tag_name           = "TEST2"
-      assume_role_policy = data.aws_iam_policy_document.eks_cluster_role.json
-      mgd_policies       = [
+    EKS_CLUSTER_ROLE ={
+      name = "EKS_CLUSTER_ROLE"
+      tag_name = "EKS_CLUSTER_ROLE"
+      #assume_role_policy = data.aws_iam_policy_document.eks_cluster_role.json
+      assume_role_policy = "template/eks_cluster_role_policy.json"
+      mgd_policies = [
         "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy",
         "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController",
       ]
     }
-    EKS_NG_ROLE = {
-      name               = "TEST"
-      tag_name           = "TEST2"
-      assume_role_policy = data.aws_iam_policy_document.eks_node_group_role.json
-      mgd_policies       = [
+    EKS_NG_ROLE ={
+      name = "EKS_NG_ROLE"
+      tag_name = "EKS_NG_ROLE"
+      assume_role_policy = "template/eks_node_group_role_policy.json"
+      mgd_policies = [
         "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
         "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
         "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
@@ -89,7 +90,7 @@ variable "iam_roles" {
       ]
     }
   }
-}
+  }
 
 
   /*
