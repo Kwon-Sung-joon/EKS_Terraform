@@ -71,7 +71,7 @@ variable "iam_roles"{
       name = "EKS_CLUSTER_ROLE"
       tag_name = "EKS_CLUSTER_ROLE"
       #assume_role_policy = data.aws_iam_policy_document.eks_cluster_role.json
-      assume_role_policy = data.aws_iam_policy_document.eks_cluster_role.json
+      assume_role_policy = "template/eks_cluster_role_policy.json"
       mgd_policies = [
         "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy",
         "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController",
