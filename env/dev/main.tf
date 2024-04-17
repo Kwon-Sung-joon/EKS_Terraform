@@ -12,7 +12,6 @@ module "nat_gw" {
   depends_on    = [module.vpc, module.public_subnet1]
 }
 */
-
 module "pub_subnets" {
   source = "../../module/subnets"
   for_each = merge(var.subnets,local.pub_subnets)
@@ -24,7 +23,7 @@ module "pri_subnets" {
   subnet_config=each.value
 }
 output "pub_subnet_ids" {
-  value =[ for subnet in module.pub_subnets : subnet.subnet_id ]
+  value =module.pub_subnets.*.subnet_id
 }
 output "pri_subnet_ids" {
   value =[ for subnet in module.pri_subnets : subnet.subnet_id ]
