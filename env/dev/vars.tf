@@ -78,7 +78,7 @@ locals {
       assume_role_policy = data.aws_iam_policy_document.eks_cluster_role.json
       mgd_policies       = [
         "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy",
-        "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
+        "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController",
       ]
     }
   }
@@ -92,7 +92,7 @@ locals {
         "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
         "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
         "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy",
-        "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
+        "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess",
       ]
     }
   }
