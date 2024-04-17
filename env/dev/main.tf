@@ -23,12 +23,15 @@ module "pri_subnets" {
   subnet_config=each.value
 }
 output "pub_subnet_ids" {
-  value = module.pub_subnets.subnet_id
+  value = flatten([for subnet_info in values(module.pub_subnets) : subnet_info.subnet_id])
 }
-#output "pri_subnet_ids" {
-#  value = flatten([for subnet_info in values(module.pri_subnets) : subnet_info.subnet_id])
-#}
+output "pri_subnet_ids" {
+  value = flatten([for subnet_info in values(module.pri_subnets) : subnet_info.subnet_id])
+}
 
+output "test" {
+  value = module.pub_subnets.test
+}
 /*
 module "public_subnet1" {
   source             = "../../module/subnet"
@@ -66,14 +69,15 @@ module "private_subnet2" {
   alltag             = var.alltag
 }
 */
-
+/*
 module "public_subnet_rtb_igw" {
   source     = "../../module/rtb_igw"
   vpc_id     = module.vpc.vpc_id
   igw_id     = module.vpc.igw_id
-  subnet_ids = module.pub_subnets.subnet_id
+  subnet_ids = output.pub_subnet_ids
   alltag     = var.alltag
 }
+*/
 /*
 module "private_subnet_rtb_nat" {
   source     = "../../module/rtb_nat"
