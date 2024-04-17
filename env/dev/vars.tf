@@ -73,8 +73,8 @@ variable "iam_roles"{
 locals {
   EKS_CLUSTER_ROLE = {
     dev_cluster = {
-      name               = "EKS_CLUSTER_ROLE"
-      tag_name           = "EKS_CLUSTER_ROLE"
+      name               = "dev_cluster_role"
+      tag_name           = "dev_cluster_role"
       assume_role_policy = data.aws_iam_policy_document.eks_cluster_role.json
       mgd_policies       = [
         "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy",
@@ -84,8 +84,8 @@ locals {
   }
   EKS_NODE_GROUP_ROLE = {
     dev_node_group = {
-      name               = "EKS_NG_ROLE"
-      tag_name           = "EKS_NG_ROLE"
+      name               = "dev_node_group_role"
+      tag_name           = "dev_node_group_role"
       assume_role_policy = data.aws_iam_policy_document.eks_node_group_role.json
       mgd_policies       = [
         "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
