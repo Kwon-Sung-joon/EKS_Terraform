@@ -71,30 +71,32 @@ variable "iam_roles"{
   }
 
 locals {
-  EKS_CLUSTER_ROLE ={
-    name = "EKS_CLUSTER_ROLE"
-    tag_name = "EKS_CLUSTER_ROLE"
-    #assume_role_policy = data.aws_iam_policy_document.eks_cluster_role.json
-    assume_role_policy = "template/eks_cluster_role_policy.json"
-    mgd_policies = [
-      "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy",
-      "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController",
-    ]
+  EKS_CLUSTER_ROLE = {
+    eks_cluster = {
+      name               = "EKS_CLUSTER_ROLE"
+      tag_name           = "EKS_CLUSTER_ROLE"
+      #assume_role_policy = data.aws_iam_policy_document.eks_cluster_role.json
+      assume_role_policy = "template/eks_cluster_role_policy.json"
+      mgd_policies       = [
+        "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy",
+        "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController",
+      ]
+    }
   }
-  EKS_NG_ROLE ={
-    name = "EKS_NG_ROLE"
-    tag_name = "EKS_NG_ROLE"
-    assume_role_policy = "template/eks_node_group_role_policy.json"
-    mgd_policies = [
-      "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
-      "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
-      "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
-      "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy",
-      "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess",
-    ]
+  EKS_NODE_GROUP_ROLE = {
+    EKS_NG_ROLE = {
+      name               = "EKS_NG_ROLE"
+      tag_name           = "EKS_NG_ROLE"
+      assume_role_policy = "template/eks_node_group_role_policy.json"
+      mgd_policies       = [
+        "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
+        "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
+        "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
+        "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy",
+        "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess",
+      ]
+    }
   }
-
-
 }
 
   /*
