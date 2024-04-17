@@ -1,6 +1,6 @@
 resource "aws_iam_role" "iam_role" {
   name = var.iam_role_config.name
-  assume_role_policy = jsonencode(var.iam_role_config.assume_role_policy)
+  assume_role_policy = var.iam_role_config.assume_role_policy
   tags = {
     Name  = var.iam_role_config.tag_name,
     Owner = "ksj"
