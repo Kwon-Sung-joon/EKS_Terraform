@@ -62,8 +62,8 @@ locals {
 
 variable "iam_roles"{
   type=map(object({
-    name=string
-    tag_name=string
+    name=any
+    tag_name=any
     assume_role_policy = any
     mgd_policies = any
   }))
