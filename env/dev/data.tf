@@ -17,6 +17,9 @@ data "aws_iam_policy_document" "eks_node_group_role" {
     }
   }
 }
+data "aws_availability_zones" "available" {
+  state = "available"
+}
 
 /*
 data "template_file" "eks_userdata" {

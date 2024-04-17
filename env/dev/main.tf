@@ -66,8 +66,6 @@ module "private_subnet2" {
   alltag             = var.alltag
 }
 */
-
-
 module "public_subnet_rtb_igw" {
   source     = "../../module/rtb_igw"
   vpc_id     = module.vpc.vpc_id
@@ -115,22 +113,15 @@ module "eks_node_groups" {
   min = 0
   lt_id = module.eks_node_lt.id
 }
-
-module "eks_cluster_iam_role" {
+*/
+module "iam_roles" {
   source             = "../../module/iam_role"
-  name               = "${var.alltag}-eks-cluster-role"
-  tag_name           = "${var.alltag}-IAM-ROLE-EKS-CLUSTER"
-  assume_role_policy = data.aws_iam_policy_document.eks_cluster_role.json
-  mgd_policies       = var.mgd_policies_for_eks_cluster
+  for_each = merge(var.iam_roles)
+  iam_role_config=each.value
+}
 
-}
-module "eks_node_group_iam_role" {
-  source             = "../../module/iam_role"
-  name               = "${var.alltag}-eks-nodegroup-role"
-  tag_name           = "${var.alltag}-IAM-ROLE-EKS-NODEGROUP"
-  assume_role_policy = data.aws_iam_policy_document.eks_node_group_role.json
-  mgd_policies       = var.mgd_policies_for_eks_node_group
-}
+
+/*
 module "eks_node_lt" {
   source      = "../../module/launch_template"
   lt_ec2_type = "t3.medium"
