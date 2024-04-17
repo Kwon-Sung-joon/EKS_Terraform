@@ -22,17 +22,12 @@ module "pri_subnets" {
   for_each = merge(var.subnets,local.pri_subnets)
   subnet_config=each.value
 }
-/*
+
 output "pub_subnet_ids" {
   value = flatten([for subnet_info in values(module.pub_subnets) : subnet_info.subnet_id])
 }
 output "pri_subnet_ids" {
   value = flatten([for subnet_info in values(module.pri_subnets) : subnet_info.subnet_id])
-}
-
-*/
-output "pub_subnet_ids" {
-  value = flatten(module.pub_subnets.subnet_id)
 }
 /*
 module "public_subnet1" {
@@ -71,23 +66,25 @@ module "private_subnet2" {
   alltag             = var.alltag
 }
 */
-/*
+
+
 module "public_subnet_rtb_igw" {
   source     = "../../module/rtb_igw"
   vpc_id     = module.vpc.vpc_id
   igw_id     = module.vpc.igw_id
-  subnet_ids = output.pub_subnet_ids
+  subnet_ids = flatten([for subnet_info in values(module.pub_subnets) : subnet_info.subnet_id])
   alltag     = var.alltag
 }
-*/
+
 /*
 module "private_subnet_rtb_nat" {
   source     = "../../module/rtb_nat"
   vpc_id     = module.vpc.vpc_id
   nat_gw_id  = module.nat_gw.nat_gw
-  subnet_ids = [module.private_subnet1.subnet_id, module.private_subnet2.subnet_id]
+  subnet_ids = flatten([for subnet_info in values(module.pri_subnets) : subnet_info.subnet_id])
   alltag     = var.alltag
 }
+
 module "eks_cluster" {
   source            = "../../module/eks_cluster"
   subnet_ids        = [module.public_subnet1.subnet_id,
