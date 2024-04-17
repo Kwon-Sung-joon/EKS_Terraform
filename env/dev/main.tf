@@ -22,9 +22,9 @@ module "pri_subnets" {
   for_each = merge(var.subnets,local.pri_subnets)
   subnet_config=each.value
 }
-#output "pub_subnet_ids" {
-#  value = flatten([for subnet_info in values(module.pub_subnets) : subnet_info.subnet_id])
-#}
+output "pub_subnet_ids" {
+  value = module.pub_subnets.subnet_id
+}
 #output "pri_subnet_ids" {
 #  value = flatten([for subnet_info in values(module.pri_subnets) : subnet_info.subnet_id])
 #}
