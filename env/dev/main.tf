@@ -81,6 +81,11 @@ module "eks_cluster_iam_role" {
   for_each = merge(var.iam_roles,local.EKS_CLUSTER_ROLE)
   iam_role_config = each.value
 }
+module "eks_node_group_iam_role" {
+  source             = "../../module/iam_role"
+  for_each = merge(var.iam_roles,local.EKS_NODE_GROUP_ROLE)
+  iam_role_config = each.value
+}
 
 
 /*
