@@ -67,6 +67,7 @@ variable "iam_roles"{
     assume_role_policy = any
     mgd_policies = any
   }))
+  default = {}
   }
 
 locals {
