@@ -91,7 +91,7 @@ output eks_node_group_role {
 }
 
 output eks_node_group_role2 {
-  value = module.eks_cluster_iam_role["dev_cluster"].iam_role
+  value = values(module.eks_cluster_iam_role["dev_cluster"])
 }
 /*
 module "eks_node_lt" {
