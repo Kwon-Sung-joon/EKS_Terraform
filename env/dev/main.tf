@@ -62,8 +62,8 @@ module "eks_node_groups" {
 module "eks_cluster" {
   source            = "../../module/eks_cluster"
   subnet_ids        = flattenconcat(module.pub_subnets["pub1"].subnet_id,
-    module.pub_subnets["pub2"].subnet_id
-    module.pri_subnets["pri1"].subnet_id
+    module.pub_subnets["pub2"].subnet_id,
+    module.pri_subnets["pri1"].subnet_id,
     module.pri_subnets["pri2"].subnet_id
   )
   alltag            = var.alltag
@@ -97,8 +97,8 @@ output eks_node_group_role {
 output eks_node_group_role2 {
   #value = concat(flatten([for subnet in module.pub_subnets : subnet.subnet_id]),flatten([for subnet in module.pri_subnets : subnet.subnet_id]))
   value = concat(module.pub_subnets["pub1"].subnet_id,
-    module.pub_subnets["pub2"].subnet_id
-    module.pri_subnets["pri1"].subnet_id
+    module.pub_subnets["pub2"].subnet_id,
+    module.pri_subnets["pri1"].subnet_id,
     module.pri_subnets["pri2"].subnet_id
   )
 }
