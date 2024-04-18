@@ -67,7 +67,7 @@ module "eks_cluster" {
   depends_on = [
     module.eks_cluster_iam_role
   ]
-  eks-cluster-role    = flatten([for iam_roles in module.eks_cluster_iam_role : iam_roles.iam_role])
+  eks-cluster-role    = module.eks_cluster_iam_role.iam_role["dev_node_group"]
   eks-cluster-version = 1.26
   vpc_cidr = var.vpc_cidr
 }
