@@ -1,4 +1,3 @@
-
 module "vpc" {
   source   = "../../module/vpc"
   vpc_cidr = var.vpc_cidr
@@ -62,10 +61,7 @@ module "eks_node_groups" {
 
 module "eks_cluster" {
   source            = "../../module/eks_cluster"
-  subnet_ids        = merge(
-    [for subnet_info in values(module.pub_subnets) : subnet_info.subnet_id],
-    [for subnet_info in values(module.pri_subnets) : subnet_info.subnet_id]
-  )
+  subnet_ids        = merge(module.pub_subnets.subnet_id  )
   alltag            = var.alltag
   service_ipv4_cidr = var.eks_cluster_service_ipv4_cidr
   depends_on = [
