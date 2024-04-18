@@ -7,5 +7,6 @@ phases:
       - cd ./env/dev/
   build:
     commands:
+      - terraform --version
       - terraform init
       - terraform apply --auto-approve
