@@ -7,8 +7,8 @@ module "vpc" {
 module "nat_gw" {
   source        = "../../module/nat"
   alltag        = var.alltag
-  public_subnet = module.public_subnet1.subnet_id
-  depends_on    = [module.vpc, module.public_subnet1]
+  public_subnet = module.pub_subnets["pub1"].subnet_id
+  depends_on    = [module.vpc, module.pub_subnets]
 }
 */
 module "pub_subnets" {
