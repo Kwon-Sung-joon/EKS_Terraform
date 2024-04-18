@@ -2,18 +2,10 @@ variable "vpc_cidr" {
   description = "VPC CIDR BLOCK : x.x.x.x/x"
   default     = "192.168.0.0/16"
 }
-
 variable "alltag" {
   description = "name"
   default = "test"
 }
-
-variable "node_types" {
-  description = "insert eks node types"
-  default = "t3.medium"
-}
-
-
 variable "subnets" {
   type=map(object({
     vpc_id=any
@@ -58,8 +50,6 @@ locals {
     }
   }
 }
-
-
 variable "iam_roles"{
   type=map(object({
     name=any
@@ -69,7 +59,6 @@ variable "iam_roles"{
   }))
   default = {}
   }
-
 locals {
   EKS_CLUSTER_ROLE = {
     dev_cluster = {
@@ -97,7 +86,6 @@ locals {
     }
   }
 }
-
   /*
   variable "ecr-repose-name" {
     description = "ECR Repository Name"
@@ -114,6 +102,25 @@ locals {
   }
   */
 
-  variable "eks_cluster_service_ipv4_cidr" {
-    default = "10.100.0.0/16"
-  }
+
+variable "node_types" {
+  description = "insert eks node types"
+  default = "t3.medium"
+}
+variable "eks_cluster_service_ipv4_cidr" {
+  default = "10.100.0.0/16"
+}
+
+
+variable "launch_template" {
+  type = map(object({
+    ec2_type=string
+    ami=string
+    lt_name=string
+    userdata = any
+  }))
+}
+
+locals {
+
+}
