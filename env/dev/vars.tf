@@ -119,5 +119,6 @@ variable "launch_template" {
     lt_name=string
     userdata = any
   }))
+  default = {}
 }
 */
