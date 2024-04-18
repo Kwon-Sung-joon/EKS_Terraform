@@ -89,10 +89,10 @@ module "eks_node_group_iam_role" {
 }
 
 output iam_role2 {
-  value =[for iam_roles in module.eks_node_group_iam_role : iam_roles.iam_role]
+  value =[for iam_roles in module.eks_cluster_iam_role : iam_roles.iam_role]
 }
 output iam_roles {
-  value = flatten([for iam_roles in module.eks_node_group_iam_role : iam_roles.iam_role])
+  value = flatten([for iam_roles in module.eks_cluster_iam_role : iam_roles.iam_role])
 }
 
 /*
