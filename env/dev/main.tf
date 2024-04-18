@@ -91,7 +91,7 @@ output eks_node_group_role {
 }
 
 output eks_node_group_role2 {
-  value = module.pub_subnets["pub_subnets"].subnet_id
+  value = module.pub_subnets["pub_subnets"]["pub1"].subnet_id
 }
 /*
 module "eks_node_lt" {
