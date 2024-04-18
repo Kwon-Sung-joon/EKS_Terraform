@@ -67,16 +67,26 @@ variable "iam_roles"{
     assume_role_policy = any
     mgd_policies = set(string)
   }))
-  default = {}
-  }
-
-locals {
-  EKS_CLUSTER_ROLE = {
+  default = {
+    dev_cluster = {
       name               = "dev_cluster_role"
       tag_name           = "dev_cluster_role"
       assume_role_policy = data.aws_iam_policy_document.eks_cluster_role.json
       mgd_policies       = ["arn:aws:iam::aws:policy/AmazonEKSClusterPolicy",
         "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"]
+    }
+  }
+  }
+
+locals {
+  EKS_CLUSTER_ROLE = {
+    dev_cluster = {
+      name               = "dev_cluster_role"
+      tag_name           = "dev_cluster_role"
+      assume_role_policy = data.aws_iam_policy_document.eks_cluster_role.json
+      mgd_policies       = ["arn:aws:iam::aws:policy/AmazonEKSClusterPolicy",
+        "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"]
+    }
   }
   EKS_NODE_GROUP_ROLE = {
     dev_node_group = {
