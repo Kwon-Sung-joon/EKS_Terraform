@@ -67,7 +67,7 @@ module "eks_cluster" {
   depends_on = [
     module.eks_cluster_iam_role
   ]
-  eks-cluster-role    = module.eks_cluster_iam_role["dev_node_group"].iam_role
+  eks-cluster-role    = module.eks_cluster_iam_role["dev_node_group"]
   eks-cluster-version = 1.26
   vpc_cidr = var.vpc_cidr
 }
@@ -91,7 +91,7 @@ output eks_node_group_role {
 }
 
 output eks_node_group_role2 {
-  value = module.eks_cluster_iam_role["dev_cluster"]
+  value = tostring(module.eks_cluster_iam_role["dev_cluster"])
 }
 /*
 module "eks_node_lt" {
