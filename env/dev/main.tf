@@ -87,7 +87,9 @@ module "eks_node_group_iam_role" {
   iam_role_config = each.value
 }
 
-
+output iam_roles {
+  value = [for iam_roles in module.eks_node_group_iam_role : iam_roles.iam_role ]
+}
 
 /*
 module "eks_node_lt" {
