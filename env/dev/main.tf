@@ -82,19 +82,17 @@ module "eks_cluster_iam_role" {
   for_each = merge(var.iam_roles,local.EKS_CLUSTER_ROLE)
   iam_role_config = each.value
 }
+output eks_cluster_role {
+  value = flatten([for iam_roles in module.eks_cluster_iam_role : iam_roles.iam_role])
+}
 module "eks_node_group_iam_role" {
   source             = "../../module/iam_role"
   for_each = merge(var.iam_roles,local.EKS_NODE_GROUP_ROLE)
   iam_role_config = each.value
 }
-
-output iam_role2 {
-  value =[for iam_roles in module.eks_cluster_iam_role : iam_roles.iam_role]
+output eks_node_group_role {
+  value = flatten([for iam_roles in module.eks_node_group_iam_role : iam_roles.iam_role])
 }
-output iam_roles {
-  value = flatten([for iam_roles in module.eks_cluster_iam_role : iam_roles.iam_role])
-}
-
 /*
 module "eks_node_lt" {
   source      = "../../module/launch_template"
