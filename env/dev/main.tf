@@ -91,7 +91,8 @@ output eks_node_group_role {
 }
 
 output eks_node_group_role2 {
-  value = concat(flatten([for subnet in module.pub_subnets : subnet.subnet_id]),flatten([for subnet in module.pri_subnets : subnet.subnet_id]))
+  #value = concat(flatten([for subnet in module.pub_subnets : subnet.subnet_id]),flatten([for subnet in module.pri_subnets : subnet.subnet_id]))
+  value = concat(module.pub_subnets["pub1"].subnet_id,module.pub_subnets["pub2"].subnet_id)
 }
 /*
 module "eks_node_lt" {
