@@ -9,9 +9,9 @@ resource "aws_iam_role" "iam_role" {
 
 resource "aws_iam_role_policy_attachment" "aws_iam_policy_attach" {
   role       = aws_iam_role.iam_role.name
-  #for_each   = var.iam_role_config.mgd_policies
-  #policy_arn = each.value
-  policy_arn = var.iam_role_config.mgd_policies
+  for_each   = var.iam_role_config.mgd_policies
+  policy_arn = each.value
+
 }
 
 output "iam_role" {
