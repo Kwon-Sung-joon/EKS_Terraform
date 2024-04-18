@@ -89,6 +89,10 @@ module "eks_node_group_iam_role" {
 output eks_node_group_role {
   value = flatten([for iam_roles in module.eks_node_group_iam_role : iam_roles.iam_role])
 }
+
+output eks_node_group_role2 {
+  value = module.eks_cluster_iam_role[*].iam_role
+}
 /*
 module "eks_node_lt" {
   source      = "../../module/launch_template"
@@ -111,7 +115,6 @@ module "eks_node_sg" {
   vpc_id  = module.vpc.vpc_id
   depends_on = [module.vpc]
 }
-
 
 /*
 module "ecr_repos" {
