@@ -58,7 +58,7 @@ module "eks_node_groups" {
   lt_id = module.eks_node_lt.id
 }
 */
-
+/*
 module "eks_cluster" {
   source            = "../../module/eks_cluster"
   subnet_ids        = flatten([for subnet_info in values(module.pub_subnets) : subnet_info.subnet_id])
@@ -71,7 +71,7 @@ module "eks_cluster" {
   eks-cluster-version = 1.26
   vpc_cidr = var.vpc_cidr
 }
-
+*/
 module "eks_cluster_iam_role" {
   source             = "../../module/iam_role"
   #for_each = merge(var.iam_roles,local.EKS_CLUSTER_ROLE)
