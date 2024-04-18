@@ -111,7 +111,7 @@ variable "eks_cluster_service_ipv4_cidr" {
   default = "10.100.0.0/16"
 }
 
-
+/*
 variable "launch_template" {
   type = map(object({
     ec2_type=string
@@ -120,7 +120,4 @@ variable "launch_template" {
     userdata = any
   }))
 }
-
-locals {
-
-}
+*/
