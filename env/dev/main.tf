@@ -61,7 +61,7 @@ module "eks_node_groups" {
 
 module "eks_cluster" {
   source            = "../../module/eks_cluster"
-  subnet_ids        = merge(module.pub_subnets.subnet_id  )
+  subnet_ids        = flatten([for subnet_info in values(module.pub_subnets) : subnet_info.subnet_id])
   alltag            = var.alltag
   service_ipv4_cidr = var.eks_cluster_service_ipv4_cidr
   depends_on = [
