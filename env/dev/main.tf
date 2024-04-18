@@ -92,7 +92,7 @@ module "eks_node_group_iam_role" {
 output eks_node_group_role {
   value = flatten([for iam_roles in module.eks_node_group_iam_role : iam_roles.iam_role])
 }
-
+/*
 module "eks_node_lt" {
   source      = "../../module/launch_template"
   lt_ec2_type = "t3.medium"
