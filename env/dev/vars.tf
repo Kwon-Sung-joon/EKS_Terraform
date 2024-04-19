@@ -125,10 +125,7 @@ locals {
         }
 
       ]
-      subnets = concat(
-        module.public_subnets["pub1"].subnet_id,
-        module.public_subnets["pub2"].subnet_id
-      )
+      subnets = module.public_subnets["pub1"].subnet_id
     }
     dev_private_route_table = {
       vpc_id = module.vpc["dev_vpc"].vpc_id
