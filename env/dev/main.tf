@@ -100,14 +100,13 @@ output test {
   )
 }
 
-
+/*
 module "eks_node_sg" {
   source = "../../module/security_groups"
   for_each = merge(var.security_group_rules,local.EC2_SECURITY_GROUPS)
   sg_config = each.value
-
 }
-
+*/
 
 
 /*
