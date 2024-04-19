@@ -209,8 +209,8 @@ variable "nat_gw" {
   }))
   default = {
     nat_gw_A = {
-      public_subnet = tostring(module.public_subnets["pub1"].subnet_id)
-      alltag = "nat"
+      public_subnet = module.public_subnets["pub1"].subnet_id
+      alltag = "nat-A"
     }
   }
 }
