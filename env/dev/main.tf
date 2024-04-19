@@ -27,13 +27,12 @@ output "pri_subnet_ids" {
   value = flatten([for subnet_info in values(module.private_subnets) : subnet_info.subnet_id])
 }
 
-/*
+
 module "public_subnet_rtb_igw" {
   source     = "../../module/rtb_igw"
   vpc_id     = module.vpc.vpc_id
   igw_id     = module.vpc.igw_id
   subnet_ids = flatten([for subnet_info in values(module.public_subnets) : subnet_info.subnet_id])
-  alltag     = var.alltag
 }
 
 /*

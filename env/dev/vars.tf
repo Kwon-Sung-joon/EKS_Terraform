@@ -58,7 +58,7 @@ locals {
     pri1 = {
       vpc_id      = module.vpc["dev_vpc"].vpc_id
       subnet_cidr = "192.168.2.0/24"
-      subnet_az   = data.aws_availability_zones.available.names[1]
+      subnet_az   = data.aws_availability_zones.available.names[0]
       is_public   = false
       tags= {
         Name  = "${var.dev_name_tag}-private-1",
@@ -68,7 +68,7 @@ locals {
     pri2 = {
       vpc_id      = module.vpc["dev_vpc"].vpc_id
       subnet_cidr = "192.168.3.0/24"
-      subnet_az   = data.aws_availability_zones.available.names[3]
+      subnet_az   = data.aws_availability_zones.available.names[2]
       is_public   = false
       tags= {
         Name  = "${var.dev_name_tag}-private-2",
@@ -77,6 +77,15 @@ locals {
     }
   }
 }
+
+variable "route_tables" {
+  type = map(object({
+    vpc_id = string
+    route = any
+    tags = any
+  }))
+}
+
 variable "iam_roles"{
   type=map(object({
     name=any
