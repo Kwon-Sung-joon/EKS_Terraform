@@ -1,52 +1,78 @@
+variable "dev_name_tag" {
+  default = "dev"
+}
 variable "vpc_cidr" {
   description = "VPC CIDR BLOCK : x.x.x.x/x"
-  default     = "192.168.0.0/16"
+  type = map(object({
+    vpc_cidr=string
+    tags = any
+  }))
 }
-variable "alltag" {
-  description = "name"
-  default = "test"
+locals {
+  DEV_VPC={
+    dev_vpc = {
+      vpc_cidr = "192.168.0.0/16"
+      tags= {
+        Name  = "${var.dev_name_tag}-vpc",
+        Owner = "ksj"
+      }
+    }
+  }
 }
+
 variable "subnets" {
   type=map(object({
     vpc_id=any
     subnet_cidr=any
     subnet_az=any
     is_public=bool
-    alltag=any
+    tags=any
   }))
   default = {}
 }
 locals {
-  PUBLIC_SUBNETS= {
+  DEV_PUBLIC_SUBNETS= {
     pub1 = {
-      vpc_id      = module.vpc.vpc_id
+      vpc_id      = module.vpc["dev_vpc"].vpc_id
       subnet_cidr = "192.168.0.0/24"
       subnet_az   = data.aws_availability_zones.available.names[0]
       is_public   = true
-      alltag      = "pub1"
+      tags= {
+        Name  = "${var.dev_name_tag}-public-1",
+        Owner = "ksj"
+      }
     }
     pub2 = {
-      vpc_id      = module.vpc.vpc_id
+      vpc_id      = module.vpc["dev_vpc"].vpc_id
       subnet_cidr = "192.168.1.0/24"
       subnet_az   = data.aws_availability_zones.available.names[2]
       is_public   = true
-      alltag      = "pub2"
+      tags= {
+        Name  = "${var.dev_name_tag}-public-2",
+        Owner = "ksj"
+      }
     }
   }
-  PRIVATE_SUBNETS= {
+  DEV_PRIVATE_SUBNETS= {
     pri1 = {
-      vpc_id      = module.vpc.vpc_id
+      vpc_id      = module.vpc["dev_vpc"].vpc_id
       subnet_cidr = "192.168.2.0/24"
       subnet_az   = data.aws_availability_zones.available.names[1]
       is_public   = false
-      alltag      = "pri1"
+      tags= {
+        Name  = "${var.dev_name_tag}-private-1",
+        Owner = "ksj"
+      }
     }
     pri2 = {
-      vpc_id      = module.vpc.vpc_id
+      vpc_id      = module.vpc["dev_vpc"].vpc_id
       subnet_cidr = "192.168.3.0/24"
       subnet_az   = data.aws_availability_zones.available.names[3]
       is_public   = false
-      alltag      = "pri2"
+      tags= {
+        Name  = "${var.dev_name_tag}-private-2",
+        Owner = "ksj"
+      }
     }
   }
 }

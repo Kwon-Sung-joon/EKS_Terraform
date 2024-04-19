@@ -1,18 +1,10 @@
 resource "aws_vpc" "vpc" {
-  cidr_block           = var.vpc_cidr
+  cidr_block           = var.vpc_config.vpc_cidr
   enable_dns_hostnames = true
 
-  tags = {
-    Name = "${var.alltag}-vpc",
-    Owner = "ksj"
-  }
+  tags = var.vpc_config.tags
 }
-
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.vpc.id
-
-  tags = {
-    Name = "${var.alltag}-igw",
-    Owner = "ksj"
-  }
+  tags = var.vpc_config.tags
 }

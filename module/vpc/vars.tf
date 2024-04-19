@@ -1,2 +1,1 @@
-variable "vpc_cidr" {}
-variable "alltag" {}
+variable "vpc_config" {}

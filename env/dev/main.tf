@@ -1,27 +1,23 @@
 module "vpc" {
   source   = "../../module/vpc"
-  vpc_cidr = var.vpc_cidr
-  alltag   = var.alltag
-}
+  for_each = var.vpc_cidr
+  vpc_config=each.value
 
+}
 module "nat_gw" {
   source        = "../../module/nat"
   for_each = merge(var.nat_gw,local.NAT_GW)
   nat_config=each.value
   depends_on    = [module.vpc, module.public_subnets]
 }
-
-
-
-
 module "public_subnets" {
   source = "../../module/subnets"
-  for_each = merge(var.subnets,local.PUBLIC_SUBNETS)
+  for_each = merge(var.subnets,local.DEV_PUBLIC_SUBNETS)
   subnet_config=each.value
 }
 module "private_subnets" {
   source = "../../module/subnets"
-  for_each = merge(var.subnets,local.PRIVATE_SUBNETS)
+  for_each = merge(var.subnets,local.DEV_PRIVATE_SUBNETS)
   subnet_config=each.value
 }
 output "pub_subnet_ids" {
@@ -30,6 +26,8 @@ output "pub_subnet_ids" {
 output "pri_subnet_ids" {
   value = flatten([for subnet_info in values(module.private_subnets) : subnet_info.subnet_id])
 }
+
+/*
 module "public_subnet_rtb_igw" {
   source     = "../../module/rtb_igw"
   vpc_id     = module.vpc.vpc_id
@@ -44,6 +42,33 @@ module "private_subnet_rtb_nat" {
   subnet_ids = flatten([for subnet_info in values(module.private_subnets) : subnet_info.subnet_id])
   alltag     = var.alltag
 }
+
+module "eks_cluster_iam_role" {
+  source             = "../../module/iam_role"
+  #for_each = merge(var.iam_roles,local.EKS_CLUSTER_ROLE)
+  for_each = merge(var.iam_roles,local.EKS_CLUSTER_ROLE)
+  iam_role_config = each.value
+}
+output eks_cluster_role {
+  value = flatten([for iam_roles in module.eks_cluster_iam_role : iam_roles.iam_role])
+}
+module "eks_node_group_iam_role" {
+  source             = "../../module/iam_role"
+  for_each = merge(var.iam_roles,local.EKS_NODE_GROUP_ROLE)
+  iam_role_config = each.value
+}
+output eks_node_group_role {
+  value = flatten([for iam_roles in module.eks_node_group_iam_role : iam_roles.iam_role])
+}
+module "security_groups" {
+  source = "../../module/security_groups"
+  for_each = merge(var.security_group_rules,local.EC2_SECURITY_GROUPS)
+  sg_config = each.value
+}
+output eks_node_sg_id {
+  value = module.security_groups["eks_node_sg"].id
+}
+
 /*
 module "eks_node_lt" {
   source      = "../../module/launch_template"
@@ -91,32 +116,6 @@ module "eks_cluster" {
   vpc_cidr = var.vpc_cidr
 }
 */
-module "eks_cluster_iam_role" {
-  source             = "../../module/iam_role"
-  #for_each = merge(var.iam_roles,local.EKS_CLUSTER_ROLE)
-  for_each = merge(var.iam_roles,local.EKS_CLUSTER_ROLE)
-  iam_role_config = each.value
-}
-output eks_cluster_role {
-  value = flatten([for iam_roles in module.eks_cluster_iam_role : iam_roles.iam_role])
-}
-module "eks_node_group_iam_role" {
-  source             = "../../module/iam_role"
-  for_each = merge(var.iam_roles,local.EKS_NODE_GROUP_ROLE)
-  iam_role_config = each.value
-}
-output eks_node_group_role {
-  value = flatten([for iam_roles in module.eks_node_group_iam_role : iam_roles.iam_role])
-}
-module "security_groups" {
-  source = "../../module/security_groups"
-  for_each = merge(var.security_group_rules,local.EC2_SECURITY_GROUPS)
-  sg_config = each.value
-}
-output eks_node_sg_id {
-  value = module.security_groups["eks_node_sg"].id
-}
-
 
 
 
