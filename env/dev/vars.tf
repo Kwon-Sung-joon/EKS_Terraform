@@ -34,7 +34,7 @@ variable "subnets" {
 locals {
   DEV_PUBLIC_SUBNETS= {
     pub1 = {
-      vpc_id      = module.vpc["dev_vpc"].vpc_id
+      vpc_id      = module.vpc["DEV_VPC"].vpc_id
       subnet_cidr = "192.168.0.0/24"
       subnet_az   = data.aws_availability_zones.available.names[0]
       is_public   = true
@@ -44,7 +44,7 @@ locals {
       }
     }
     pub2 = {
-      vpc_id      = module.vpc["dev_vpc"].vpc_id
+      vpc_id      = module.vpc["DEV_VPC"].vpc_id
       subnet_cidr = "192.168.1.0/24"
       subnet_az   = data.aws_availability_zones.available.names[2]
       is_public   = true
@@ -56,7 +56,7 @@ locals {
   }
   DEV_PRIVATE_SUBNETS= {
     pri1 = {
-      vpc_id      = module.vpc["dev_vpc"].vpc_id
+      vpc_id      = module.vpc["DEV_VPC"].vpc_id
       subnet_cidr = "192.168.2.0/24"
       subnet_az   = data.aws_availability_zones.available.names[1]
       is_public   = false
@@ -66,7 +66,7 @@ locals {
       }
     }
     pri2 = {
-      vpc_id      = module.vpc["dev_vpc"].vpc_id
+      vpc_id      = module.vpc["DEV_VPC"].vpc_id
       subnet_cidr = "192.168.3.0/24"
       subnet_az   = data.aws_availability_zones.available.names[3]
       is_public   = false
