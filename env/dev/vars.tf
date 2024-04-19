@@ -7,6 +7,7 @@ variable "vpc_cidr" {
     vpc_cidr=string
     tags = any
   }))
+  default = {}
 }
 locals {
   DEV_VPC={
