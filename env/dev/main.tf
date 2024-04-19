@@ -43,7 +43,7 @@ module "security_groups" {
   depends_on = [module.vpc]
 }
 output eks_node_sg_id {
-  value = module.security_groups["dev_node_group_role"].id
+  value = module.security_groups["dev_eks_node_sg"].id
 }
 
 /*
