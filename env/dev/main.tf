@@ -3,14 +3,14 @@ module "vpc" {
   vpc_cidr = var.vpc_cidr
   alltag   = var.alltag
 }
-/*
+
 module "nat_gw" {
   source        = "../../module/nat"
   alltag        = var.alltag
-  public_subnet = module.PUBLIC_SUBNETS["pub1"].subnet_id
-  depends_on    = [module.vpc, module.PUBLIC_SUBNETS]
+  public_subnet = module.public_subnets["pub1"].subnet_id
+  depends_on    = [module.vpc, module.public_subnets]
 }
-*/
+
 module "public_subnets" {
   source = "../../module/subnets"
   for_each = merge(var.subnets,local.PUBLIC_SUBNETS)
@@ -34,14 +34,28 @@ module "public_subnet_rtb_igw" {
   subnet_ids = flatten([for subnet_info in values(module.public_subnets) : subnet_info.subnet_id])
   alltag     = var.alltag
 }
-/*
+
 module "private_subnet_rtb_nat" {
   source     = "../../module/rtb_nat"
   vpc_id     = module.vpc.vpc_id
   nat_gw_id  = module.nat_gw.nat_gw
-  subnet_ids = flatten([for subnet_info in values(module.PRIVATE_SUBNETS) : subnet_info.subnet_id])
+  subnet_ids = flatten([for subnet_info in values(module.private_subnets) : subnet_info.subnet_id])
   alltag     = var.alltag
 }
+/*
+module "eks_node_lt" {
+  source      = "../../module/launch_template"
+  lt_ec2_type = "t3.medium"
+  lt_image_id = "ami-06aaf7c21e7e74e2a"
+  lt_name     = "${var.alltag}-eks-ng-lt"
+  user_data = base64encode(templatefile("${path.module}/user_data/eks_node.sh", { CLUSTER-NAME = module.eks_cluster.cluster_name,
+    B64-CLUSTER-CA     = module.eks_cluster.kubeconfig-certificate-authority-data,
+    APISERVER-ENDPOINT = module.eks_cluster.endpoint,
+    DNS-CLUSTER-IP = cidrhost(var.eks_cluster_service_ipv4_cidr, 10) }))
+  vpc_security_group_ids = [module.eks_node_sg.id]
+  depends_on             = [module.eks_cluster, module.eks_node_sg]
+}
+
 module "eks_node_groups" {
   source       = "../../module/eks_node_groups"
   alltag       = var.alltag
@@ -57,8 +71,6 @@ module "eks_node_groups" {
   min = 0
   lt_id = module.eks_node_lt.id
 }
-*/
-/*
 module "eks_cluster" {
   source            = "../../module/eks_cluster"
   #subnet_ids = concat(flatten([for subnet in module.public_subnets : subnet.subnet_id]),flatten([for subnet in module.private_subnets : subnet.subnet_id]))
@@ -99,33 +111,12 @@ module "security_groups" {
   for_each = merge(var.security_group_rules,local.EC2_SECURITY_GROUPS)
   sg_config = each.value
 }
-output sg_ids {
+output eks_node_sg_id {
   value = module.security_groups["eks_node_sg"].id
 }
 
 
-/*
-module "eks_node_lt" {
-  source      = "../../module/launch_template"
-  lt_ec2_type = "t3.medium"
-  lt_image_id = "ami-06aaf7c21e7e74e2a"
-  lt_name     = "${var.alltag}-eks-ng-lt"
-  user_data = base64encode(templatefile("${path.module}/user_data/eks_node.sh", { CLUSTER-NAME = module.eks_cluster.cluster_name,
-    B64-CLUSTER-CA     = module.eks_cluster.kubeconfig-certificate-authority-data,
-    APISERVER-ENDPOINT = module.eks_cluster.endpoint,
-    DNS-CLUSTER-IP = cidrhost(var.eks_cluster_service_ipv4_cidr, 10) }))
-  vpc_security_group_ids = [module.eks_node_sg.id]
-  depends_on             = [module.eks_cluster, module.eks_node_sg]
-}
 
-module "eks_node_sg" {
-  source = "../../module/sg"
-  alltag  = "ksj-eks-node"
-  sg_desc = "ksj-eks-node-sg"
-  sg_name = "ksj-eks-node-sg"
-  vpc_id  = module.vpc.vpc_id
-  depends_on = [module.vpc]
-}
 
 /*
 module "ecr_repos" {
