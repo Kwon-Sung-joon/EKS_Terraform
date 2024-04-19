@@ -157,11 +157,11 @@ locals {
         }
       }
       egress = {
-        outbound_80 = {
+        outbound_any = {
           cidr_ipv4   = "0.0.0.0/0"
-          from_port   = 80
+          from_port   = 0
           ip_protocol = "tcp"
-          to_port     = 80
+          to_port     = 0
           description = "outbound_80"
         }
       }
