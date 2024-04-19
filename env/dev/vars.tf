@@ -166,7 +166,7 @@ locals {
     eks_node_sg = {
       name = "eks-node-sg"
       description = "eks-node-sg"
-      vpc_id = module.vpc.vpc_id
+      vpc_id = module.vpc["dev_vpc"].vpc_id
       ingress = {
         inbound_80 = {
           cidr_ipv4   = "0.0.0.0/0"
@@ -197,7 +197,7 @@ locals {
     ec2_ssh_sg = {
       name = "ec2_ssh_sg"
       description = "ec2_ssh_sg"
-      vpc_id = module.vpc.vpc_id
+      vpc_id = module.vpc["dev_vpc"].vpc_id
       ingress = {
         inbound_80 = {
           cidr_ipv4   = "0.0.0.0/0"
