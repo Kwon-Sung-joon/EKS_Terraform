@@ -41,7 +41,7 @@ module "security_groups" {
   sg_config = each.value
 }
 output eks_node_sg_id {
-  value = module.security_groups["eks_node_sg"].id
+  value = module.security_groups["dev_node_group_role"].id
 }
 
 /*

@@ -131,7 +131,7 @@ locals {
       route =[
         {
           cidr_block = "0.0.0.0/0"
-          gateway_id = module.nat_gw["nat_gw_1"].nat_gw
+          gateway_id = module.nat_gw["dev_nat_gw_1"].nat_gw
         }
       ]
       subnets = [module.subnets["pri1"].subnet_id,
