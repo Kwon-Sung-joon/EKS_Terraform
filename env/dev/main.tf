@@ -7,7 +7,7 @@ module "vpc" {
 module "nat_gw" {
   source        = "../../module/nat"
   alltag        = var.alltag
-  public_subnet = module.public_subnets["pub1"].subnet_id
+  public_subnet = tostring(module.public_subnets["pub1"].subnet_id)
   depends_on    = [module.vpc, module.public_subnets]
 }
 
