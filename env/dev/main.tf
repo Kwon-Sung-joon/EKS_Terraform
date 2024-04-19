@@ -40,7 +40,7 @@ module "public_subnet_rtb_igw" {
 module "private_subnet_rtb_nat" {
   source     = "../../module/rtb_nat"
   vpc_id     = module.vpc.vpc_id
-  nat_gw_id  = module.nat_gw.nat_gw['nat_gw_a']
+  nat_gw_id  = module.nat_gw['nat_gw_a'].nat_gw
   subnet_ids = flatten([for subnet_info in values(module.private_subnets) : subnet_info.subnet_id])
   alltag     = var.alltag
 }
