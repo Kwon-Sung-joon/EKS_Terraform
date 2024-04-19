@@ -40,6 +40,7 @@ module "security_groups" {
   source = "../../module/security_groups"
   for_each = merge(var.security_group_rules,local.DEV_SECURITY_GROUPS)
   sg_config = each.value
+  depends_on = [module.vpc]
 }
 output eks_node_sg_id {
   value = module.security_groups["dev_node_group_role"].id
