@@ -107,7 +107,7 @@ variable "route_tables" {
 locals {
   DEV_ROUTE_TABLE = {
     dev_public_route_table = {
-      vpc_id = module.vpc["dev_vpc"].vpc_id
+      vpc_id = module.vpc["dev_vpc_1"].vpc_id
       tags = {
         Name = "public-route-table"
         Owner = "ksj"
@@ -115,7 +115,7 @@ locals {
       route =[
         {
           cidr_block = "0.0.0.0/0"
-          gateway_id = module.vpc["dev_vpc"].igw_id
+          gateway_id = module.vpc["dev_vpc_1"].igw_id
         }
 
       ]
@@ -123,7 +123,7 @@ locals {
         module.subnets["pub2"].subnet_id]
     }
     dev_private_route_table = {
-      vpc_id = module.vpc["dev_vpc"].vpc_id
+      vpc_id = module.vpc["dev_vpc_1"].vpc_id
       tags = {
         Name = "private-route-table"
         Owner = "ksj"
@@ -131,7 +131,7 @@ locals {
       route =[
         {
           cidr_block = "0.0.0.0/0"
-          gateway_id = module.nat_gw["nat_gw_a"].nat_gw
+          gateway_id = module.nat_gw["nat_gw_1"].nat_gw
         }
       ]
       subnets = [module.subnets["pri1"].subnet_id,
