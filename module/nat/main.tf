@@ -4,9 +4,9 @@ resource "aws_eip" "nat_eip" {
 }
 resource "aws_nat_gateway" "nat_gw" {
   allocation_id = aws_eip.nat_eip.id
-  subnet_id     = var.public_subnet
+  subnet_id     = var.nat_config.public_subnet
 tags = {
-    Name = "${var.alltag}-nat",
+    Name = "${var.nat_config.alltag}-nat",
     Owner = "ksj"
   }
   depends_on = [aws_eip.nat_eip]

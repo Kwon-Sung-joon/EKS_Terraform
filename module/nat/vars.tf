@@ -1,2 +1,1 @@
-variable alltag {}
-variable public_subnet {}
+variable "nat_config" {}

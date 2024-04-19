@@ -6,8 +6,8 @@ module "vpc" {
 
 module "nat_gw" {
   source        = "../../module/nat"
-  alltag        = var.alltag
-  public_subnet = tostring(module.public_subnets["pub1"].subnet_id)
+  for_each = var.nat_gw
+  nat_config=each.value
   depends_on    = [module.vpc, module.public_subnets]
 }
 

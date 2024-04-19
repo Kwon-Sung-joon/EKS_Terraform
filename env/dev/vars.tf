@@ -202,10 +202,18 @@ locals {
 }
 
 
-
-
-
-
+variable "nat_gw" {
+  type = map(object({
+    public_subnet=string
+    alltag=string
+  }))
+  default = {
+    nat_gw_A = {
+      public_subnet = tostring(module.public_subnets["pub1"].subnet_id)
+      alltag = "nat"
+    }
+  }
+}
 
 
 
