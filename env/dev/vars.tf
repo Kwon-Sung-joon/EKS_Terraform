@@ -330,7 +330,7 @@ locals {
       service_ipv4_cidr = "100.100.0.0/16"
       cluster_role = module.eks_cluster_iam_role["dev_cluster_role"].iam_role
       cluster_version = 1.26
-      sg_ids = module.security_groups["dev_eks_cluster_sg"].id
+      sg_ids = [module.security_groups["dev_eks_cluster_sg"].id]
     }
   }
 }
