@@ -327,7 +327,7 @@ locals {
         Name = "ksj-dev-cluster-1"
         Owner = "ksj"
       }
-      service_ipv4_cidr = "100.100.0.0/16"
+      service_ipv4_cidr = "10.0.0.0/8"
       cluster_role = module.eks_cluster_iam_role["dev_cluster_role"].iam_role
       cluster_version = 1.26
       sg_ids = [module.security_groups["dev_eks_cluster_sg"].id]
