@@ -1,6 +1,6 @@
 resource "aws_security_group" "sg" {
-  name        = var.sg_config.sg_name
-  description = var.sg_config.sg_desc
+  name        = var.sg_config.name
+  description = var.sg_config.description
   vpc_id      = var.sg_config.vpc_id
   tags = {
     Name = var.sg_config.alltag-sg

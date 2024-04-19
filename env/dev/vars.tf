@@ -130,6 +130,7 @@ variable "security_group_rules" {
     vpc_id = string
     ingress = any
     egress = any
+    alltag = any
   }))
   default = {}
 }
@@ -141,9 +142,9 @@ locals {
       vpc_id = module.vpc.vpc_id
       ingress = {}
       egress = {}
+      alltag = "sg"
     }
   }
-
 }
 
 
