@@ -84,6 +84,7 @@ variable "route_tables" {
     route = any
     tags = any
   }))
+  default = {}
 }
 
 variable "iam_roles"{
