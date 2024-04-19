@@ -53,7 +53,7 @@ variable "subnets" {
 locals {
   DEV_SUBNETS= {
     pub1 = {
-      vpc_id      = module.vpc["dev_vpc"].vpc_id
+      vpc_id      = module.vpc["dev_vpc_1"].vpc_id
       subnet_cidr = "192.168.0.0/24"
       subnet_az   = data.aws_availability_zones.available.names[0]
       is_public   = true
@@ -63,7 +63,7 @@ locals {
       }
     }
     pub2 = {
-      vpc_id      = module.vpc["dev_vpc"].vpc_id
+      vpc_id      = module.vpc["dev_vpc_1"].vpc_id
       subnet_cidr = "192.168.1.0/24"
       subnet_az   = data.aws_availability_zones.available.names[2]
       is_public   = true
@@ -73,7 +73,7 @@ locals {
       }
     }
     pri1 = {
-      vpc_id      = module.vpc["dev_vpc"].vpc_id
+      vpc_id      = module.vpc["dev_vpc_1"].vpc_id
       subnet_cidr = "192.168.2.0/24"
       subnet_az   = data.aws_availability_zones.available.names[0]
       is_public   = false
@@ -83,7 +83,7 @@ locals {
       }
     }
     pri2 = {
-      vpc_id      = module.vpc["dev_vpc"].vpc_id
+      vpc_id      = module.vpc["dev_vpc_1"].vpc_id
       subnet_cidr = "192.168.3.0/24"
       subnet_az   = data.aws_availability_zones.available.names[2]
       is_public   = false
@@ -232,7 +232,7 @@ locals {
     dev_eks_node_sg = {
       name = "eks-node-sg"
       description = "eks-node-sg"
-      vpc_id = module.vpc["dev_vpc"].vpc_id
+      vpc_id = module.vpc["dev_vpc_1"].vpc_id
       ingress = {
         inbound_80 = {
           cidr_ipv4   = "0.0.0.0/0"
@@ -266,7 +266,7 @@ locals {
     dev_ec2_ssh_sg = {
       name = "ec2_ssh_sg"
       description = "ec2_ssh_sg"
-      vpc_id = module.vpc["dev_vpc"].vpc_id
+      vpc_id = module.vpc["dev_vpc_1"].vpc_id
       ingress = {
         inbound_80 = {
           cidr_ipv4   = "0.0.0.0/0"
