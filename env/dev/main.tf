@@ -6,56 +6,38 @@ module "vpc" {
 }
 module "nat_gw" {
   source        = "../../module/nat"
-  for_each = merge(var.nat_gw,local.NAT_GW)
+  for_each = merge(var.nat_gw,local.DEV_NAT_GW)
   nat_config=each.value
-  depends_on    = [module.vpc, module.public_subnets]
+  depends_on    = [module.vpc, module.subnets]
 }
-module "public_subnets" {
+module "subnets" {
   source = "../../module/subnets"
-  for_each = merge(var.subnets,local.DEV_PUBLIC_SUBNETS)
+  for_each = merge(var.subnets,local.DEV_SUBNETS)
   subnet_config=each.value
-}
-module "private_subnets" {
-  source = "../../module/subnets"
-  for_each = merge(var.subnets,local.DEV_PRIVATE_SUBNETS)
-  subnet_config=each.value
-}
-output "pub_subnet_ids" {
-  value = flatten([for subnet_info in values(module.public_subnets) : subnet_info.subnet_id])
-}
-output "pri_subnet_ids" {
-  value = flatten([for subnet_info in values(module.private_subnets) : subnet_info.subnet_id])
 }
 
-module "dev_route_tables" {
+output "subnets" {
+  value = flatten([for subnet_info in values(module.subnets) : subnet_info.subnet_id])
+}
+
+module "route_tables" {
   source     = "../../module/route_table"
   for_each = merge(var.route_tables,local.DEV_ROUTE_TABLE)
   route_table_config = each.value
 }
-
 module "eks_cluster_iam_role" {
   source             = "../../module/iam_role"
   #for_each = merge(var.iam_roles,local.EKS_CLUSTER_ROLE)
-  for_each = merge(var.iam_roles,local.EKS_CLUSTER_ROLE)
+  for_each = merge(var.iam_roles,local.DEV_IAM_ROLE)
   iam_role_config = each.value
 }
-output eks_cluster_role {
+output iam_role {
   value = flatten([for iam_roles in module.eks_cluster_iam_role : iam_roles.iam_role])
 }
-/*
-module "eks_node_group_iam_role" {
-  source             = "../../module/iam_role"
-  for_each = merge(var.iam_roles,local.EKS_NODE_GROUP_ROLE)
-  iam_role_config = each.value
-}
 
-output eks_node_group_role {
-  value = flatten([for iam_roles in module.eks_node_group_iam_role : iam_roles.iam_role])
-}
-*/
 module "security_groups" {
   source = "../../module/security_groups"
-  for_each = merge(var.security_group_rules,local.EC2_SECURITY_GROUPS)
+  for_each = merge(var.security_group_rules,local.DEV_SECURITY_GROUPS)
   sg_config = each.value
 }
 output eks_node_sg_id {

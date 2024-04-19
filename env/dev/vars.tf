@@ -11,7 +11,7 @@ variable "vpc_cidr" {
 }
 locals {
   DEV_VPC={
-    dev_vpc = {
+    dev_vpc_1 = {
       vpc_cidr = "192.168.0.0/16"
       tags= {
         Name  = "${var.dev_name_tag}-vpc",
@@ -29,9 +29,9 @@ variable "nat_gw" {
   default = {}
 }
 locals {
-  NAT_GW ={
-    nat_gw_a = {
-      public_subnet = module.public_subnets["pub1"].subnet_id
+  DEV_NAT_GW ={
+    dev_nat_gw_1 = {
+      public_subnet = module.subnets["pub1"].subnet_id
       tags = {
         Name = "dev_nat_gw"
         Owner = "ksj"
@@ -51,7 +51,7 @@ variable "subnets" {
   default = {}
 }
 locals {
-  DEV_PUBLIC_SUBNETS= {
+  DEV_SUBNETS= {
     pub1 = {
       vpc_id      = module.vpc["dev_vpc"].vpc_id
       subnet_cidr = "192.168.0.0/24"
@@ -72,8 +72,6 @@ locals {
         Owner = "ksj"
       }
     }
-  }
-  DEV_PRIVATE_SUBNETS= {
     pri1 = {
       vpc_id      = module.vpc["dev_vpc"].vpc_id
       subnet_cidr = "192.168.2.0/24"
@@ -121,8 +119,8 @@ locals {
         }
 
       ]
-      subnets = [module.public_subnets["pub1"].subnet_id,
-        module.public_subnets["pub2"].subnet_id]
+      subnets = [module.subnets["pub1"].subnet_id,
+        module.subnets["pub2"].subnet_id]
     }
     dev_private_route_table = {
       vpc_id = module.vpc["dev_vpc"].vpc_id
@@ -136,8 +134,8 @@ locals {
           gateway_id = module.nat_gw["nat_gw_a"].nat_gw
         }
       ]
-      subnets = [module.private_subnets["pri1"].subnet_id,
-        module.private_subnets["pri2"].subnet_id]
+      subnets = [module.subnets["pri1"].subnet_id,
+        module.subnets["pri2"].subnet_id]
     }
   }
 }
@@ -152,8 +150,8 @@ variable "iam_roles"{
   default = {}
   }
 locals {
-  EKS_CLUSTER_ROLE = {
-    dev_cluster = {
+  DEV_IAM_ROLE = {
+    dev_cluster_role = {
       name               = "dev_cluster_role"
       tags = {
         Name = "dev_cluster_role"
@@ -165,24 +163,7 @@ locals {
         "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
       ]
     }
-    dev_node_group = {
-      name               = "dev_node_group_role"
-      tags = {
-        Name = "dev_node_group_role"
-        Owner = "ksj"
-      }
-      assume_role_policy = data.aws_iam_policy_document.eks_node_group_role.json
-      mgd_policies       = [
-        "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
-        "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
-        "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
-        "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy",
-        "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
-      ]
-    }
-  }
-  EKS_NODE_GROUP_ROLE = {
-    dev_node_group = {
+    dev_node_group_role = {
       name               = "dev_node_group_role"
       tags = {
         Name = "dev_node_group_role"
@@ -247,8 +228,8 @@ variable "security_group_rules" {
   default = {}
 }
 locals {
-  EC2_SECURITY_GROUPS = {
-    eks_node_sg = {
+  DEV_SECURITY_GROUPS = {
+    dev_eks_node_sg = {
       name = "eks-node-sg"
       description = "eks-node-sg"
       vpc_id = module.vpc["dev_vpc"].vpc_id
@@ -282,7 +263,7 @@ locals {
         Owner = "ksj"
       }
     }
-    ec2_ssh_sg = {
+    dev_ec2_ssh_sg = {
       name = "ec2_ssh_sg"
       description = "ec2_ssh_sg"
       vpc_id = module.vpc["dev_vpc"].vpc_id
