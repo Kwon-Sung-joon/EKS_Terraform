@@ -83,8 +83,26 @@ variable "route_tables" {
     vpc_id = string
     route = any
     tags = any
+    subnets = any
   }))
   default = {}
+}
+locals {
+  PUBLIC_ROUTE_TABLE = {
+    dev_public_route_table = {
+      vpc_id = module.vpc["dev_vpc"].vpc_id
+      tags = {
+        Name = "test"
+        Owner = "ksj"
+      }
+      route =[{
+        cidr_block = "0.0.0.0/0"
+        gateway_id = module.vpc["dev_vpc"].igw_id
+      }]
+      subnets = flatten([for subnet_info in values(module.public_subnets) : subnet_info.subnet_id])
+
+    }
+  }
 }
 
 variable "iam_roles"{

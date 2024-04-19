@@ -30,9 +30,8 @@ output "pri_subnet_ids" {
 
 module "public_subnet_rtb_igw" {
   source     = "../../module/rtb_igw"
-  vpc_id     = module.vpc.vpc_id
-  igw_id     = module.vpc.igw_id
-  subnet_ids = flatten([for subnet_info in values(module.public_subnets) : subnet_info.subnet_id])
+  for_each = merge(var.route_tables,local.PUBLIC_ROUTE_TABLE)
+  route_table_config = each.value
 }
 
 /*

@@ -1,17 +1,16 @@
 resource "aws_route_table" "rtb" {
-  vpc_id = var.vpc_id
-  tags = {
-    Name = "rtb-public"
-Owner = "ksj"
+  vpc_id = var.route_table_config.vpc_id
+  tags = var.route_table_config.tags
+  dynamic "route" {
+    for_each = var.route_table_config.route
+    content {
+      cidr_block = route.value.cidr_block
+      gateway_id = route.value.gateway_id
+    }
   }
-  route = [{
-	cidr_block = "0.0.0.0/0"
-  	gateway_id             = var.igw_id
-  }]
-
 }
 resource "aws_route_table_association" "rtb" {
-  count = length(var.subnet_ids)
-  subnet_id      = var.subnet_ids[count.index]
+  count = length(var.route_table_config.subnets)
+  subnet_id      = var.route_table_config.subnets[count.index]
   route_table_id = aws_route_table.rtb.id
 }
