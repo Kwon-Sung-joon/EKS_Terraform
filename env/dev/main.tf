@@ -27,13 +27,12 @@ output "pri_subnet_ids" {
   value = flatten([for subnet_info in values(module.private_subnets) : subnet_info.subnet_id])
 }
 
-/*
-module "public_subnet_rtb_igw" {
-  source     = "../../module/rtb_igw"
-  for_each = merge(var.route_tables,local.PUBLIC_ROUTE_TABLE)
+module "dev_route_tables" {
+  source     = "../../module/route_table"
+  for_each = merge(var.route_tables,local.DEV_ROUTE_TABLE)
   route_table_config = each.value
 }
-*/
+
 /*
 module "private_subnet_rtb_nat" {
   source     = "../../module/rtb_nat"

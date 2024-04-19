@@ -21,6 +21,25 @@ locals {
   }
 }
 
+variable "nat_gw" {
+  type = map(object({
+    public_subnet=string
+    alltag=string
+  }))
+  default = {}
+}
+locals {
+  NAT_GW ={
+    nat_gw_a = {
+      public_subnet = module.public_subnets["pub1"].subnet_id
+      tags = "nat-A"
+    }
+  }
+}
+
+
+
+
 variable "subnets" {
   type=map(object({
     vpc_id=any
@@ -88,7 +107,7 @@ variable "route_tables" {
   default = {}
 }
 locals {
-  PUBLIC_ROUTE_TABLE = {
+  DEV_ROUTE_TABLE = {
     dev_public_route_table = {
       vpc_id = module.vpc["dev_vpc"].vpc_id
       tags = {
@@ -106,7 +125,27 @@ locals {
         }
 
       ]
-      subnets = flatten([for subnet_info in values(module.public_subnets) : subnet_info.subnet_id])
+      subnets = concat(
+        module.public_subnets["pub1"].subnet_id,
+        module.public_subnets["pub2"].subnet_id
+      )
+    }
+    dev_private_route_table = {
+      vpc_id = module.vpc["dev_vpc"].vpc_id
+      tags = {
+        Name = "private-route-table"
+        Owner = "ksj"
+      }
+      route =[
+        {
+          cidr_block = "0.0.0.0/0"
+          gateway_id = module.nat_gw["nat_gw_a"].nat_gw
+        }
+      ]
+      subnets = concat(
+        module.private_subnets["pri1"].subnet_id,
+        module.private_subnets["pri2"].subnet_id
+      )
     }
   }
 }
@@ -261,23 +300,3 @@ locals {
     }
   }
 }
-
-
-variable "nat_gw" {
-  type = map(object({
-    public_subnet=string
-    alltag=string
-  }))
-  default = {}
-}
-locals {
-  NAT_GW ={
-    nat_gw_a = {
-      public_subnet = module.public_subnets["pub1"].subnet_id
-      alltag = "nat-A"
-    }
-  }
-}
-
-
-
