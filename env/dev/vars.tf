@@ -101,13 +101,12 @@ locals {
           gateway_id = module.vpc["dev_vpc"].igw_id
         },
         {
-          cidr_block = "10.0.0.0/0"
+          cidr_block = "10.0.0.0/8"
           gateway_id = module.vpc["dev_vpc"].igw_id
         }
 
       ]
       subnets = flatten([for subnet_info in values(module.public_subnets) : subnet_info.subnet_id])
-
     }
   }
 }
