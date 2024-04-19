@@ -24,7 +24,7 @@ locals {
 variable "nat_gw" {
   type = map(object({
     public_subnet=string
-    alltag=string
+    tags=any
   }))
   default = {}
 }
@@ -32,7 +32,10 @@ locals {
   NAT_GW ={
     nat_gw_a = {
       public_subnet = module.public_subnets["pub1"].subnet_id
-      tags = "nat-A"
+      tags = {
+        Name = "public-route-table"
+        Owner = "ksj"
+      }
     }
   }
 }
