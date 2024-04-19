@@ -1,6 +1,6 @@
 module "vpc" {
   source   = "../../module/vpc"
-  for_each = var.vpc_cidr
+  for_each = merge(var.vpc_cidr,local.DEV_VPC)
   vpc_config=each.value
 
 }
