@@ -38,13 +38,23 @@ output iam_role {
 
 module "security_groups" {
   source = "../../module/security_groups"
-  for_each = merge(var.security_group_rules,local.DEV_SECURITY_GROUPS)
+  for_each = merge(var.security_group,local.DEV_SECURITY_GROUPS)
   sg_config = each.value
   depends_on = [module.vpc]
 }
 output eks_node_sg_id {
   value = module.security_groups["dev_eks_node_sg"].id
 }
+
+module "eks_cluster" {
+  source            = "../../module/eks_cluster"
+  for_each = merge(var.eks_cluster,local.DEV_EKS_CLUSTER)
+  eks_cluster_config = each.value
+  depends_on = [
+    module.eks_cluster_iam_role
+  ]
+}
+
 
 /*
 module "eks_node_lt" {
@@ -75,23 +85,7 @@ module "eks_node_groups" {
   min = 0
   lt_id = module.eks_node_lt.id
 }
-module "eks_cluster" {
-  source            = "../../module/eks_cluster"
-  #subnet_ids = concat(flatten([for subnet in module.public_subnets : subnet.subnet_id]),flatten([for subnet in module.private_subnets : subnet.subnet_id]))
-  subnet_ids        = concat(module.public_subnets["pub1"].subnet_id,
-    module.public_subnets["pub2"].subnet_id,
-    module.private_subnets["pri1"].subnet_id,
-    module.private_subnets["pri2"].subnet_id
-  )
-  alltag            = var.alltag
-  service_ipv4_cidr = var.eks_cluster_service_ipv4_cidr
-  depends_on = [
-    module.eks_cluster_iam_role
-  ]
-  eks-cluster-role    = module.eks_cluster_iam_role["dev_cluster"].iam_role
-  eks-cluster-version = 1.26
-  vpc_cidr = var.vpc_cidr
-}
+
 */
 
 

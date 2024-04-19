@@ -180,43 +180,8 @@ locals {
     }
   }
 }
-  /*
-  variable "ecr-repose-name" {
-    description = "ECR Repository Name"
 
-  }
-
-  variable "bastionAmi" {
-    description = "Bastion AMI"
-    default     = "ami-0cbec04a61be382d9"
-  }
-  variable "bastionKey" {
-    description = "Bastion Key Paire what you have."
-    default     = "TerraformTest"
-  }
-  */
-
-variable "node_types" {
-  description = "insert eks node types"
-  default = "t3.medium"
-}
-variable "eks_cluster_service_ipv4_cidr" {
-  default = "10.100.0.0/16"
-}
-
-/*
-variable "launch_template" {
-  type = map(object({
-    ec2_type=string
-    ami=string
-    lt_name=string
-    userdata = any
-  }))
-  default = {}
-}
-*/
-
-variable "security_group_rules" {
+variable "security_group" {
   type = map(object({
     name = string
     description = string
@@ -297,5 +262,107 @@ locals {
         Owner = "ksj"
       }
     }
+    dev_eks_cluster_sg = {
+      name = "dev_eks_cluster_sg"
+      description = "dev_eks_cluster_sg"
+      vpc_id = module.vpc["dev_vpc_1"].vpc_id
+      ingress = {
+        inbound_80 = {
+          cidr_ipv4   = "0.0.0.0/0"
+          from_port   = 0
+          ip_protocol = -1
+          to_port     = 0
+          description = "inbound_80"
+        }
+      }
+      egress = {
+        outbound_any = {
+          cidr_ipv4   = "0.0.0.0/0"
+          from_port   = 0
+          ip_protocol = -1
+          to_port     = 0
+          description = "outbound_any"
+        }
+      }
+      tags= {
+        Name  = "dev_eks_cluster_sg",
+        Owner = "ksj"
+      }
+    }
   }
 }
+
+
+variable "node_types" {
+  description = "insert eks node types"
+  default = "t3.medium"
+}
+variable "eks_cluster_service_ipv4_cidr" {
+  default = "100.100.0.0/16"
+}
+
+variable "eks_cluster" {
+  type = map(object({
+    name = string
+    subnets = any
+    tags = any
+    service_ipv4_cidr = string
+    cluster_role = string
+    cluster_version = number
+    sg_ids= any
+  }))
+  default = {}
+}
+
+locals {
+  DEV_EKS_CLUSTER = {
+    dev_cluster_1 = {
+      name = "dev_cluster_1"
+      subnets = [module.subnets["pub1"].subnet_id,
+        module.subnets["pub2"].subnet_id,
+        module.subnets["pri1"].subnet_id,
+        module.subnets["pri2"].subnet_id
+      ]
+      tags = {
+        Name = "ksj-dev-cluster-1"
+        Owner = "ksj"
+      }
+      service_ipv4_cidr = "100.100.0.0/16"
+      cluster_role = module.eks_cluster_iam_role["dev_cluster_role"].iam_role
+      cluster_version = 1.26
+      sg_ids = module.security_groups["dev_eks_cluster_sg"].id
+    }
+  }
+}
+
+
+
+
+  /*
+  variable "ecr-repose-name" {
+    description = "ECR Repository Name"
+
+  }
+
+  variable "bastionAmi" {
+    description = "Bastion AMI"
+    default     = "ami-0cbec04a61be382d9"
+  }
+  variable "bastionKey" {
+    description = "Bastion Key Paire what you have."
+    default     = "TerraformTest"
+  }
+  */
+
+
+/*
+variable "launch_template" {
+  type = map(object({
+    ec2_type=string
+    ami=string
+    lt_name=string
+    userdata = any
+  }))
+  default = {}
+}
+*/
