@@ -24,6 +24,7 @@ module "route_tables" {
   source     = "../../module/route_table"
   for_each = merge(var.route_tables,local.DEV_ROUTE_TABLE)
   route_table_config = each.value
+  depends_on = [module.vpc, module.nat_gw,module.subnets]
 }
 module "eks_cluster_iam_role" {
   source             = "../../module/iam_role"
