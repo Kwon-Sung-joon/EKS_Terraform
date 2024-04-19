@@ -3,7 +3,8 @@ resource "aws_security_group" "sg" {
   description = var.sg_config.description
   vpc_id      = var.sg_config.vpc_id
   tags = {
-    Name = var.sg_config.alltag + "-sg"
+    Name = "${var.sg_config.alltag}-sg"
+
     Owner = "ksj"
   }
 }
