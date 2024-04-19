@@ -61,7 +61,8 @@ module "eks_node_groups" {
 /*
 module "eks_cluster" {
   source            = "../../module/eks_cluster"
-  subnet_ids        = flattenconcat(module.pub_subnets["pub1"].subnet_id,
+  #subnet_ids = concat(flatten([for subnet in module.pub_subnets : subnet.subnet_id]),flatten([for subnet in module.pri_subnets : subnet.subnet_id]))
+  subnet_ids        = concat(module.pub_subnets["pub1"].subnet_id,
     module.pub_subnets["pub2"].subnet_id,
     module.pri_subnets["pri1"].subnet_id,
     module.pri_subnets["pri2"].subnet_id
@@ -93,15 +94,22 @@ module "eks_node_group_iam_role" {
 output eks_node_group_role {
   value = flatten([for iam_roles in module.eks_node_group_iam_role : iam_roles.iam_role])
 }
-
-output eks_node_group_role2 {
-  #value = concat(flatten([for subnet in module.pub_subnets : subnet.subnet_id]),flatten([for subnet in module.pri_subnets : subnet.subnet_id]))
+output test {
   value = concat(module.pub_subnets["pub1"].subnet_id,
     module.pub_subnets["pub2"].subnet_id,
-    module.pri_subnets["pri1"].subnet_id,
-    module.pri_subnets["pri2"].subnet_id
   )
 }
+
+
+module "eks_node_sg" {
+  source = "../../module/security_groups"
+  for_each = merge(var.security_group_rules,local.EC2_SECURITY_GROUPS)
+  sg_config = each.value
+
+}
+
+
+
 /*
 module "eks_node_lt" {
   source      = "../../module/launch_template"

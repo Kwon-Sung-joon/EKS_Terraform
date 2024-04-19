@@ -122,3 +122,35 @@ variable "launch_template" {
   default = {}
 }
 */
+
+variable "security_group_rules" {
+  type = map(object({
+    name = string
+    description = string
+    vpc_id = string
+    ingress = any
+    egress = any
+  }))
+  default = {}
+}
+locals {
+  EC2_SECURITY_GROUPS = {
+    eks_node_sg = {
+      name = "eks-node-sg"
+      description = "eks-node-sg"
+      vpc_id = module.vpc.vpc_id
+      ingress = {}
+      egress = {}
+    }
+  }
+
+}
+
+
+
+
+
+
+
+
+
