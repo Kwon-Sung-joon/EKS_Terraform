@@ -142,10 +142,8 @@ locals {
           gateway_id = module.nat_gw["nat_gw_a"].nat_gw
         }
       ]
-      subnets = flatten(
-        module.private_subnets["pri1"].subnet_id,
-        module.private_subnets["pri2"].subnet_id
-      )
+      subnets = set(module.private_subnets["pri1"].subnet_id,
+        module.private_subnets["pri2"].subnet_id)
     }
   }
 }
