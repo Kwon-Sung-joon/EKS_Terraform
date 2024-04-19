@@ -17,7 +17,7 @@ variable "subnets" {
   default = {}
 }
 locals {
-  pub_subnets= {
+  PUBLIC_SUBNETS= {
     pub1 = {
       vpc_id      = module.vpc.vpc_id
       subnet_cidr = "192.168.0.0/24"
@@ -33,7 +33,7 @@ locals {
       alltag      = "pub2"
     }
   }
-  pri_subnets= {
+  PRIVATE_SUBNETS= {
     pri1 = {
       vpc_id      = module.vpc.vpc_id
       subnet_cidr = "192.168.2.0/24"

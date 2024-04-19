@@ -7,31 +7,31 @@ module "vpc" {
 module "nat_gw" {
   source        = "../../module/nat"
   alltag        = var.alltag
-  public_subnet = module.pub_subnets["pub1"].subnet_id
-  depends_on    = [module.vpc, module.pub_subnets]
+  public_subnet = module.PUBLIC_SUBNETS["pub1"].subnet_id
+  depends_on    = [module.vpc, module.PUBLIC_SUBNETS]
 }
 */
-module "pub_subnets" {
+module "public_subnets" {
   source = "../../module/subnets"
-  for_each = merge(var.subnets,local.pub_subnets)
+  for_each = merge(var.subnets,local.PUBLIC_SUBNETS)
   subnet_config=each.value
 }
-module "pri_subnets" {
+module "private_subnets" {
   source = "../../module/subnets"
-  for_each = merge(var.subnets,local.pri_subnets)
+  for_each = merge(var.subnets,local.PRIVATE_SUBNETS)
   subnet_config=each.value
 }
 output "pub_subnet_ids" {
-  value = flatten([for subnet_info in values(module.pub_subnets) : subnet_info.subnet_id])
+  value = flatten([for subnet_info in values(module.public_subnets) : subnet_info.subnet_id])
 }
 output "pri_subnet_ids" {
-  value = flatten([for subnet_info in values(module.pri_subnets) : subnet_info.subnet_id])
+  value = flatten([for subnet_info in values(module.private_subnets) : subnet_info.subnet_id])
 }
 module "public_subnet_rtb_igw" {
   source     = "../../module/rtb_igw"
   vpc_id     = module.vpc.vpc_id
   igw_id     = module.vpc.igw_id
-  subnet_ids = flatten([for subnet_info in values(module.pub_subnets) : subnet_info.subnet_id])
+  subnet_ids = flatten([for subnet_info in values(module.public_subnets) : subnet_info.subnet_id])
   alltag     = var.alltag
 }
 /*
@@ -39,7 +39,7 @@ module "private_subnet_rtb_nat" {
   source     = "../../module/rtb_nat"
   vpc_id     = module.vpc.vpc_id
   nat_gw_id  = module.nat_gw.nat_gw
-  subnet_ids = flatten([for subnet_info in values(module.pri_subnets) : subnet_info.subnet_id])
+  subnet_ids = flatten([for subnet_info in values(module.PRIVATE_SUBNETS) : subnet_info.subnet_id])
   alltag     = var.alltag
 }
 module "eks_node_groups" {
@@ -61,11 +61,11 @@ module "eks_node_groups" {
 /*
 module "eks_cluster" {
   source            = "../../module/eks_cluster"
-  #subnet_ids = concat(flatten([for subnet in module.pub_subnets : subnet.subnet_id]),flatten([for subnet in module.pri_subnets : subnet.subnet_id]))
-  subnet_ids        = concat(module.pub_subnets["pub1"].subnet_id,
-    module.pub_subnets["pub2"].subnet_id,
-    module.pri_subnets["pri1"].subnet_id,
-    module.pri_subnets["pri2"].subnet_id
+  #subnet_ids = concat(flatten([for subnet in module.public_subnets : subnet.subnet_id]),flatten([for subnet in module.private_subnets : subnet.subnet_id]))
+  subnet_ids        = concat(module.public_subnets["pub1"].subnet_id,
+    module.public_subnets["pub2"].subnet_id,
+    module.private_subnets["pri1"].subnet_id,
+    module.private_subnets["pri2"].subnet_id
   )
   alltag            = var.alltag
   service_ipv4_cidr = var.eks_cluster_service_ipv4_cidr
@@ -94,19 +94,14 @@ module "eks_node_group_iam_role" {
 output eks_node_group_role {
   value = flatten([for iam_roles in module.eks_node_group_iam_role : iam_roles.iam_role])
 }
-output test {
-  value = concat(module.pub_subnets["pub1"].subnet_id,
-    module.pub_subnets["pub2"].subnet_id,
-  )
-}
-
-/*
-module "eks_node_sg" {
+module "security_groups" {
   source = "../../module/security_groups"
   for_each = merge(var.security_group_rules,local.EC2_SECURITY_GROUPS)
   sg_config = each.value
 }
-*/
+output sg_ids {
+  value = module.security_groups["eks_node_sg"].id
+}
 
 
 /*
