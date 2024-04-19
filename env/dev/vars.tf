@@ -40,9 +40,6 @@ locals {
   }
 }
 
-
-
-
 variable "subnets" {
   type=map(object({
     vpc_id=any
