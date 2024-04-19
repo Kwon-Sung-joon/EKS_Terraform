@@ -33,7 +33,7 @@ locals {
     nat_gw_a = {
       public_subnet = module.public_subnets["pub1"].subnet_id
       tags = {
-        Name = "public-route-table"
+        Name = "dev_nat_gw"
         Owner = "ksj"
       }
     }
