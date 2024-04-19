@@ -142,7 +142,7 @@ locals {
           gateway_id = module.nat_gw["nat_gw_a"].nat_gw
         }
       ]
-      subnets = concat(module.private_subnets["pri1"].subnet_id,module.private_subnets["pri2"].subnet_id)
+      subnets = module.private_subnets["pri1"].subnet_id
     }
   }
 }
