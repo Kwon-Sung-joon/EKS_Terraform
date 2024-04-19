@@ -14,17 +14,21 @@ output "id" {
 
 resource "aws_vpc_security_group_ingress_rule" "ingress_rule" {
   security_group_id = aws_security_group.sg.id
-  cidr_ipv4   = "10.0.0.0/8"
-  from_port   = 80
-  ip_protocol = "tcp"
-  to_port     = 80
+  for_each = var.sg_config.ingress
+  cidr_ipv4   = each.value.cidr_ipv4
+  from_port   = each.value.from_port
+  ip_protocol = each.value.ip_protocol
+  to_port     = each.value.to_port
+  description = each.value.description
 }
 resource "aws_vpc_security_group_egress_rule" "egress_rule" {
   security_group_id = aws_security_group.sg.id
-  cidr_ipv4   = "10.0.0.0/8"
-  from_port   = 80
-  ip_protocol = "tcp"
-  to_port     = 80
+  for_each = var.sg_config.egress
+  cidr_ipv4   = each.value.cidr_ipv4
+  from_port   = each.value.from_port
+  ip_protocol = each.value.ip_protocol
+  to_port     = each.value.to_port
+  description = each.value.description
 }
 
 

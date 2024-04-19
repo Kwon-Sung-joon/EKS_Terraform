@@ -140,8 +140,24 @@ locals {
       name = "eks-node-sg"
       description = "eks-node-sg"
       vpc_id = module.vpc.vpc_id
-      ingress = {}
-      egress = {}
+      ingress = {
+        inbound_80 = {
+          cidr_ipv4   = "0.0.0.0/0"
+          from_port   = 80
+          ip_protocol = "tcp"
+          to_port     = 80
+          description = "inbound_80"
+        }
+      }
+      egress = {
+        outbound_80 = {
+          cidr_ipv4   = "0.0.0.0/0"
+          from_port   = 80
+          ip_protocol = "tcp"
+          to_port     = 80
+          description = "outbound_80"
+        }
+      }
       alltag = "eks-node-sg"
     }
   }
