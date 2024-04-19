@@ -162,10 +162,41 @@ locals {
           from_port   = 0
           ip_protocol = "tcp"
           to_port     = 65535
-          description = "outbound_80"
+          description = "outbound_any"
         }
       }
       alltag = "eks-node-sg"
+    }
+    ec2_ssh_sg = {
+      name = "ec2_ssh_sg"
+      description = "ec2_ssh_sg"
+      vpc_id = module.vpc.vpc_id
+      ingress = {
+        inbound_80 = {
+          cidr_ipv4   = "0.0.0.0/0"
+          from_port   = 80
+          ip_protocol = "tcp"
+          to_port     = 80
+          description = "inbound_80"
+        }
+        inbound_22 = {
+          cidr_ipv4   = "0.0.0.0/0"
+          from_port   = 22
+          ip_protocol = "tcp"
+          to_port     = 22
+          description = "inbound_22"
+        }
+      }
+      egress = {
+        outbound_any = {
+          cidr_ipv4   = "0.0.0.0/0"
+          from_port   = 0
+          ip_protocol = "tcp"
+          to_port     = 65535
+          description = "outbound_any"
+        }
+      }
+      alltag = "ec2-ssh-sg"
     }
   }
 }
