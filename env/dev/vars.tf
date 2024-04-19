@@ -207,8 +207,11 @@ variable "nat_gw" {
     public_subnet=string
     alltag=string
   }))
-  default = {
-    nat_gw_A = {
+  default = {}
+}
+locals {
+  NAT_GW ={
+    nat_gw_a = {
       public_subnet = module.public_subnets["pub1"].subnet_id
       alltag = "nat-A"
     }

@@ -6,7 +6,7 @@ module "vpc" {
 
 module "nat_gw" {
   source        = "../../module/nat"
-  for_each = var.nat_gw
+  for_each = merge(var.nat_gw,local.NAT_GW)
   nat_config=each.value
   depends_on    = [module.vpc, module.public_subnets]
 }
