@@ -200,7 +200,6 @@ locals {
   }
   */
 
-
 variable "node_types" {
   description = "insert eks node types"
   default = "t3.medium"
@@ -228,7 +227,7 @@ variable "security_group_rules" {
     vpc_id = string
     ingress = any
     egress = any
-    alltag = any
+    tags = any
   }))
   default = {}
 }
@@ -263,7 +262,10 @@ locals {
           description = "outbound_any"
         }
       }
-      alltag = "eks-node-sg"
+      tags= {
+        Name  = "eks-node-sg",
+        Owner = "ksj"
+      }
     }
     ec2_ssh_sg = {
       name = "ec2_ssh_sg"
@@ -294,7 +296,10 @@ locals {
           description = "outbound_any"
         }
       }
-      alltag = "ec2-ssh-sg"
+      tags= {
+        Name  = "ec2_ssh_sg",
+        Owner = "ksj"
+      }
     }
   }
 }
