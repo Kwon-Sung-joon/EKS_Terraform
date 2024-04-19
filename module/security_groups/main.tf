@@ -2,11 +2,7 @@ resource "aws_security_group" "sg" {
   name        = var.sg_config.name
   description = var.sg_config.description
   vpc_id      = var.sg_config.vpc_id
-  tags = {
-    Name = "${var.sg_config.alltag}-sg"
-
-    Owner = "ksj"
-  }
+  tags = var.sg_config.tags
 }
 output "id" {
   value = aws_security_group.sg.id
