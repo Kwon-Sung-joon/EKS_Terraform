@@ -22,7 +22,7 @@ output "subnets" {
 
 module "route_tables" {
   source     = "../../module/route_table"
-  for_each = merge(var.rou te_tables,local.DEV_ROUTE_TABLE)
+  for_each = merge(var.route_tables,local.DEV_ROUTE_TABLE)
   route_table_config = each.value
   depends_on = [module.vpc, module.nat_gw,module.subnets]
 }
