@@ -256,7 +256,7 @@ locals {
           from_port   = 443
           ip_protocol = "tcp"
           to_port     = 443
-          description = "inbound_80"
+          description = "inbound_443"
         }
       }
       egress = {
@@ -318,6 +318,13 @@ locals {
           ip_protocol = "tcp"
           to_port     = 80
           description = "inbound_80"
+        }
+        inbound_443 = {
+          cidr_ipv4   = "0.0.0.0/0"
+          from_port   = 443
+          ip_protocol = "tcp"
+          to_port     = 443
+          description = "inbound_443"
         }
       }
       egress = {
