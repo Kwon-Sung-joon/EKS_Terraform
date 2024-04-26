@@ -63,7 +63,9 @@ variable "launch_template" {
     vpc_security_group_ids = any
     user_data = any
   }))
+  default = {}
 }
+
 #EKS NODEGROUP TYPE
 variable "node_types" {
   description = "insert eks node types"
