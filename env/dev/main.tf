@@ -55,6 +55,15 @@ module "eks_cluster" {
   ]
 }
 
+module "launch_template" {
+  source = "../../module/launch_template"
+  for_each = merge(var.launch_template,local.DEV_LAUNCH_TEMPLATES)
+  launch_template_config = each.value
+  depends_on = [
+  module.eks_cluster,module.security_groups
+  ]
+}
+
 
 /*
 module "eks_node_lt" {
@@ -69,7 +78,7 @@ module "eks_node_lt" {
   vpc_security_group_ids = [module.eks_node_sg.id]
   depends_on             = [module.eks_cluster, module.eks_node_sg]
 }
-
+/*
 module "eks_node_groups" {
   source       = "../../module/eks_node_groups"
   alltag       = var.alltag

@@ -9,6 +9,8 @@ variable "vpc_cidr" {
   }))
   default = {}
 }
+
+#VPC CIDR
 locals {
   DEV_VPC={
     dev_vpc_1 = {
@@ -28,6 +30,7 @@ variable "nat_gw" {
   }))
   default = {}
 }
+#NAT GW
 locals {
   DEV_NAT_GW ={
     dev_nat_gw_1 = {
@@ -50,6 +53,8 @@ variable "subnets" {
   }))
   default = {}
 }
+
+#SUBNETS
 locals {
   DEV_SUBNETS= {
     pub1 = {
@@ -104,6 +109,8 @@ variable "route_tables" {
   }))
   default = {}
 }
+
+#ROUTE TABLES
 locals {
   DEV_ROUTE_TABLE = {
     dev_public_route_table = {
@@ -149,6 +156,8 @@ variable "iam_roles"{
   }))
   default = {}
   }
+
+#IAM ROLES
 locals {
   DEV_IAM_ROLE = {
     dev_cluster_role = {
@@ -192,6 +201,8 @@ variable "security_group" {
   }))
   default = {}
 }
+
+#SECURIT GROUPS
 locals {
   DEV_SECURITY_GROUPS = {
     dev_eks_node_sg = {
@@ -292,7 +303,33 @@ locals {
   }
 }
 
+variable "launch_template" {
+  type = map(object({
+    name = string
+    image_id = string
+    instance_type = string
+    vpc_security_group_ids = any
+    user_data = any
+  }))
+}
+locals {
+  DEV_LAUNCH_TEMPLATES = {
+    dev_eks_node_groups_lt = {
+      name = "dev-eks-ng-lt"
+      image_id = "ami-06aaf7c21e7e74e2a"
+      instance_type = "t3.medium"
+      vpc_security_group_ids = module.security_groups["dev_eks_node_sg"].id
+      user_data = base64encode(templatefile("${path.module}/user_data/eks_node.sh", { CLUSTER-NAME = module.eks_cluster['dev_cluster_1'].cluster_name,
+        B64-CLUSTER-CA     = module.eks_cluster['dev_cluster_1'].kubeconfig-certificate-authority-data,
+        APISERVER-ENDPOINT = module.eks_cluster['dev_cluster_1'].endpoint,
+        DNS-CLUSTER-IP = cidrhost(local.DEV_EKS_CLUSTER.dev_cluster_1.service_ipv4_cidr, 10) }))
+    }
+  }
+}
 
+
+
+#EKS NODEGROUP TYPE
 variable "node_types" {
   description = "insert eks node types"
   default = "t3.medium"
@@ -301,6 +338,7 @@ variable "eks_cluster_service_ipv4_cidr" {
   default = "100.100.0.0/16"
 }
 
+#EKS CLUSTERS
 variable "eks_cluster" {
   type = map(object({
     name = string
