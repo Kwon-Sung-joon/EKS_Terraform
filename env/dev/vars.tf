@@ -208,7 +208,7 @@ locals {
     dev_eks_node_group_1 = {
       cluster_name = module.eks_cluster["dev_cluster_1"].cluster_name
       node_group_name = "${var.dev_name_tag}-eks-node-group-1"
-      node_group_role_arn = module.eks_cluster_iam_role['dev_node_group_role'].iam_role
+      node_group_role_arn = module.eks_cluster_iam_role["dev_node_group_role"].iam_role
       subnet_ids = [module.subnets["pub1"].subnet_id,
         module.subnets["pub2"].subnet_id,
         module.subnets["pri1"].subnet_id,
