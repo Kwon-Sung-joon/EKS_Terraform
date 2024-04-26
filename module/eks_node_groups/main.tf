@@ -2,7 +2,6 @@ resource "aws_eks_node_group" "eks-node-group" {
   cluster_name    = var.eks_node_group_config.cluster_name
   node_group_name = var.eks_node_group_config.node_group_name
   node_role_arn   = var.eks_node_group_config.node_role_arn
-
   subnet_ids      = var.eks_node_group_config.subnet_ids
 
   dynamic "scaling_config" {
