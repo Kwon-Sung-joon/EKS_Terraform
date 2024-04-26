@@ -341,7 +341,7 @@ locals {
       name = "dev-eks-ng-lt"
       image_id = "ami-06aaf7c21e7e74e2a"
       instance_type = "t3.medium"
-      vpc_security_group_ids = module.security_groups["dev_eks_node_sg"].id
+      vpc_security_group_ids = [module.security_groups["dev_eks_node_sg"].id]
       user_data = base64encode(templatefile("${path.module}/user_data/eks_node.sh",
         {
         CLUSTER-NAME = module.eks_cluster["dev_cluster_1"].cluster_name,
