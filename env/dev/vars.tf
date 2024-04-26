@@ -9,6 +9,86 @@ variable "vpc_cidr" {
   }))
   default = {}
 }
+variable "nat_gw" {
+  type = map(object({
+    public_subnet=string
+    tags=any
+  }))
+  default = {}
+}
+variable "subnets" {
+  type=map(object({
+    vpc_id=any
+    subnet_cidr=any
+    subnet_az=any
+    is_public=bool
+    tags=any
+  }))
+  default = {}
+}
+variable "route_tables" {
+  type = map(object({
+    vpc_id = string
+    route = any
+    tags = any
+    subnets = any
+  }))
+  default = {}
+}
+variable "iam_roles"{
+  type=map(object({
+    name=any
+    tags=any
+    assume_role_policy = any
+    mgd_policies = set(string)
+  }))
+  default = {}
+  }
+variable "security_group" {
+  type = map(object({
+    name = string
+    description = string
+    vpc_id = string
+    ingress = any
+    egress = any
+    tags = any
+  }))
+  default = {}
+}
+variable "launch_template" {
+  type = map(object({
+    name = string
+    image_id = string
+    instance_type = string
+    vpc_security_group_ids = any
+    user_data = any
+  }))
+}
+#EKS NODEGROUP TYPE
+variable "node_types" {
+  description = "insert eks node types"
+  default = "t3.medium"
+}
+variable "eks_cluster_service_ipv4_cidr" {
+  default = "100.100.0.0/16"
+}
+
+#EKS CLUSTERS
+variable "eks_cluster" {
+  type = map(object({
+    name = string
+    subnets = any
+    tags = any
+    service_ipv4_cidr = string
+    cluster_role = string
+    cluster_version = number
+    sg_ids= any
+  }))
+  default = {}
+}
+
+
+
 
 #VPC CIDR
 locals {
@@ -23,13 +103,6 @@ locals {
   }
 }
 
-variable "nat_gw" {
-  type = map(object({
-    public_subnet=string
-    tags=any
-  }))
-  default = {}
-}
 #NAT GW
 locals {
   DEV_NAT_GW ={
@@ -41,17 +114,6 @@ locals {
       }
     }
   }
-}
-
-variable "subnets" {
-  type=map(object({
-    vpc_id=any
-    subnet_cidr=any
-    subnet_az=any
-    is_public=bool
-    tags=any
-  }))
-  default = {}
 }
 
 #SUBNETS
@@ -100,15 +162,6 @@ locals {
   }
 }
 
-variable "route_tables" {
-  type = map(object({
-    vpc_id = string
-    route = any
-    tags = any
-    subnets = any
-  }))
-  default = {}
-}
 
 #ROUTE TABLES
 locals {
@@ -147,16 +200,6 @@ locals {
   }
 }
 
-variable "iam_roles"{
-  type=map(object({
-    name=any
-    tags=any
-    assume_role_policy = any
-    mgd_policies = set(string)
-  }))
-  default = {}
-  }
-
 #IAM ROLES
 locals {
   DEV_IAM_ROLE = {
@@ -189,19 +232,6 @@ locals {
     }
   }
 }
-
-variable "security_group" {
-  type = map(object({
-    name = string
-    description = string
-    vpc_id = string
-    ingress = any
-    egress = any
-    tags = any
-  }))
-  default = {}
-}
-
 #SECURIT GROUPS
 locals {
   DEV_SECURITY_GROUPS = {
@@ -303,15 +333,6 @@ locals {
   }
 }
 
-variable "launch_template" {
-  type = map(object({
-    name = string
-    image_id = string
-    instance_type = string
-    vpc_security_group_ids = any
-    user_data = any
-  }))
-}
 locals {
   DEV_LAUNCH_TEMPLATES = {
     dev_eks_node_groups_lt = {
@@ -319,37 +340,17 @@ locals {
       image_id = "ami-06aaf7c21e7e74e2a"
       instance_type = "t3.medium"
       vpc_security_group_ids = module.security_groups["dev_eks_node_sg"].id
-      user_data = base64encode(templatefile("${path.module}/user_data/eks_node.sh", { CLUSTER-NAME = module.eks_cluster['dev_cluster_1'].cluster_name,
-        B64-CLUSTER-CA     = module.eks_cluster['dev_cluster_1'].kubeconfig-certificate-authority-data,
-        APISERVER-ENDPOINT = module.eks_cluster['dev_cluster_1'].endpoint,
-        DNS-CLUSTER-IP = cidrhost(local.DEV_EKS_CLUSTER.dev_cluster_1.service_ipv4_cidr, 10) }))
+      user_data = base64encode(templatefile("${path.module}/user_data/eks_node.sh",
+        {
+        CLUSTER-NAME = module.eks_cluster["dev_cluster_1"].cluster_name,
+        B64-CLUSTER-CA     = module.eks_cluster["dev_cluster_1"].kubeconfig-certificate-authority-data,
+        APISERVER-ENDPOINT = module.eks_cluster["dev_cluster_1"].endpoint,
+        DNS-CLUSTER-IP = cidrhost(local.DEV_EKS_CLUSTER.dev_cluster_1.service_ipv4_cidr, 10)
+        }
+      )
+      )
     }
   }
-}
-
-
-
-#EKS NODEGROUP TYPE
-variable "node_types" {
-  description = "insert eks node types"
-  default = "t3.medium"
-}
-variable "eks_cluster_service_ipv4_cidr" {
-  default = "100.100.0.0/16"
-}
-
-#EKS CLUSTERS
-variable "eks_cluster" {
-  type = map(object({
-    name = string
-    subnets = any
-    tags = any
-    service_ipv4_cidr = string
-    cluster_role = string
-    cluster_version = number
-    sg_ids= any
-  }))
-  default = {}
 }
 
 locals {
@@ -372,8 +373,6 @@ locals {
     }
   }
 }
-
-
 
 
   /*
