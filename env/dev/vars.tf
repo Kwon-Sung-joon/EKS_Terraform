@@ -65,17 +65,6 @@ variable "launch_template" {
   }))
   default = {}
 }
-
-#EKS NODEGROUP TYPE
-variable "node_types" {
-  description = "insert eks node types"
-  default = "t3.medium"
-}
-variable "eks_cluster_service_ipv4_cidr" {
-  default = "100.100.0.0/16"
-}
-
-#EKS CLUSTERS
 variable "eks_cluster" {
   type = map(object({
     name = string
@@ -88,7 +77,18 @@ variable "eks_cluster" {
   }))
   default = {}
 }
-
+variable "eks_node_group" {
+  type = map(object({
+    cluster_name = string
+    node_group_name = string
+    node_group_role_arn = string
+    subnet_ids = any
+    scaling_config = any
+    launch_template = any
+    tags = any
+  }))
+  default = {}
+}
 
 
 
@@ -202,6 +202,45 @@ locals {
   }
 }
 
+
+locals {
+  DEV_EKS_NODE_GROUP = {
+    dev_eks_node_group_1 = {
+      cluster_name = module.eks_cluster["dev_cluster_1"].cluster_name
+      node_group_name = "${var.dev_name_tag}-eks-node-group-1"
+      node_group_role_arn = module.eks_cluster_iam_role['dev_node_group_role'].iam_role
+      subnet_ids = [module.subnets["pub1"].subnet_id,
+        module.subnets["pub2"].subnet_id,
+        module.subnets["pri1"].subnet_id,
+        module.subnets["pri2"].subnet_id
+      ]
+      scaling_config = [
+        {
+          desired_size = 0
+          min_size     = 0
+          max_size     = 3
+
+        }
+
+      ]
+      launch_template = [
+        {
+          version = "$Latest"
+          id = module.launch_template["dev_eks_node_groups_lt"].id
+        }
+
+      ]
+      tags= {
+        Name  = "${var.dev_name_tag}-eks-node-group-1",
+        Owner = "ksj"
+      }
+
+    }
+  }
+
+
+
+}
 #IAM ROLES
 locals {
   DEV_IAM_ROLE = {
@@ -334,7 +373,7 @@ locals {
     }
   }
 }
-
+#LAUNCH TEMPLATES
 locals {
   DEV_LAUNCH_TEMPLATES = {
     dev_eks_node_groups_lt = {
@@ -354,7 +393,7 @@ locals {
     }
   }
 }
-
+#EKS CLUSTERS
 locals {
   DEV_EKS_CLUSTER = {
     dev_cluster_1 = {

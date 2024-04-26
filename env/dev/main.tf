@@ -64,39 +64,12 @@ module "launch_template" {
   ]
 }
 
-
-/*
-module "eks_node_lt" {
-  source      = "../../module/launch_template"
-  lt_ec2_type = "t3.medium"
-  lt_image_id = "ami-06aaf7c21e7e74e2a"
-  lt_name     = "${var.alltag}-eks-ng-lt"
-  user_data = base64encode(templatefile("${path.module}/user_data/eks_node.sh", { CLUSTER-NAME = module.eks_cluster.cluster_name,
-    B64-CLUSTER-CA     = module.eks_cluster.kubeconfig-certificate-authority-data,
-    APISERVER-ENDPOINT = module.eks_cluster.endpoint,
-    DNS-CLUSTER-IP = cidrhost(var.eks_cluster_service_ipv4_cidr, 10) }))
-  vpc_security_group_ids = [module.eks_node_sg.id]
-  depends_on             = [module.eks_cluster, module.eks_node_sg]
+module "eks_node_group" {
+  source = "../../module/eks_node_groups"
+  for_each = merge(var.eks_node_group,local.DEV_EKS_NODE_GROUP)
+  eks_node_group_config = each.value
+  depends_on = [module.launch_template, module.eks_cluster_iam_role]
 }
-/*
-module "eks_node_groups" {
-  source       = "../../module/eks_node_groups"
-  alltag       = var.alltag
-  cluster_name = module.eks_cluster.cluster_name
-  subnet_ids        = [module.private_subnet1.subnet_id,module.private_subnet2.subnet_id]
- // node_types   = var.node_types
-  depends_on = [
-    module.eks_node_group_iam_role
-  ]
-  eks-ng-role = module.eks_node_group_iam_role.iam_role
-  desired     = 1
-  max         = 4
-  min = 0
-  lt_id = module.eks_node_lt.id
-}
-
-*/
-
 
 
 /*
