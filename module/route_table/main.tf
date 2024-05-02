@@ -14,7 +14,7 @@ resource "aws_route_table" "rtb" {
 resource "aws_route_table_association" "rtb" {
   #count = length(var.route_table_config.subnets)
   #subnet_id      = var.route_table_config.subnets[count.index]
-  for_each = toset(var.route_table_config.subnets)
+  for_each = var.route_table_config.subnets
   subnet_id = each.value
   route_table_id = aws_route_table.rtb.id
 }
