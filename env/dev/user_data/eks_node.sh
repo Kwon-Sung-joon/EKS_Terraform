@@ -33,3 +33,5 @@ set -ex
   --apiserver-endpoint  ${APISERVER-ENDPOINT}\
   --dns-cluster-ip  ${DNS-CLUSTER-IP}\
   --container-runtime containerd
+
+systemctl restart kubelet
