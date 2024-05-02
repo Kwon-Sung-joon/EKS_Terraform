@@ -33,7 +33,7 @@ systemctl start docker
 systemctl enable docker
 
 usermod -a -G docker ec2-user
-curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.26.12/2024-01-04/bin/linux/arm64/kubectl	# 버전 1.24
+curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.26.12/2024-01-04/bin/linux/amd64/kubectl
 
 chmod +x ./kubectl
 
