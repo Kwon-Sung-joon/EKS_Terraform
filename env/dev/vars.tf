@@ -454,7 +454,7 @@ locals {
       subnet_id = module.subnets["pub2"].subnet_id
       user_data = base64encode(templatefile("${path.module}/user_data/ec2_eks_admin.sh",
         {
-          CLUSTER-ID = module.eks_cluster["dev_cluster_1"].cluster_name
+          CLUSTER-NAME = module.eks_cluster["dev_cluster_1"].cluster_name
         }
       )
       )
