@@ -1,5 +1,5 @@
 resource "aws_iam_instance_profile" "instance_profile" {
-  name = var.ec2_instance_config.tags.Name
+  name = var.ec2_instance_config.instance_profile_name
   role = var.ec2_instance_config.iam_role
 }
 

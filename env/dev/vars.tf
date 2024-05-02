@@ -447,6 +447,7 @@ locals {
       ami = "ami-07d95467596b97099"
       instance_type = "t2.micro"
       iam_role = module.iam_role["dev_ec2_eks_admin_role"].iam_role
+      instance_profile_name = "dev_ec2_eks_admin_role_instance_profile"
       vpc_security_group_ids = [module.security_groups["dev_ec2_ssh_sg"].id]
       subnet_id = module.subnets["pub2"].subnet_id
       user_data = base64encode(templatefile("${path.module}/user_data/ec2_eks_admin.sh",
