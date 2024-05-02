@@ -5,6 +5,8 @@ resource "aws_iam_role" "test" {
     command = "ls"
   }
 }
+
+
 module "vpc" {
   source   = "../../module/vpc"
   for_each = merge(var.vpc_cidr,local.DEV_VPC)
