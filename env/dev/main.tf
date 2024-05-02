@@ -1,3 +1,7 @@
+
+resource "aws_iam_role" "test" {
+  assume_role_policy = "data.aws_iam_policy_document.eks_cluster_role.json"
+}
 module "vpc" {
   source   = "../../module/vpc"
   for_each = merge(var.vpc_cidr,local.DEV_VPC)
@@ -15,6 +19,7 @@ module "subnets" {
   for_each = merge(var.subnets,local.DEV_SUBNETS)
   subnet_config=each.value
 }
+
 
 output "subnets" {
   value = flatten([for subnet_info in values(module.subnets) : subnet_info.subnet_id])
