@@ -9,6 +9,8 @@ resource "aws_route_table" "rtb" {
     }
   }
 }
+
+
 resource "aws_route_table_association" "rtb" {
   #count = length(var.route_table_config.subnets)
   #subnet_id      = var.route_table_config.subnets[count.index]
