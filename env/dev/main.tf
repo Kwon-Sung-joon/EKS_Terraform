@@ -26,14 +26,14 @@ module "route_tables" {
   route_table_config = each.value
   depends_on = [module.vpc, module.nat_gw,module.subnets]
 }
-module "eks_cluster_iam_role" {
+module "iam_role" {
   source             = "../../module/iam_role"
   #for_each = merge(var.iam_roles,local.EKS_CLUSTER_ROLE)
   for_each = merge(var.iam_roles,local.DEV_IAM_ROLE)
   iam_role_config = each.value
 }
 output iam_role {
-  value = flatten([for iam_roles in module.eks_cluster_iam_role : iam_roles.iam_role])
+  value = flatten([for iam_roles in module.iam_role : iam_roles.iam_role])
 }
 
 module "security_groups" {
@@ -51,7 +51,7 @@ module "eks_cluster" {
   for_each = merge(var.eks_cluster,local.DEV_EKS_CLUSTER)
   eks_cluster_config = each.value
   depends_on = [
-    module.eks_cluster_iam_role
+    module.iam_role
   ]
 }
 
@@ -68,7 +68,14 @@ module "eks_node_group" {
   source = "../../module/eks_node_groups"
   for_each = merge(var.eks_node_group,local.DEV_EKS_NODE_GROUP)
   eks_node_group_config = each.value
-  depends_on = [module.launch_template, module.eks_cluster_iam_role]
+  depends_on = [module.launch_template, module.iam_role]
+}
+
+module "ec2_instance" {
+  source = "../../module/ec2"
+  for_each = merge(var.ec2_instance,local.DEV_EC2_INSTANCE)
+  ec2_instance_config = each.value
+  depends_on = [module.security_groups, module.iam_role,module.eks_cluster]
 }
 
 

@@ -17,6 +17,17 @@ data "aws_iam_policy_document" "eks_node_group_role" {
     }
   }
 }
+
+data "aws_iam_policy_document" "dev_ec2_eks_admin_role" {
+  statement {
+    actions = ["sts:AssumeRole"]
+    principals {
+      identifiers = ["ec2.amazonaws.com"]
+      type        = "Service"
+    }
+  }
+}
+
 data "aws_availability_zones" "available" {
   state = "available"
 }

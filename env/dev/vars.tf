@@ -89,7 +89,18 @@ variable "eks_node_group" {
   }))
   default = {}
 }
-
+variable "ec2_instance" {
+  type = map(object({
+    ami = string
+    instance_type = string
+    iam_instance_profile = string
+    vpc_security_group_ids = list(string)
+    subnet_id = string
+    user_data = any
+    tags = any
+  }))
+  default = {}
+}
 
 
 #VPC CIDR
@@ -202,7 +213,6 @@ locals {
   }
 }
 
-
 #IAM ROLES
 locals {
   DEV_IAM_ROLE = {
@@ -232,6 +242,17 @@ locals {
         "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
         "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy",
         "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
+      ]
+    }
+    dev_ec2_eks_admin_role = {
+      name               = "dev_ec2_eks_admin_role"
+      tags = {
+        Name = "dev_ec2_eks_admin_role"
+        Owner = "ksj"
+      }
+      assume_role_policy = data.aws_iam_policy_document.dev_ec2_eks_admin_role.json
+      mgd_policies       = [
+        "arn:aws:iam::aws:policy/ReadOnlyAccess"
       ]
     }
   }
@@ -378,7 +399,7 @@ locals {
         Owner = "ksj"
       }
       service_ipv4_cidr = "10.100.0.0/16"
-      cluster_role = module.eks_cluster_iam_role["dev_cluster_role"].iam_role
+      cluster_role = module.iam_role["dev_cluster_role"].iam_role
       cluster_version = 1.26
       sg_ids = [module.security_groups["dev_eks_cluster_sg"].id]
     }
@@ -390,7 +411,7 @@ locals {
     dev_eks_node_group_1 = {
       cluster_name = module.eks_cluster["dev_cluster_1"].cluster_name
       node_group_name = "${var.dev_name_tag}-eks-node-group-1"
-      node_role_arn = module.eks_cluster_iam_role["dev_node_group_role"].iam_role
+      node_role_arn = module.iam_role["dev_node_group_role"].iam_role
       subnet_ids = [module.subnets["pub1"].subnet_id,
         module.subnets["pub2"].subnet_id,
         module.subnets["pri1"].subnet_id,
@@ -417,6 +438,29 @@ locals {
         Owner = "ksj"
       }
 
+    }
+  }
+}
+
+#EC2 INSTANCE
+locals {
+  DEV_EC2_INSTANCE = {
+    dev_ec2_eks_admin = {
+      ami = "ami-07d95467596b97099"
+      instance_type = "t2.micro"
+      iam_instance_profile = module.iam_role["dev_ec2_eks_admin_role"].iam_role
+      vpc_security_group_ids = [module.security_groups["dev_ec2_ssh_sg"].id]
+      subnet_id = module.subnets["pub2"].subnet_id
+      user_data = base64encode(templatefile("${path.module}/user_data/ec2_eks_admin.sh",
+        {
+          CLUSTER-ID = module.eks_cluster["dev_cluster_1"].cluster_name
+        }
+      )
+      )
+      tags = {
+        Name = "${var.dev_name_tag}-eks-admin",
+        Owner = "ksj"
+      }
     }
   }
 }
