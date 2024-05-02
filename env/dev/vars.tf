@@ -250,7 +250,8 @@ locals {
       }
       assume_role_policy = data.aws_iam_policy_document.dev_ec2_eks_admin_role.json
       mgd_policies       = [
-        "arn:aws:iam::aws:policy/ReadOnlyAccess"
+        "arn:aws:iam::aws:policy/ReadOnlyAccess",
+        "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
       ]
     }
   }
