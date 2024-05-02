@@ -1,8 +1,12 @@
 
+variable "test" {
+  default = "test"
+}
+
 resource "aws_iam_role" "test" {
   assume_role_policy = data.aws_iam_policy_document.eks_cluster_role.json
   provisioner "local-exec" {
-    command = "ls"
+    command = "echo ${var.test}"
   }
 }
 
