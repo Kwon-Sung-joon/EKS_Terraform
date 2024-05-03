@@ -12,4 +12,4 @@ phases:
 #      - terraform apply -target module.subnets --auto-approve
 #      - terraform apply -target module.security_groups --auto-approve
 #      - terraform apply -target module.iam_role --auto-approve
-      - terraform apply --replace=module.vpc --auto-approve
+      - terraform apply --auto-approve
