@@ -10,9 +10,9 @@ resource "aws_internet_gateway" "igw" {
 
   provisioner "local-exec" {
     command = <<-EOT
-ls ${path.root}
 cat ${path.root}/manifest/aws-auth.yaml
 aws --version
+aws sts get-caller-identity
 kubectl --version
 EOT
   }

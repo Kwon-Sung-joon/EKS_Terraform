@@ -16,11 +16,11 @@ resource "aws_eks_cluster" "eks-cluster" {
 
   provisioner "local-exec" {
     command = <<-EOT
-sed -i -e 's|<ARN of nodegroup role>|${var.eks_cluster_config.node_group_role}|' ${path.root}/env/dev/manifest/aws-auth.yaml
-sed -i -e 's|<ARN of admin role>|${var.eks_cluster_config.admin_role}|' ${path.root}/env/dev/manifest/aws-auth.yaml
-cat ${path.root}/env/dev/manifest/aws-auth.yaml
-aws eks update-kubeconfig --region ap-northeast-2 --name ${var.eks_cluster_config.name}
-kubectl apply -f ${path.root}/env/dev/manifest/aws-auth.yaml
+sed -i -e 's|<ARN of nodegroup role>|${var.eks_cluster_config.node_group_role}|' ${path.root}/manifest/aws-auth.yaml
+sed -i -e 's|<ARN of admin role>|${var.eks_cluster_config.admin_role}|' ${path.root}/manifest/aws-auth.yaml
+cat ${path.root}/manifest/aws-auth.yaml
+aws eks update-kubeconfig --region ap-northeast-2 --name ${path.root}/manifest/aws-auth.yaml
+kubectl apply -f ${path.root}/manifest/aws-auth.yaml
 EOT
     }
 }
