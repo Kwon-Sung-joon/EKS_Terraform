@@ -9,9 +9,8 @@ phases:
     commands:
       - terraform --version
       - terraform init
-      - terraform apply -target aws_iam_role.test -replace=aws_iam_role.test --auto-approve
-#      - terraform apply -target module.subnets --auto-approve
-#      - terraform apply -target module.subnets --auto-approve
-#      - terraform apply -target module.security_groups --auto-approve
-#      - terraform apply -target module.iam_role --auto-approve
-#      - terraform apply --auto-approve
+      - terraform apply -target module.subnets --auto-approve
+      - terraform apply -target module.subnets --auto-approve
+      - terraform apply -target module.security_groups --auto-approve
+      - terraform apply -target module.iam_role --auto-approve
+      - terraform apply --auto-approve

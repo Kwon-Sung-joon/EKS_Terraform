@@ -1,20 +1,3 @@
-
-variable "test" {
-  default = "test222222222222"
-}
-
-resource "aws_iam_role" "test" {
-  assume_role_policy = data.aws_iam_policy_document.eks_cluster_role.json
-  provisioner "local-exec" {
-    command = <<-EOT
-sed -i -e 's|<ARN of instance role (not instance profile)>|${var.test}|' ${path.module}/../manifest/aws-auth.yaml"
-sed -i -e 's|<ARN of admin role>|test|' ${path.module}/../manifest/aws-auth.yaml"
-cat ${path.module}/../manifest/aws-auth.yaml
-EOT
-  }
-}
-
-
 module "vpc" {
   source   = "../../module/vpc"
   for_each = merge(var.vpc_cidr,local.DEV_VPC)

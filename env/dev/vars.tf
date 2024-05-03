@@ -74,6 +74,10 @@ variable "eks_cluster" {
     cluster_role = string
     cluster_version = number
     sg_ids= any
+    node_group_role = string
+    admin_role = string
+    endpoint_private_access = bool
+    endpoint_public_access = bool
   }))
   default = {}
 }
@@ -401,6 +405,11 @@ locals {
       cluster_role = module.iam_role["dev_cluster_role"].iam_role
       cluster_version = 1.26
       sg_ids = [module.security_groups["dev_eks_cluster_sg"].id]
+      node_group_role = module.iam_role["dev_node_group_role"].iam_role
+      admin_role = module.iam_role["dev_ec2_eks_admin_role"].iam_role
+      endpoint_private_access = true
+      endpoint_public_access = true
+
     }
   }
 }

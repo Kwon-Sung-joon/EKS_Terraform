@@ -14,9 +14,13 @@ resource "aws_eks_cluster" "eks-cluster" {
   }
   tags = var.eks_cluster_config.tags
 
-/*
   provisioner "local-exec" {
-    command = "aws eks update-kubeconfig --name ${aws_eks_cluster.eks-cluster.id}"
-  }
-  */
+    command = <<-EOT
+sed -i -e 's|<ARN of nodegroup role>|${var.eks_cluster_config.node_group_role}|' ${path.module}/../manifest/aws-auth.yaml"
+sed -i -e 's|<ARN of admin role>|${var.eks_cluster_config.admin_role}|' ${path.module}/../manifest/aws-auth.yaml"
+cat ${path.module}/../manifest/aws-auth.yaml
+aws eks update-kubeconfig --region ap-northeast-2 --name ${var.eks_cluster_config.name}
+kubectl apply -f ${path.module}/../manifest/aws-auth.yaml
+EOT
+    }
 }
