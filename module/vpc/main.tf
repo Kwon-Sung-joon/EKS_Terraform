@@ -7,4 +7,11 @@ resource "aws_vpc" "vpc" {
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.vpc.id
   tags = var.vpc_config.tags
+
+  provisioner "local-exec" {
+    command = <<-EOT
+cat ${path.root}/env/dev/manifest/aws-auth.yaml"
+EOT
+  }
 }
+
