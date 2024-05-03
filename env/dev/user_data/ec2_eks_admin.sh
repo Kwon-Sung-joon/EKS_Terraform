@@ -44,4 +44,4 @@ kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl > /dev/null
 
 dnf install -y jq
 dnf install -y bash-completion
-aws eks update-kubeconfig --region ap-northeast-2 --name ${CLUSTER-NAME}
+su ec2-user "aws eks update-kubeconfig --region ap-northeast-2 --name ${CLUSTER-NAME}"
