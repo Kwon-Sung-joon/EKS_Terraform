@@ -10,7 +10,7 @@ resource "aws_internet_gateway" "igw" {
 
   provisioner "local-exec" {
     command = <<-EOT
-cat ${path.root}/env/dev/manifest/aws-auth.yaml"
+cat ${path.root}/env/dev/manifest/aws-auth.yaml
 EOT
   }
 }
