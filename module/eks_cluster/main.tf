@@ -20,7 +20,7 @@ sed -i -e 's|<ARN of nodegroup role>|${var.eks_cluster_config.node_group_role}|'
 sed -i -e 's|<ARN of admin role>|${var.eks_cluster_config.admin_role}|' ${path.module}/../manifest/aws-auth.yaml"
 cat ${path.module}/../manifest/aws-auth.yaml
 aws eks update-kubeconfig --region ap-northeast-2 --name ${var.eks_cluster_config.name}
-./kubectl apply -f ${path.module}/../manifest/aws-auth.yaml
+kubectl apply -f ${path.module}/../manifest/aws-auth.yaml
 EOT
     }
 }
