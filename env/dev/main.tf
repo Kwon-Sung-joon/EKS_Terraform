@@ -5,7 +5,7 @@ module "vpc" {
 
 }
 
-/*
+
 module "nat_gw" {
   source        = "../../module/nat"
   for_each = merge(var.nat_gw,local.DEV_NAT_GW)

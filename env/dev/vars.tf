@@ -119,7 +119,7 @@ locals {
     }
   }
 }
-/*
+
 #NAT GW
 locals {
   DEV_NAT_GW ={

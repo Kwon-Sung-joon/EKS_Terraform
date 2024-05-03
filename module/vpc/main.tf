@@ -8,13 +8,5 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.vpc.id
   tags = var.vpc_config.tags
 
-  provisioner "local-exec" {
-    command = <<-EOT
-cat ${path.root}/manifest/aws-auth.yaml
-aws --version
-aws sts get-caller-identity
-kubectl --version
-EOT
-  }
 }
 
