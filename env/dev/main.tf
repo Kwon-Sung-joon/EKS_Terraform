@@ -6,12 +6,7 @@ variable "test" {
 resource "aws_iam_role" "test" {
   assume_role_policy = data.aws_iam_policy_document.eks_cluster_role.json
   provisioner "local-exec" {
-    command = <<EOT
-    "pwd"
-    "sed -i -e 's|<ARN of instance role (not instance profile)>|${var.test}|' ../manifest/aws-auth-cm.yaml"
-    "sed -i -e 's|<ARN of admin role>|test|' ../manifest/aws-auth-cm.yaml"
-    "cat ../manifest/aws-auth-cm.yaml"
-    EOT
+    command = "ls -al"
   }
 }
 
