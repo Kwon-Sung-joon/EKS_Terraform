@@ -13,6 +13,8 @@ resource "aws_internet_gateway" "igw" {
 pwd
 ls ${path.root}
 cat ${path.root}/env/dev/manifest/aws-auth.yaml
+aws --version
+kubectl --version
 EOT
   }
 }
