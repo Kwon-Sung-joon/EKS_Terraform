@@ -462,7 +462,7 @@ locals {
       ]
       launch_template = [
         {
-          version = "$Latest"
+          version = "$Default"
           id = module.launch_template["dev_eks_node_groups_lt"].id
         }
 
