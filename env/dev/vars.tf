@@ -392,7 +392,7 @@ locals {
   }
 }
 
-/*
+
 #LAUNCH TEMPLATES
 locals {
   DEV_LAUNCH_TEMPLATES = {

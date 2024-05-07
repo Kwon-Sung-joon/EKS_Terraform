@@ -58,7 +58,7 @@ module "security_groups" {
 output eks_node_sg_id {
   value = module.security_groups["dev_eks_node_sg"].id
 }
-/*
+
 module "eks_cluster" {
   source            = "../../module/eks_cluster"
   for_each = merge(var.eks_cluster,local.DEV_EKS_CLUSTER)
