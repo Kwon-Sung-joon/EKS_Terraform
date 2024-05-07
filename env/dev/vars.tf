@@ -253,7 +253,8 @@ locals {
         "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
         "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
         "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy",
-        "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
+        "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess",
+        module.iam_policy["dev_node_group_policy"].policy_arn
       ]
     }
     dev_ec2_eks_admin_role = {
@@ -265,8 +266,7 @@ locals {
       assume_role_policy = data.aws_iam_policy_document.dev_ec2_eks_admin_role.json
       mgd_policies       = [
         "arn:aws:iam::aws:policy/ReadOnlyAccess",
-        "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
-        module.iam_policy["dev_node_group_policy"].policy_arn
+        "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
       ]
     }
   }
