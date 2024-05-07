@@ -39,6 +39,16 @@ output iam_role {
   value = flatten([for iam_roles in module.iam_role : iam_roles.iam_role])
 }
 
+module "iam_policy" {
+  source = "../../module/iam_policy"
+  for_each = merge(var.iam_policies,local.DEV_IAM_POLICY)
+  iam_policy_config = each.value
+}
+
+output iam_policy {
+  value = flatten([for iam_roles in module.iam_role : iam_roles.iam_role])
+}
+
 module "security_groups" {
   source = "../../module/security_groups"
   for_each = merge(var.security_group,local.DEV_SECURITY_GROUPS)
@@ -48,7 +58,7 @@ module "security_groups" {
 output eks_node_sg_id {
   value = module.security_groups["dev_eks_node_sg"].id
 }
-
+/*
 module "eks_cluster" {
   source            = "../../module/eks_cluster"
   for_each = merge(var.eks_cluster,local.DEV_EKS_CLUSTER)

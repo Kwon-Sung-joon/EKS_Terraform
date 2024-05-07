@@ -15,7 +15,7 @@ users:
     groups : [ wheel ]
     shell : /bin/bash
     lock_passwd : false
-    plain_text_passwd: 'admin01'
+    plain_text_passwd: 'admin0!'
 
 --//
 Content-Type: text/x-shellscript; charset="us-ascii"

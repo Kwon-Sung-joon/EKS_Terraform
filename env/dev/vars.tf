@@ -44,6 +44,16 @@ variable "iam_roles"{
   }))
   default = {}
   }
+
+variable "iam_policies" {
+  type = map(object({
+    name = string
+    policy = any
+    description = string
+    tags = any
+  }))
+  default = {}
+}
 variable "security_group" {
   type = map(object({
     name = string
@@ -255,8 +265,22 @@ locals {
       assume_role_policy = data.aws_iam_policy_document.dev_ec2_eks_admin_role.json
       mgd_policies       = [
         "arn:aws:iam::aws:policy/ReadOnlyAccess",
-        "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+        "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
+        module.iam_policy["dev_node_group_policy"].policy_arn
       ]
+    }
+  }
+}
+locals {
+  DEV_IAM_POLICY = {
+    dev_node_group_policy = {
+      name = "dev_node_group_policy"
+      description = "ecr policy for node group"
+      policy = "${path.root}/template/NodeECR_Policy.json"
+      tags = {
+        Name = "dev_node_group_policy"
+        Owner = "ksj"
+      }
     }
   }
 }
@@ -367,6 +391,8 @@ locals {
     }
   }
 }
+
+/*
 #LAUNCH TEMPLATES
 locals {
   DEV_LAUNCH_TEMPLATES = {
