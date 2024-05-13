@@ -271,6 +271,8 @@ locals {
     }
   }
 }
+
+#IAM POLICY
 locals {
   DEV_IAM_POLICY = {
     dev_node_group_policy = {
