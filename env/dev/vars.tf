@@ -433,7 +433,7 @@ locals {
         CLUSTER-NAME = module.eks_cluster["dev_cluster_1"].cluster_name,
         B64-CLUSTER-CA     = module.eks_cluster["dev_cluster_1"].kubeconfig-certificate-authority-data,
         APISERVER-ENDPOINT = module.eks_cluster["dev_cluster_1"].endpoint,
-        DNS-CLUSTER-IP = cidrhost(10.100.0.0/16, 10)
+        DNS-CLUSTER-IP = cidrhost("10.100.0.0/16", 10)
         #DNS-CLUSTER-IP = cidrhost(local.DEV_EKS_CLUSTER.dev_cluster_1.service_ipv4_cidr, 10)
         }
       )
