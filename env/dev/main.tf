@@ -5,7 +5,6 @@ module "vpc" {
 
 }
 
-
 module "nat_gw" {
   source        = "../../module/nat"
   for_each = merge(var.nat_gw,local.DEV_NAT_GW)
@@ -17,12 +16,9 @@ module "subnets" {
   for_each = merge(var.subnets,local.DEV_SUBNETS)
   subnet_config=each.value
 }
-
-
 output "subnets" {
   value = flatten([for subnet_info in values(module.subnets) : subnet_info.subnet_id])
 }
-
 module "route_tables" {
   source     = "../../module/route_table"
   for_each = merge(var.route_tables,local.DEV_ROUTE_TABLE)
@@ -38,17 +34,14 @@ module "iam_role" {
 output iam_role {
   value = flatten([for iam_roles in module.iam_role : iam_roles.iam_role])
 }
-
 module "iam_policy" {
   source = "../../module/iam_policy"
   for_each = merge(var.iam_policies,local.DEV_IAM_POLICY)
   iam_policy_config = each.value
 }
-
 output iam_policy {
   value = flatten([for iam_roles in module.iam_role : iam_roles.iam_role])
 }
-
 module "security_groups" {
   source = "../../module/security_groups"
   for_each = merge(var.security_group,local.DEV_SECURITY_GROUPS)
@@ -77,6 +70,7 @@ module "launch_template" {
   ]
 }
 
+/*
 module "eks_node_group" {
   source = "../../module/eks_node_groups"
   for_each = merge(var.eks_node_group,local.DEV_EKS_NODE_GROUP)
