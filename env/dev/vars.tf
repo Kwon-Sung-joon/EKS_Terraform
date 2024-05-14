@@ -116,6 +116,15 @@ variable "ec2_instance" {
   default = {}
 }
 
+variable "iam_oidc" {
+  type = map(object({
+    url = any
+    client_id_list = any
+    thumbprint_list = any
+  }))
+  default = {}
+}
+
 
 #VPC CIDR
 locals {
@@ -498,6 +507,15 @@ locals {
         Name = "${var.dev_name_tag}-eks-admin",
         Owner = "ksj"
       }
+    }
+  }
+}
+
+locals {
+  DEV_IAM_OIDC = {
+    iam_oidc = {
+      url = module.eks_cluster["dev_cluster_1"].cluster_oidc
+      client_id_list = ["sts.amazonaws.com",]
     }
   }
 }

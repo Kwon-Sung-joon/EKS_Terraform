@@ -70,6 +70,13 @@ module "launch_template" {
   ]
 }
 
+module "iam_oidc" {
+  source = "../../module/iam_oidc"
+  for_each = merge(var.iam_oidc,local.DEV_IAM_OIDC)
+  iam_oidc_config = each.value
+  depends_on = [
+  module.eks_cluster]
+}
 /*
 module "eks_node_group" {
   source = "../../module/eks_node_groups"
