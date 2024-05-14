@@ -69,6 +69,7 @@ module "launch_template" {
   module.eks_cluster,module.security_groups
   ]
 }
+/*
 
 module "iam_oidc" {
   source = "../../module/iam_oidc"
@@ -77,7 +78,7 @@ module "iam_oidc" {
   depends_on = [
   module.eks_cluster]
 }
-
+*/
 output eks_oidc {
   value = module.eks_cluster["dev_cluster_1"].cluster_oidc
 }
