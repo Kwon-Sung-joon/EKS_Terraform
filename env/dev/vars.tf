@@ -293,12 +293,12 @@ locals {
         Owner = "ksj"
       }
     }
-    dev_alb_controller_policy = {
-      name = "dev_alb_controller_policy"
+    dev_aws_load_balancer_controller = {
+      name = "dev_aws_load_balancer_controller"
       description = "ecr policy for node group"
       policy = "${path.root}/template/ALB_Controller_Policy.json"
       tags = {
-        Name = "dev_alb_controller_policy"
+        Name = "dev_aws_load_balancer_controller"
         Owner = "ksj"
       }
     }
@@ -324,6 +324,13 @@ locals {
           from_port   = 443
           ip_protocol = "tcp"
           to_port     = 443
+          description = "inbound_443"
+        }
+        inbound_9443 = {
+          cidr_ipv4   = "0.0.0.0/0"
+          from_port   = 9443
+          ip_protocol = "tcp"
+          to_port     = 9443
           description = "inbound_443"
         }
       }
@@ -426,7 +433,8 @@ locals {
         CLUSTER-NAME = module.eks_cluster["dev_cluster_1"].cluster_name,
         B64-CLUSTER-CA     = module.eks_cluster["dev_cluster_1"].kubeconfig-certificate-authority-data,
         APISERVER-ENDPOINT = module.eks_cluster["dev_cluster_1"].endpoint,
-        DNS-CLUSTER-IP = cidrhost(local.DEV_EKS_CLUSTER.dev_cluster_1.service_ipv4_cidr, 10)
+        DNS-CLUSTER-IP = cidrhost(10.100.0.0/16, 10)
+        #DNS-CLUSTER-IP = cidrhost(local.DEV_EKS_CLUSTER.dev_cluster_1.service_ipv4_cidr, 10)
         }
       )
       )
@@ -447,7 +455,7 @@ locals {
         Name = "ksj-dev-cluster-1"
         Owner = "ksj"
       }
-      service_ipv4_cidr = "10.100.0.0/16"
+      #service_ipv4_cidr = "10.100.0.0/16"
       cluster_role = module.iam_role["dev_cluster_role"].iam_role
       cluster_version = 1.26
       sg_ids = [module.security_groups["dev_eks_cluster_sg"].id]
@@ -455,7 +463,6 @@ locals {
       admin_role = module.iam_role["dev_ec2_eks_admin_role"].iam_role
       endpoint_private_access = true
       endpoint_public_access = true
-
     }
   }
 }

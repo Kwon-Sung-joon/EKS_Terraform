@@ -82,13 +82,14 @@ output eks_oidc {
   value = module.eks_cluster["dev_cluster_1"].cluster_oidc
 }
 
+/*
 module "eks_node_group" {
   source = "../../module/eks_node_groups"
   for_each = merge(var.eks_node_group,local.DEV_EKS_NODE_GROUP)
   eks_node_group_config = each.value
   depends_on = [module.launch_template, module.iam_role]
 }
-
+*/
 module "ec2_instance" {
   source = "../../module/ec2"
   for_each = merge(var.ec2_instance,local.DEV_EC2_INSTANCE)
