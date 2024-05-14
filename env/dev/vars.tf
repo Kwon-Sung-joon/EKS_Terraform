@@ -293,6 +293,15 @@ locals {
         Owner = "ksj"
       }
     }
+    dev_alb_controller_policy = {
+      name = "dev_alb_controller_policy"
+      description = "ecr policy for node group"
+      policy = "${path.root}/template/ALB_Controller_Policy.json"
+      tags = {
+        Name = "dev_alb_controller_policy"
+        Owner = "ksj"
+      }
+    }
   }
 }
 #SECURIT GROUPS
