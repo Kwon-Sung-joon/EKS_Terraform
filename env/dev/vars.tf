@@ -433,8 +433,7 @@ locals {
         CLUSTER-NAME = module.eks_cluster["dev_cluster_1"].cluster_name,
         B64-CLUSTER-CA     = module.eks_cluster["dev_cluster_1"].kubeconfig-certificate-authority-data,
         APISERVER-ENDPOINT = module.eks_cluster["dev_cluster_1"].endpoint,
-        DNS-CLUSTER-IP = cidrhost("10.100.0.0/16", 10)
-        #DNS-CLUSTER-IP = cidrhost(local.DEV_EKS_CLUSTER.dev_cluster_1.service_ipv4_cidr, 10)
+        DNS-CLUSTER-IP = cidrhost(local.DEV_EKS_CLUSTER.dev_cluster_1.service_ipv4_cidr, 10)
         }
       )
       )
@@ -455,7 +454,7 @@ locals {
         Name = "ksj-dev-cluster-1"
         Owner = "ksj"
       }
-      #service_ipv4_cidr = "10.100.0.0/16"
+      service_ipv4_cidr = "10.100.0.0/16"
       cluster_role = module.iam_role["dev_cluster_role"].iam_role
       cluster_version = 1.26
       sg_ids = [module.security_groups["dev_eks_cluster_sg"].id]
@@ -480,7 +479,7 @@ locals {
       ]
       scaling_config = [
         {
-          desired_size = 0
+          desired_size = 2
           min_size     = 0
           max_size     = 3
 

@@ -33,7 +33,7 @@ spec:
         app: spring-app
     spec:
       containers:
-        - image: k8s.gcr.io/e2e-test-images/spring-app:2.5
+        - image: ecr....dkr.ecr.ap-northeast-2.amazonaws.com/ksj-apps:spring-8080-x86
           imagePullPolicy: Always
           name: spring-app
           ports:
@@ -46,7 +46,8 @@ metadata:
   namespace: spring-app
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/tags: Environment=dev,Team=test
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/subnets:
 spec:
   ingressClassName: alb
   rules:
