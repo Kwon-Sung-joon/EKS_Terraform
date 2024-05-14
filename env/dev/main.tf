@@ -80,7 +80,7 @@ module "iam_oidc" {
 }
 */
 output eks_oidc {
-  value = module.eks_cluster["dev_cluster_1"].cluster_oidc["oidc"]
+  value = module.eks_cluster["dev_cluster_1"].cluster_oidc
 }
 /*
 module "eks_node_group" {
