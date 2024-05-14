@@ -12,5 +12,5 @@ output "cluster_sg_id" {
 }
 
 output "cluster_oidc" {
-  value = aws_eks_cluster.eks-cluster.identity
+  value = aws_eks_cluster.eks-cluster.identity.oidc[0]
 }
