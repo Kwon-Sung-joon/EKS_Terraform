@@ -32,6 +32,9 @@ data "aws_availability_zones" "available" {
   state = "available"
 }
 
+data "tls_certificate" "dev_eks_cluster_1_oidc" {
+  url = module.eks_cluster["dev_cluster_1"].cluster_oidc
+}
 /*
 data "template_file" "eks_userdata" {
   template = "./user_data/eks_node.sh"

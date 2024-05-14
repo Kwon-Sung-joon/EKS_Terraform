@@ -515,7 +515,9 @@ locals {
   DEV_IAM_OIDC = {
     iam_oidc = {
       url = module.eks_cluster["dev_cluster_1"].cluster_oidc
-      client_id_list = ["sts.amazonaws.com",]
+      client_id_list = ["sts.amazonaws.com"]
+      thumbprint_list = [data.tls_certificate.dev_eks_cluster_1_oidc.certificates.0.sha1_fingerprint]
+
     }
   }
 }
