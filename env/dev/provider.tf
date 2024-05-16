@@ -13,6 +13,8 @@ terraform {
   }
 }
 
+
+/*
 provider "kubernetes" {
   host                   = module.eks_cluster["dev_cluster_1"].endpoint
   cluster_ca_certificate = base64decode(module.eks_cluster["dev_cluster_1"].kubeconfig-certificate-authority-data)
@@ -25,7 +27,13 @@ provider "kubernetes" {
     args        = ["eks", "get-token", "--cluster-name", "dev_cluster_1"]
   }
 }
+*/
 
+provider "kubernetes" {
+  config_path = base64decode(data.aws_s3_bucket_object.kubeconfig.body)
+}
+
+/*
 provider "helm" {
   kubernetes {
     host                   = module.eks_cluster["dev_cluster_1"].endpoint
@@ -38,5 +46,11 @@ provider "helm" {
       command     = "aws"
       args        = ["eks", "get-token", "--cluster-name", "dev_cluster_1"]
     }
+  }
+}
+*/
+provider "helm" {
+  kubernetes {
+    config_path = base64decode(data.aws_s3_bucket_object.kubeconfig.body)
   }
 }

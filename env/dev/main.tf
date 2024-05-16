@@ -102,22 +102,14 @@ module "ec2_instance" {
   ec2_instance_config = each.value
   depends_on = [module.security_groups, module.iam_role,module.eks_cluster]
 }
-
-#EKS SERVICE ACCOUNT
-resource "kubernetes_service_account" "service-account" {
-  metadata {
-    name      = "aws-load-balancer-controller"
-    namespace = "kube-system"
-    labels = {
-      "app.kubernetes.io/name"      = "aws-load-balancer-controller"
-      "app.kubernetes.io/component" = "controller"
-    }
-    annotations = {
-      "eks.amazonaws.com/role-arn"               = module.iam_role["dev_elb_sa_role"].iam_role
-      "eks.amazonaws.com/sts-regional-endpoints" = "true"
-    }
-  }
+/*
+##K8S Resources
+module "k8s_service_account" {
+  source = "../../module/k8s_service_account"
+  for_each = merge(var.k8s_service_account,local.DEV_K8S_SERVICE_ACCOUNT)
+  k8s_service_account_config = each.value
 }
+
 
 module "helm_release" {
   source = "../../module/helm"
@@ -125,7 +117,7 @@ module "helm_release" {
   helm_release_config = each.value
 }
 
-
+*/
 /*
 module "ecr_repos" {
   source         = "../../module/ecr"

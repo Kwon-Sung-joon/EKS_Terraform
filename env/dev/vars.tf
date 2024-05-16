@@ -135,6 +135,14 @@ variable "helm_release" {
   }))
   default = {}
 }
+variable "k8s_service_account" {
+  type = map(object({
+    metadata = any
+  }))
+  default = {}
+}
+
+
 
 #VPC CIDR
 locals {
@@ -566,21 +574,13 @@ locals {
 locals {
   DEV_HELM = {
     dev_elb_controller_chart = {
-      repository = "test"
-      chart = "test"
-      name  = "test"
+      repository = "https://aws.github.io/eks-charts"
+      chart = "aws-load-balancer-controller"
+      name  = "kube-system"
       set   = [
         {
           name  = "region"
           value = "ap-northeast-2"
-        },
-        {
-          name  = "vpcId"
-          value = module.vpc["dev_vpc_1"].vpc_id
-        },
-        {
-          name  = "image_repository"
-          value = module.vpc["dev_vpc_1"].igw_id
         },
         {
           name  = "serviceAccount.create"
@@ -598,6 +598,30 @@ locals {
     }
   }
 }
+
+locals {
+  DEV_K8S_SERVICE_ACCOUNT = {
+    dev_elb_sa = {
+      metadata = [
+        {
+          name      = "aws-load-balancer-controller"
+          namespace = "kube-system"
+          labels = {
+            "app.kubernetes.io/name"      = "aws-load-balancer-controller"
+            "app.kubernetes.io/component" = "controller"
+          }
+          annotations = {
+            "eks.amazonaws.com/role-arn"               = module.iam_role["dev_elb_sa_role"].iam_role
+            "eks.amazonaws.com/sts-regional-endpoints" = "true"
+          }
+        }
+      ]
+
+    }
+  }
+
+}
+
   /*
   variable "ecr-repose-name" {
     description = "ECR Repository Name"
