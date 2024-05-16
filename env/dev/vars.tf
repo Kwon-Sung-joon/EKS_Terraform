@@ -596,7 +596,7 @@ locals {
         },
         {
           name  = "clusterName"
-          value = "asd"
+          value = "dev_cluster_1"
         }
       ]
     }
