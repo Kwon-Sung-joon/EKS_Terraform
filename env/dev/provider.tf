@@ -14,7 +14,5 @@ terraform {
 }
 
 provider "helm" {
-  kubernetes {
     config_raw = base64decode(data.aws_s3_bucket_object.kubeconfig.body)
-  }
 }
