@@ -46,21 +46,21 @@ data "aws_iam_policy_document" "dev_elb_sa_role" {
   statement {
     principals {
       type        = "Federated"
-      identifiers = ["arn:aws:iam::${var.account_id}:oidc-provider/${module.iam_oidc["iam_oidc"].oidc_provider}"]
+      identifiers = ["arn:aws:iam::${var.account_id}:oidc-provider/arn:aws:iam::672956273056:oidc-provider/oidc.eks.ap-northeast-2.amazonaws.com/id/42AA06C0891D619DB25EEF90FD53D2AC"]
     }
 
     actions = ["sts:AssumeRoleWithWebIdentity"]
 
     condition {
       test     = "StringEquals"
-      variable = "${module.iam_oidc["iam_oidc"].oidc_provider}:aud"
+      variable = "arn:aws:iam::672956273056:oidc-provider/oidc.eks.ap-northeast-2.amazonaws.com/id/42AA06C0891D619DB25EEF90FD53D2AC:aud"
       values   = ["sts.amazonaws.com"]
     }
 
     condition {
       test     = "StringEquals"
-      variable = "${module.iam_oidc["iam_oidc"].oidc_provider}:sub"
-      values   = ["system:serviceaccount:${module.iam_oidc["iam_oidc"].oidc_provider}:${module.iam_oidc["iam_oidc"].oidc_provider}"]
+      variable = "arn:aws:iam::672956273056:oidc-provider/oidc.eks.ap-northeast-2.amazonaws.com/id/42AA06C0891D619DB25EEF90FD53D2AC:sub"
+      values   = ["system:serviceaccount:kube-system:aws-load-balancer-controller"]
     }
   }
 }
