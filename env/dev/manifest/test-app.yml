@@ -33,7 +33,7 @@ spec:
         app: spring-app
     spec:
       containers:
-        - image: ecr....dkr.ecr.ap-northeast-2.amazonaws.com/ksj-apps:spring-8080-x86
+        - image: 672956273056.dkr.ecr.ap-northeast-2.amazonaws.com/ksj-apps:spring-8080-x64-v2
           imagePullPolicy: Always
           name: spring-app
           ports:

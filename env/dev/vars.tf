@@ -72,6 +72,7 @@ variable "launch_template" {
     instance_type = string
     vpc_security_group_ids = any
     user_data = any
+    update_default_version = bool
   }))
   default = {}
 }
@@ -278,6 +279,18 @@ locals {
         "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
       ]
     }
+    dev_elb_sa_role = {
+      name               = "dev_elb_sa_role"
+      tags = {
+        Name = "dev_elb_sa_role"
+        Owner = "ksj"
+      }
+      assume_role_policy = data.aws_iam_policy_document.dev_ec2_eks_admin_role.json
+      mgd_policies       = [
+        "arn:aws:iam::aws:policy/ReadOnlyAccess",
+        "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+      ]
+    }
   }
 }
 
@@ -293,12 +306,12 @@ locals {
         Owner = "ksj"
       }
     }
-    dev_aws_load_balancer_controller = {
-      name = "dev_aws_load_balancer_controller"
-      description = "ecr policy for node group"
-      policy = "${path.root}/template/ALB_Controller_Policy.json"
+    dev_elb_sa_policy = {
+      name = "dev_elb_sa_policy"
+      description = "elb policy for eks service account"
+      policy = "${path.root}/template/AWS_LB_Controller_Policy.json"
       tags = {
-        Name = "dev_aws_load_balancer_controller"
+        Name = "ddev_elb_sa_policy"
         Owner = "ksj"
       }
     }
@@ -331,7 +344,7 @@ locals {
           from_port   = 9443
           ip_protocol = "tcp"
           to_port     = 9443
-          description = "inbound_443"
+          description = "inbound_9443"
         }
       }
       egress = {
@@ -427,6 +440,7 @@ locals {
       name = "dev-eks-ng-lt"
       image_id = "ami-06aaf7c21e7e74e2a"
       instance_type = "t3.medium"
+      update_default_version = false
       vpc_security_group_ids = [module.security_groups["dev_eks_node_sg"].id]
       user_data = base64encode(templatefile("${path.module}/user_data/eks_node.sh",
         {
@@ -526,13 +540,13 @@ locals {
   }
 }
 
+#IAM OIDC
 locals {
   DEV_IAM_OIDC = {
     iam_oidc = {
       url = module.eks_cluster["dev_cluster_1"].cluster_oidc
       client_id_list = ["sts.amazonaws.com"]
       thumbprint_list = [data.tls_certificate.dev_eks_cluster_1_oidc.certificates.0.sha1_fingerprint]
-
     }
   }
 }

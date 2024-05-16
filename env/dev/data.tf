@@ -36,8 +36,29 @@ data "tls_certificate" "dev_eks_cluster_1_oidc" {
   url = module.eks_cluster["dev_cluster_1"].cluster_oidc
 }
 
+/*
+data "aws_iam_policy_document" "dev_elb_sa_role" {
+  statement {
+    principals {
+      type        = "Federated"
+      identifiers = ["arn:aws:iam::${var.account_id}:oidc-provider/${var.oidc_provider}"]
+    }
 
+    actions = ["sts:AssumeRoleWithWebIdentity"]
 
+    condition {
+      test     = "StringEquals"
+      variable = "${var.oidc_provider}:aud"
+      values   = ["sts.amazonaws.com"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "${var.oidc_provider}:sub"
+      values   = ["system:serviceaccount:${var.namespace}:${var.service_account}"]
+    }
+  }
+}
 
 
 /*

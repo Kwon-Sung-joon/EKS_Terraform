@@ -1,0 +1,1 @@
+variable "helm_release_config" {}

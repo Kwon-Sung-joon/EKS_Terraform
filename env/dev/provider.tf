@@ -12,3 +12,9 @@ terraform {
     encrypt = true
   }
 }
+
+provider "helm" {
+  kubernetes {
+    config_path = "/home/ec2-user/.kube/config"
+  }
+}
