@@ -354,6 +354,13 @@ locals {
           to_port     = 9443
           description = "inbound_9443"
         }
+        inbound_8080 = {
+          cidr_ipv4   = "0.0.0.0/0"
+          from_port   = 8080
+          ip_protocol = "tcp"
+          to_port     = 8080
+          description = "inbound_8080"
+        }
       }
       egress = {
         outbound_any = {
