@@ -30,7 +30,7 @@ provider "kubernetes" {
 */
 
 provider "kubernetes" {
-  config_path = base64decode(data.aws_s3_bucket_object.kubeconfig.body)
+  config_raw = base64decode(data.aws_s3_bucket_object.kubeconfig.body)
 }
 
 /*
@@ -50,7 +50,5 @@ provider "helm" {
 }
 */
 provider "helm" {
-  kubernetes {
-    config_path = base64decode(data.aws_s3_bucket_object.kubeconfig.body)
-  }
+  config_raw = base64decode(data.aws_s3_bucket_object.kubeconfig.body)
 }
