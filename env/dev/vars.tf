@@ -126,6 +126,14 @@ variable "iam_oidc" {
   default = {}
 }
 
+variable "helm_release" {
+  type = map(object({
+    chart = any
+    name = string
+    set = any
+  }))
+  default = {}
+}
 
 #VPC CIDR
 locals {
@@ -551,6 +559,43 @@ locals {
   }
 }
 
+
+#HELM RELEASE
+locals {
+  DEV_HELM = {
+    dev_elb_controller_chart = {
+      repository = "test"
+      chart = "test"
+      name  = "test"
+      set   = [
+        {
+          name  = "region"
+          value = "region"
+        },
+        {
+          name  = "vpcId"
+          value = module.vpc["dev_vpc_1"].igw_id
+        },
+        {
+          name  = "image_repository"
+          value = module.vpc["dev_vpc_1"].igw_id
+        },
+        {
+          name  = "serviceAccount.create"
+          value = false
+        },
+        {
+          name  = "serviceAccount.name"
+          value = "aws-load-balancer-controller"
+        },
+        {
+          name  = "clusterName"
+          value = "asd"
+        }
+      ]
+    }
+  }
+}
   /*
   variable "ecr-repose-name" {
     description = "ECR Repository Name"

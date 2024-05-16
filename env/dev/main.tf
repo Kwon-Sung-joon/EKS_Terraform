@@ -97,6 +97,13 @@ module "ec2_instance" {
   depends_on = [module.security_groups, module.iam_role,module.eks_cluster]
 }
 
+/*
+module "helm_release" {
+  source = "../../module/helm"
+  for_each = merge(var.helm_release,local.DEV_HELM)
+  helm_release_config = each.value
+}
+*/
 
 /*
 module "ecr_repos" {

@@ -1,4 +1,5 @@
 resource "helm_release" "release" {
+  repository = var.helm_release_config.repository
   chart = var.helm_release_config.chart
   name  = var.helm_release_config.name
   dynamic "set" {
