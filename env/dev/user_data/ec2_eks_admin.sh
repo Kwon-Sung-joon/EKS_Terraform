@@ -45,3 +45,7 @@ kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl > /dev/null
 dnf install -y jq
 dnf install -y bash-completion
 su ec2-user -c "aws eks update-kubeconfig --region ap-northeast-2 --name ${CLUSTER-NAME}"
+curl -fsSL -o /tmp/get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 /tmp/get_helm.sh
+sh +x /tmp/get_helm.sh
+rm -f /tmp/get_helm.sh

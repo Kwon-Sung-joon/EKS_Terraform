@@ -28,7 +28,6 @@ provider "kubernetes" {
   }
 }
 
-/*
 
 provider "helm" {
   kubernetes {
@@ -44,4 +43,3 @@ provider "helm" {
     }
   }
 }
-*/
