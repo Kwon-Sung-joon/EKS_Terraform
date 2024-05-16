@@ -5,5 +5,5 @@ resource "aws_iam_openid_connect_provider" "default" {
 }
 
 output "oidc_provider" {
-  value = aws_iam_openid_connect_provider.default.provider
+  value = aws_iam_openid_connect_provider.default.arn
 }
