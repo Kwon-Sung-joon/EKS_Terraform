@@ -1,4 +1,4 @@
-resource "aws_launch_template" "ec2_lt" {
+resource "kubernetes_service_account" "service_account" {
   dynamic "metadata" {
     for_each = var.k8s_service_account_config.metadata
     content {
@@ -8,8 +8,4 @@ resource "aws_launch_template" "ec2_lt" {
       annotations = metadata.value.annotations
     }
   }
-}
-
-output "id" {
-  value = aws_launch_template.ec2_lt.id
 }
