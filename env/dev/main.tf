@@ -118,13 +118,13 @@ resource "kubernetes_service_account" "service-account" {
     }
   }
 }
-/*
+
 module "helm_release" {
   source = "../../module/helm"
   for_each = merge(var.helm_release,local.DEV_HELM)
   helm_release_config = each.value
 }
-*/
+
 
 /*
 module "ecr_repos" {
