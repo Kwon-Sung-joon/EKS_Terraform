@@ -41,12 +41,12 @@ data "aws_s3_bucket_object" "kubeconfig" {
   key     = "codebuild/dev/kubeconfig"
 }
 
-
+/*
 data "aws_iam_policy_document" "dev_elb_sa_role" {
   statement {
     principals {
       type        = "Federated"
-      identifiers = ["arn:aws:iam::${var.account_id}:oidc-provider/arn:aws:iam::672956273056:oidc-provider/oidc.eks.ap-northeast-2.amazonaws.com/id/42AA06C0891D619DB25EEF90FD53D2AC"]
+      identifiers = ["arn:aws:iam::${var.account_id}:oidc-provider/arn:aws:iam::<ACCOUNT>>:oidc-provider/oidc.eks.ap-northeast-2.amazonaws.com/id/42AA06C0891D619DB25EEF90FD53D2AC"]
     }
 
     actions = ["sts:AssumeRoleWithWebIdentity"]
