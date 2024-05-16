@@ -299,18 +299,7 @@ locals {
         "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
       ]
     }
-    dev_elb_sa_role = {
-      name               = "dev_elb_sa_role"
-      tags = {
-        Name = "dev_elb_sa_role"
-        Owner = "ksj"
-      }
-      #assume_role_policy = data.aws_iam_policy_document.dev_ec2_eks_admin_role.json
-      assume_role_policy = data.aws_iam_policy_document.dev_elb_sa_role.json
-      mgd_policies       = [
-        module.iam_policy["dev_elb_sa_policy"].policy_arn
-      ]
-    }
+
   }
 
 }
