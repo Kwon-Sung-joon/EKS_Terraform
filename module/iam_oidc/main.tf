@@ -3,3 +3,7 @@ resource "aws_iam_openid_connect_provider" "default" {
   client_id_list = var.iam_oidc_config.client_id_list
   thumbprint_list = var.iam_oidc_config.thumbprint_list
 }
+
+output "oidc_provider" {
+  value = aws_iam_openid_connect_provider.default.provider
+}

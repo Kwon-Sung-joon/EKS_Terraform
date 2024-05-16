@@ -41,26 +41,26 @@ data "aws_s3_bucket_object" "kubeconfig" {
   key     = "codebuild/dev/kubeconfig"
 }
 
-/*
+
 data "aws_iam_policy_document" "dev_elb_sa_role" {
   statement {
     principals {
       type        = "Federated"
-      identifiers = ["arn:aws:iam::${var.account_id}:oidc-provider/${var.oidc_provider}"]
+      identifiers = ["arn:aws:iam::${var.account_id}:oidc-provider/${module.iam_oidc["iam_oidc"].oidc_provider}"]
     }
 
     actions = ["sts:AssumeRoleWithWebIdentity"]
 
     condition {
       test     = "StringEquals"
-      variable = "${var.oidc_provider}:aud"
+      variable = "${module.iam_oidc["iam_oidc"].oidc_provider}:aud"
       values   = ["sts.amazonaws.com"]
     }
 
     condition {
       test     = "StringEquals"
-      variable = "${var.oidc_provider}:sub"
-      values   = ["system:serviceaccount:${var.namespace}:${var.service_account}"]
+      variable = "${module.iam_oidc["iam_oidc"].oidc_provider}:sub"
+      values   = ["system:serviceaccount:${module.iam_oidc["iam_oidc"].oidc_provider}:${module.iam_oidc["iam_oidc"].oidc_provider}"]
     }
   }
 }
