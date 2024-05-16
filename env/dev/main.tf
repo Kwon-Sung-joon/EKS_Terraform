@@ -97,6 +97,7 @@ module "ec2_instance" {
   depends_on = [module.security_groups, module.iam_role,module.eks_cluster]
 }
 
+/*
 ##K8S Resources
 module "k8s_service_account" {
   source = "../../module/k8s_service_account"
@@ -104,7 +105,7 @@ module "k8s_service_account" {
   k8s_service_account_config = each.value
 }
 
-/*
+
 module "helm_release" {
   source = "../../module/helm"
   for_each = merge(var.helm_release,local.DEV_HELM)
