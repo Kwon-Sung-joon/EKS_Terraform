@@ -573,6 +573,32 @@ locals {
   }
 }
 
+#K8S SERVICE ACCOUNT
+locals {
+  DEV_K8S_SERVICE_ACCOUNT = {
+    dev_elb_sa = {
+      metadata = [
+        {
+          name      = "aws-load-balancer-controller"
+          namespace = "kube-system"
+          labels = {
+            "app.kubernetes.io/name"      = "aws-load-balancer-controller"
+            "app.kubernetes.io/component" = "controller"
+          }
+          annotations = {
+            "eks.amazonaws.com/role-arn"               = module.iam_role["dev_elb_sa_role"].iam_role
+            "eks.amazonaws.com/sts-regional-endpoints" = "true"
+          }
+        }
+      ]
+
+    }
+  }
+
+}
+
+
+
 
 #HELM RELEASE
 locals {
@@ -603,29 +629,6 @@ locals {
   }
 }
 
-#K8S SERVICE ACCOUNT
-locals {
-  DEV_K8S_SERVICE_ACCOUNT = {
-    dev_elb_sa = {
-      metadata = [
-        {
-          name      = "aws-load-balancer-controller"
-          namespace = "kube-system"
-          labels = {
-            "app.kubernetes.io/name"      = "aws-load-balancer-controller"
-            "app.kubernetes.io/component" = "controller"
-          }
-          annotations = {
-            "eks.amazonaws.com/role-arn"               = module.iam_role["dev_elb_sa_role"].iam_role
-            "eks.amazonaws.com/sts-regional-endpoints" = "true"
-          }
-        }
-      ]
-
-    }
-  }
-
-}
 
   /*
   variable "ecr-repose-name" {
