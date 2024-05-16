@@ -103,6 +103,7 @@ module "ec2_instance" {
   depends_on = [module.security_groups, module.iam_role,module.eks_cluster]
 }
 
+#EKS SERVICE ACCOUNT
 resource "kubernetes_service_account" "service-account" {
   metadata {
     name      = "aws-load-balancer-controller"
