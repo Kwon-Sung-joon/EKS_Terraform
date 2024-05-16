@@ -104,14 +104,14 @@ module "k8s_service_account" {
   k8s_service_account_config = each.value
 }
 
-/*
+
 module "helm_release" {
   source = "../../module/helm"
   for_each = merge(var.helm_release,local.DEV_HELM)
   helm_release_config = each.value
 }
 
-*/
+
 /*
 module "ecr_repos" {
   source         = "../../module/ecr"
