@@ -606,7 +606,8 @@ locals {
     dev_elb_controller_chart = {
       repository = "https://aws.github.io/eks-charts"
       chart = "aws-load-balancer-controller"
-      name  = "kube-system"
+      namespace = "kube-system"
+      name  = "aws-load-balancer-controller"
       set   = [
         {
           name  = "region"
