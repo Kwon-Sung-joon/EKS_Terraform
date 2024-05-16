@@ -77,7 +77,13 @@ module "iam_oidc" {
   depends_on = [
   module.eks_cluster]
 }
-
+/*
+module "iam_role_for_eks_sa" {
+  source             = "../../module/iam_role"
+  for_each = merge(var.iam_roles,local.DEV_IAM_ROLE_FOR_SA)
+  iam_role_config = each.value
+}
+*/
 output eks_oidc {
   value = module.eks_cluster["dev_cluster_1"].cluster_oidc
 }

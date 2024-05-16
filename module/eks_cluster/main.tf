@@ -21,6 +21,7 @@ sed -i -e 's|<ARN of admin role>|${var.eks_cluster_config.admin_role}|' ${path.r
 cat ${path.root}/manifest/aws-auth.yaml
 aws eks update-kubeconfig --region ap-northeast-2 --name ${var.eks_cluster_config.name}
 kubectl apply -f ${path.root}/manifest/aws-auth.yaml
+aws s3 cp ~/.kube/config ${var.eks_cluster_config.upload_kubeconfig}
 EOT
     }
 }

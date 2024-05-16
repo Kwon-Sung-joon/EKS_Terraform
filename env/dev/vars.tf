@@ -89,6 +89,7 @@ variable "eks_cluster" {
     admin_role = string
     endpoint_private_access = bool
     endpoint_public_access = bool
+    upload_kubeconfig = string
   }))
   default = {}
 }
@@ -295,11 +296,11 @@ locals {
       }
       assume_role_policy = data.aws_iam_policy_document.dev_ec2_eks_admin_role.json
       mgd_policies       = [
-        "arn:aws:iam::aws:policy/ReadOnlyAccess",
-        "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+        module.iam_policy["dev_elb_sa_policy"].policy_arn
       ]
     }
   }
+
 }
 
 #IAM POLICY
@@ -482,6 +483,7 @@ locals {
       sg_ids = [module.security_groups["dev_eks_cluster_sg"].id]
       node_group_role = module.iam_role["dev_node_group_role"].iam_role
       admin_role = module.iam_role["dev_ec2_eks_admin_role"].iam_role
+      upload_kubeconfig = "s3://ksj-terraform-state-bucket/codebuild/dev/kubeconfig"
       endpoint_private_access = true
       endpoint_public_access = true
     }
@@ -570,11 +572,11 @@ locals {
       set   = [
         {
           name  = "region"
-          value = "region"
+          value = "ap-northeast-2"
         },
         {
           name  = "vpcId"
-          value = module.vpc["dev_vpc_1"].igw_id
+          value = module.vpc["dev_vpc_1"].vpc_id
         },
         {
           name  = "image_repository"
