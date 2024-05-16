@@ -103,6 +103,20 @@ module "ec2_instance" {
   depends_on = [module.security_groups, module.iam_role,module.eks_cluster]
 }
 
+resource "kubernetes_service_account" "service-account" {
+  metadata {
+    name      = "aws-load-balancer-controller"
+    namespace = "kube-system"
+    labels = {
+      "app.kubernetes.io/name"      = "aws-load-balancer-controller"
+      "app.kubernetes.io/component" = "controller"
+    }
+    annotations = {
+      "eks.amazonaws.com/role-arn"               = module.iam_role["dev_elb_sa_role"].iam_role
+      "eks.amazonaws.com/sts-regional-endpoints" = "true"
+    }
+  }
+}
 /*
 module "helm_release" {
   source = "../../module/helm"
