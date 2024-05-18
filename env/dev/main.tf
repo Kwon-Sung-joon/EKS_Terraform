@@ -69,7 +69,7 @@ module "launch_template" {
   module.eks_cluster,module.security_groups
   ]
 }
-
+/*
 module "iam_oidc" {
   source = "../../module/iam_oidc"
   for_each = merge(var.iam_oidc,local.DEV_IAM_OIDC)
@@ -81,7 +81,7 @@ module "iam_oidc" {
 output eks_oidc {
   value = module.eks_cluster["dev_cluster_1"].cluster_oidc
 }
-
+*/
 
 module "eks_node_group" {
   source = "../../module/eks_node_groups"
