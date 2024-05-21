@@ -370,6 +370,13 @@ locals {
           to_port     = 8080
           description = "inbound_8080"
         }
+        inbound_10250 = {
+          cidr_ipv4   = "0.0.0.0/0"
+          from_port   = 10250
+          ip_protocol = "tcp"
+          to_port     = 10250
+          description = "inbound_10250"
+        }
       }
       egress = {
         outbound_any = {
