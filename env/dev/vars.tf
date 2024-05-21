@@ -631,7 +631,7 @@ locals {
             Condition = {
               StringEquals = {
                 "${module.eks_cluster["dev_cluster_1"].cluster_oidc}:aud" = "sts.amazonaws.com",
-                "${module.eks_cluster["dev_cluster_1"].cluster_oidc}:sub" = "system:serviceaccount:kube-system:aws-load-balancer-controller"
+                "${module.eks_cluster["dev_cluster_1"].cluster_oidc}:sub" = "system:serviceaccount:karpenter:karpenter"
               }
             }
           },
