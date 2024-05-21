@@ -665,7 +665,6 @@ locals {
 
     }
   }
-
 }
 
 #HELM RELEASE

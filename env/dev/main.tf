@@ -61,6 +61,10 @@ module "eks_cluster" {
   ]
 }
 
+output eks_oidc {
+  value = module.eks_cluster["dev_cluster_1"].cluster_oidc
+}
+
 module "launch_template" {
   source = "../../module/launch_template"
   for_each = merge(var.launch_template,local.DEV_LAUNCH_TEMPLATES)
@@ -85,8 +89,6 @@ module "ec2_instance" {
   depends_on = [module.security_groups, module.iam_role,module.eks_cluster]
 }
 
-
-
 module "iam_oidc" {
   source = "../../module/iam_oidc"
   for_each = merge(var.iam_oidc,local.DEV_IAM_OIDC)
@@ -95,9 +97,6 @@ module "iam_oidc" {
   module.eks_cluster]
 }
 
-output eks_oidc {
-  value = module.eks_cluster["dev_cluster_1"].cluster_oidc
-}
 
 module "iam_irsa" {
   source = "../../module/iam_role"

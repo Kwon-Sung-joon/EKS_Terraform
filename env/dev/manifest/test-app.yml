@@ -47,7 +47,7 @@ metadata:
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/subnets: subnet-02aae6be010173c0e, subnet-08ec4fff83ab89ae3
+    alb.ingress.kubernetes.io/subnets: subnet-0fb2aac089d761f36, subnet-0fc68ee066aae298c
     alb.ingress.kubernetes.io/healthcheck-path: /actuator/health
     alb.ingress.kubernetes.io/group.name: spring-8080
 spec:

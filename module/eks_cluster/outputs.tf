@@ -12,5 +12,5 @@ output "cluster_sg_id" {
 }
 
 output "cluster_oidc" {
-  value = aws_eks_cluster.eks-cluster.identity.0.oidc.0.issuer
+  value = split("//",aws_eks_cluster.eks-cluster.identity.0.oidc.0.issuer)[1]
 }
