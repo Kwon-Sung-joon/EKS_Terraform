@@ -597,12 +597,12 @@ locals {
             Effect    = "Allow"
             Sid       = ""
             Principal = {
-              Federated = "arn:aws:iam::672956273056:oidc-provider/${module.eks_cluster["dev_cluster_1"].cluster_oidc}"
+              Federated = "arn:aws:iam::672956273056:oidc-provider/${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}"
             }
             Condition = {
               StringEquals = {
-                "${module.eks_cluster["dev_cluster_1"].cluster_oidc}:aud" = "sts.amazonaws.com",
-                "${module.eks_cluster["dev_cluster_1"].cluster_oidc}:sub" = "system:serviceaccount:kube-system:aws-load-balancer-controller"
+                "${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}:aud" = "sts.amazonaws.com",
+                "${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}:sub" = "system:serviceaccount:kube-system:aws-load-balancer-controller"
               }
             }
           },
@@ -626,12 +626,12 @@ locals {
             Effect    = "Allow"
             Sid       = ""
             Principal = {
-              Federated = "arn:aws:iam::672956273056:oidc-provider/${module.eks_cluster["dev_cluster_1"].cluster_oidc}"
+              Federated = "arn:aws:iam::672956273056:oidc-provider/${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}"
             }
             Condition = {
               StringEquals = {
-                "${module.eks_cluster["dev_cluster_1"].cluster_oidc}:aud" = "sts.amazonaws.com",
-                "${module.eks_cluster["dev_cluster_1"].cluster_oidc}:sub" = "system:serviceaccount:karpenter:karpenter"
+                "${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}:aud" = "sts.amazonaws.com",
+                "${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}:sub" = "system:serviceaccount:karpenter:karpenter"
               }
             }
           },

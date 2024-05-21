@@ -14,3 +14,7 @@ output "cluster_sg_id" {
 output "cluster_oidc" {
   value =aws_eks_cluster.eks-cluster.identity.0.oidc.0.issuer
 }
+
+output "cluster_oidc_without_url" {
+  value =split("//",aws_eks_cluster.eks-cluster.identity.0.oidc.0.issuer)[1]
+}
