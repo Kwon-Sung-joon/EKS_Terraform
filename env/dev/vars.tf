@@ -314,12 +314,21 @@ locals {
         Owner = "ksj"
       }
     }
-    dev_elb_sa_policy = {
-      name = "dev_elb_sa_policy"
-      description = "elb policy for eks service account"
+    dev_irsa_elb_controller_policy = {
+      name = "dev_irsa_elb_controller_policy"
+      description = "irsa for elb controller"
       policy = "${path.root}/template/AWS_LB_Controller_Policy.json"
       tags = {
-        Name = "ddev_elb_sa_policy"
+        Name = "dev_irsa_elb_controller_policy"
+        Owner = "ksj"
+      }
+    }
+    dev_irsa_karpenter_policy = {
+      name = "dev_irsa_karpenter_policy"
+      description = "irsa for karpenter controller"
+      policy = "${path.root}/template/KarpenterControllerPolicy.json"
+      tags = {
+        Name = "dev_irsa_karpenter_policy"
         Owner = "ksj"
       }
     }
@@ -570,6 +579,70 @@ locals {
   }
 }
 
+
+#DEV_IAM_ROLE_IRSA
+locals {
+  DEV_IAM_ROLE_IRSA = {
+    irsa_aws_load_balancer_controller = {
+      name = "irsa_aws_load_balancer_controller"
+      tags = {
+        Name  = "irsa_aws_load_balancer_controller"
+        Owner = "ksj"
+      }
+      assume_role_policy = jsonencode({
+        Version   = "2012-10-17"
+        Statement = [
+          {
+            Action    = "sts:AssumeRoleWithWebIdentity"
+            Effect    = "Allow"
+            Sid       = ""
+            Principal = {
+              Federated = "arn:aws:iam::672956273056:oidc-provider/${module.eks_cluster["dev_cluster_1"].cluster_oidc}"
+            }
+            Condition = {
+              StringEquals = {
+                "${module.eks_cluster["dev_cluster_1"].cluster_oidc}:aud" = "sts.amazonaws.com",
+                "${module.eks_cluster["dev_cluster_1"].cluster_oidc}:sub" = "system:serviceaccount:kube-system:aws-load-balancer-controller"
+              }
+            }
+          },
+        ]
+      })
+      mgd_policies = [
+        module.iam_policy["dev_irsa_elb_controller_policy"].policy_arn
+      ]
+    }
+    irsa_karpenter_controller = {
+      name = "irsa_karpenter_controller"
+      tags = {
+        Name  = "irsa_karpenter_controller"
+        Owner = "ksj"
+      }
+      assume_role_policy = jsonencode({
+        Version   = "2012-10-17"
+        Statement = [
+          {
+            Action    = "sts:AssumeRoleWithWebIdentity"
+            Effect    = "Allow"
+            Sid       = ""
+            Principal = {
+              Federated = "arn:aws:iam::672956273056:oidc-provider/${module.eks_cluster["dev_cluster_1"].cluster_oidc}"
+            }
+            Condition = {
+              StringEquals = {
+                "${module.eks_cluster["dev_cluster_1"].cluster_oidc}:aud" = "sts.amazonaws.com",
+                "${module.eks_cluster["dev_cluster_1"].cluster_oidc}:sub" = "system:serviceaccount:kube-system:aws-load-balancer-controller"
+              }
+            }
+          },
+        ]
+      })
+      mgd_policies = [
+        module.iam_policy["dev_irsa_karpenter_policy"].policy_arn
+      ]
+    }
+  }
+}
 /*
 #K8S SERVICE ACCOUNT
 locals {

@@ -99,6 +99,15 @@ output eks_oidc {
   value = module.eks_cluster["dev_cluster_1"].cluster_oidc
 }
 
+module "iam_irsa" {
+  source = "../../module/iam_role"
+  for_each = merge(var.iam_roles,local.DEV_IAM_ROLE_IRSA)
+  iam_role_config = each.value
+  depends_on = [
+  module.eks_cluster,module.iam_oidc]
+}
+
+
 /*
 ##K8S Resources
 module "k8s_service_account" {
