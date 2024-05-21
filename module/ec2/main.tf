@@ -3,7 +3,6 @@ resource "aws_iam_instance_profile" "instance_profile" {
   role = var.ec2_instance_config.iam_role
 }
 
-
 resource "aws_instance" "instance" {
   ami                    = var.ec2_instance_config.ami
   instance_type          = var.ec2_instance_config.instance_type
@@ -13,8 +12,6 @@ resource "aws_instance" "instance" {
   user_data              = var.ec2_instance_config.user_data
   tags = var.ec2_instance_config.tags
 }
-
-
 
 output "private_ip" {
   value = aws_instance.instance.private_ip
