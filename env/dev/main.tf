@@ -107,6 +107,9 @@ module "iam_irsa" {
   module.eks_cluster,module.iam_oidc]
 }
 
+output iam_irsa {
+  value = flatten([for iam_roles in module.iam_irsa : iam_roles.iam_role])
+}
 
 /*
 ##K8S Resources
