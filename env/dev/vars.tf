@@ -172,8 +172,8 @@ locals {
               "detail-type" : ["AWS Health Event"]
             })
         }
-        event_2 = {
-          ScheduledChangeRule2          = "ScheduledChangeRule2"
+        ScheduledChangeRule2 = {
+          name          = "ScheduledChangeRule2"
           description   = "ScheduledChangeRule2"
           event_pattern = jsonencode(
             {
