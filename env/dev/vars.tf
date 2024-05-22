@@ -165,7 +165,11 @@ locals {
       event_rule = {
         name = "event_rule"
         description = "test"
-        event_pattern = data.aws_event_pattern.ScheduledChangeRule
+        event_pattern = jsonencode(
+          {
+            "source" : ["aws.health"],
+            "detail-type" : ["AWS Health Event"]
+          })
       }
     }
   }

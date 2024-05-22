@@ -51,13 +51,7 @@ data "aws_iam_policy_document" "karpenter_sqs_policy"{
   }
 }
 
-data "aws_event_pattern" "ScheduledChangeRule" {
-  event_pattern = jsonencode(
-    {
-      "source" : ["aws.health"],
-      "detail-type" : ["AWS Health Event"]
-    })
-}
+
 
 /*
 data "aws_iam_policy_document" "dev_elb_sa_role" {
