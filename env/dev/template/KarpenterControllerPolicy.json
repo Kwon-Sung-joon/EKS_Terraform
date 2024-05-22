@@ -37,7 +37,7 @@
     {
       "Effect": "Allow",
       "Action": "iam:PassRole",
-      "Resource": "arn:aws:iam::*:role/KarpenterNodeRole-${CLUSTER_NAME}",
+      "Resource": "arn:aws:iam::*:role/*",
       "Sid": "PassNodeIAMRole"
     },
     {
