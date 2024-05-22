@@ -87,3 +87,4 @@ data "template_file" "eks_userdata" {
     DNS-CLUSTER-IP     = cidrhost(var.vpc_cidr, 10)
   }
 }
+*/
