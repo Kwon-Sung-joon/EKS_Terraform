@@ -358,6 +358,22 @@ locals {
         "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
       ]
     }
+    irsa_aws_load_balancer_controller = {
+      name = "irsa_aws_load_balancer_controller"
+      tags = {
+        Name  = "irsa_aws_load_balancer_controller"
+        Owner = "ksj"
+      }
+      assume_role_policy = templatefile("${path.root}/template/EKS_IRSA_Trust_Policy.json",{
+        OIDC = "TEST"
+        NAMESPACE = "kube-system"
+        SERVICE_ACCOUNT = "aws-load-balancer-controller"
+      })
+      mgd_policies = [
+        #       module.iam_policy["dev_irsa_elb_controller_policy"].policy_arn
+        "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+      ]
+    }
   }
 }
 
@@ -658,44 +674,14 @@ locals {
         Name  = "irsa_aws_load_balancer_controller"
         Owner = "ksj"
       }
-
-      assume_role_policy = templatefile("${path.root}/template/IRSA_LB_Controller_Trust_Policy.json",{
-        OIDC = "qwe"
-        NAMESPACE = "qwe"
-        SERVICE_ACCOUNT = "qwe"
+      assume_role_policy = templatefile("${path.root}/template/EKS_IRSA_Trust_Policy.json",{
+        OIDC = "TEST"
+        NAMESPACE = "kube-system"
+        SERVICE_ACCOUNT = "aws-load-balancer-controller"
       })
       mgd_policies = [
+ #       module.iam_policy["dev_irsa_elb_controller_policy"].policy_arn
         "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
-      ]
-    }
-    /*
-    irsa_aws_load_balancer_controller = {
-      name = "irsa_aws_load_balancer_controller"
-      tags = {
-        Name  = "irsa_aws_load_balancer_controller"
-        Owner = "ksj"
-      }
-      assume_role_policy = jsonencode({
-        Version   = "2012-10-17"
-        Statement = [
-          {
-            Action    = "sts:AssumeRoleWithWebIdentity"
-            Effect    = "Allow"
-            Sid       = ""
-            Principal = {
-              Federated = "arn:aws:iam::672956273056:oidc-provider/${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}"
-            }
-            Condition = {
-              StringEquals = {
-                "${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}:aud" = "sts.amazonaws.com",
-                "${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}:sub" = "system:serviceaccount:kube-system:aws-load-balancer-controller"
-              }
-            }
-          },
-        ]
-      })
-      mgd_policies = [
-        module.iam_policy["dev_irsa_elb_controller_policy"].policy_arn
       ]
     }
     irsa_karpenter_controller = {
@@ -704,34 +690,19 @@ locals {
         Name  = "irsa_karpenter_controller"
         Owner = "ksj"
       }
-      assume_role_policy = jsonencode({
-        Version   = "2012-10-17"
-        Statement = [
-          {
-            Action    = "sts:AssumeRoleWithWebIdentity"
-            Effect    = "Allow"
-            Sid       = ""
-            Principal = {
-              Federated = "arn:aws:iam::672956273056:oidc-provider/${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}"
-            }
-            Condition = {
-              StringEquals = {
-                "${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}:aud" = "sts.amazonaws.com",
-                "${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}:sub" = "system:serviceaccount:karpenter:karpenter"
-              }
-            }
-          },
-        ]
+      assume_role_policy = templatefile("${path.root}/template/EKS_IRSA_Trust_Policy.json",{
+        OIDC = "TEST"
+        NAMESPACE = "kube-system"
+        SERVICE_ACCOUNT = "test"
       })
       mgd_policies = [
-        module.iam_policy["dev_irsa_karpenter_policy"].policy_arn,
+#        module.iam_policy["dev_irsa_karpenter_policy"].policy_arn,
         "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
         "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
         "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
         "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
       ]
     }
-    */
   }
 }
 /*
