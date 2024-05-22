@@ -373,11 +373,11 @@ locals {
         Owner = "ksj"
       }
     }
-    /*
+
     dev_irsa_elb_controller_policy = {
       name = "dev_irsa_elb_controller_policy"
       description = "irsa for elb controller"
-      policy = "${path.root}/template/AWS_LB_Controller_Policy.json"
+      policy = templatefile("${path.root}/template/AWS_LB_Controller_Policy.json", {})
       tags = {
         Name = "dev_irsa_elb_controller_policy"
         Owner = "ksj"
@@ -387,13 +387,13 @@ locals {
       name = "dev_irsa_karpenter_policy"
       description = "irsa for karpenter controller"
       #policy = "${path.root}/template/KarpenterControllerPolicy.json"
-      policy = data.aws_iam_policy_document.dev_cluster_1_karpenter_controller_policy.json
+      policy = templatefile("${path.root}/template/AWS_LB_Controller_Policy.json", { CLUSTER_NAME = 'test' })
       tags = {
         Name = "dev_irsa_karpenter_policy"
         Owner = "ksj"
       }
     }
-    */
+
   }
 }
 #SECURIT GROUPS
