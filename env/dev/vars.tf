@@ -367,12 +367,13 @@ locals {
     dev_node_group_policy = {
       name = "dev_node_group_policy"
       description = "ecr policy for node group"
-      policy = "${path.root}/template/NodeECR_Policy.json"
+      policy = templatefile("${path.root}/template/NodeECR_Policy.json", )
       tags = {
         Name = "dev_node_group_policy"
         Owner = "ksj"
       }
     }
+    /*
     dev_irsa_elb_controller_policy = {
       name = "dev_irsa_elb_controller_policy"
       description = "irsa for elb controller"
@@ -392,6 +393,7 @@ locals {
         Owner = "ksj"
       }
     }
+    */
   }
 }
 #SECURIT GROUPS
