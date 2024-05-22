@@ -162,14 +162,25 @@ locals {
         sqs_managed_sse_enabled = true
         policy = data.aws_iam_policy_document.karpenter_sqs_policy.json
       }
-      event_rule = {
-        name = "ScheduledChangeRule"
-        description = "ScheduledChangeRule"
-        event_pattern = jsonencode(
-          {
-            "source" : ["aws.health"],
-            "detail-type" : ["AWS Health Event"]
-          })
+      event_rules = {
+        ScheduledChangeRule = {
+          name          = "ScheduledChangeRule"
+          description   = "ScheduledChangeRule"
+          event_pattern = jsonencode(
+            {
+              "source" : ["aws.health"],
+              "detail-type" : ["AWS Health Event"]
+            })
+        }
+        event_2 = {
+          ScheduledChangeRule2          = "ScheduledChangeRule2"
+          description   = "ScheduledChangeRule2"
+          event_pattern = jsonencode(
+            {
+              "source" : ["aws.health"],
+              "detail-type" : ["AWS Health Event"]
+            })
+        }
       }
     }
   }
