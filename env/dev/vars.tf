@@ -367,7 +367,7 @@ locals {
     dev_node_group_policy = {
       name = "dev_node_group_policy"
       description = "ecr policy for node group"
-      policy = templatefile("${path.root}/template/NodeECR_Policy.json", )
+      policy = templatefile("${path.root}/template/NodeECR_Policy.json",{} )
       tags = {
         Name = "dev_node_group_policy"
         Owner = "ksj"
