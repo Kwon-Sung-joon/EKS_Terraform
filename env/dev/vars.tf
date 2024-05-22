@@ -145,6 +145,26 @@ variable "k8s_service_account" {
   default = {}
 }
 
+variable "k8s_karpenter" {
+  type = map(object({
+    sqs = any
+
+  }))
+  default = {}
+}
+
+locals {
+  DEV_KARPENTER = {
+    dev_karpenter_1 = {
+      sqs = {
+        name = "dev_karpenter_1_sqs"
+        message_retention_seconds = 300
+        sqs_managed_sse_enabled = true
+        policy = data.aws_iam_policy_document.karpenter_sqs_policy.json
+      }
+    }
+  }
+}
 
 
 #VPC CIDR

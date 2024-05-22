@@ -110,6 +110,12 @@ output iam_irsa {
   value = flatten([for iam_roles in module.iam_irsa : iam_roles.iam_role])
 }
 
+module "k8s_karpenter" {
+  source = "../../module/karpenter"
+  for_each = merge(var.k8s_karpenter,local.DEV_KARPENTER)
+  karpenter_config = each.value
+}
+
 /*
 ##K8S Resources
 module "k8s_service_account" {

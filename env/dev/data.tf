@@ -41,6 +41,17 @@ data "aws_s3_bucket_object" "kubeconfig" {
   key     = "codebuild/dev/kubeconfig"
 }
 
+data "aws_iam_policy_document" "karpenter_sqs_policy"{
+  statement {
+    actions = ["sqs:SendMessage"]
+    principals {
+      identifiers = ["events.amazonaws.com", "sqs.amazonaws.com"]
+      type        = "Service"
+    }
+  }
+
+}
+
 /*
 data "aws_iam_policy_document" "dev_elb_sa_role" {
   statement {
