@@ -49,7 +49,14 @@ data "aws_iam_policy_document" "karpenter_sqs_policy"{
       type        = "Service"
     }
   }
+}
 
+data "aws_event_pattern" "ScheduledChangeRule" {
+  event_pattern = jsonencode(
+    {
+      "source" : ["aws.health"],
+      "detail-type" : ["AWS Health Event"]
+    })
 }
 
 /*

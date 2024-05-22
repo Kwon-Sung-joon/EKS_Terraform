@@ -7,11 +7,15 @@ resource "aws_sqs_queue_policy" "sqs_policy" {
   policy    = var.karpenter_config.sqs.policy
   queue_url = aws_sqs_queue.sqs.id
 }
-/*
-resource "aws_cloudwatch_event_rule" "event_rule" {
 
+resource "aws_cloudwatch_event_rule" "event_rule" {
+  name = var.karpenter_config.event_rule.name
+  description = var.karpenter_config.event_rule.description
+  event_pattern = var.karpenter_config.event_rule.event_pattern
+  target_id = aws_sqs_queue.sqs.arn
 }
 
+/*
 resource "aws_iam_policy" "" {
   policy = ""
 }

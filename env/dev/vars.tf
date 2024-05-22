@@ -162,6 +162,11 @@ locals {
         sqs_managed_sse_enabled = true
         policy = data.aws_iam_policy_document.karpenter_sqs_policy.json
       }
+      event_rule = {
+        name = "event_rule"
+        description = "test"
+        event_pattern = data.aws_event_pattern.ScheduledChangeRule
+      }
     }
   }
 }
