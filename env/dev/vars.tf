@@ -342,8 +342,8 @@ locals {
         "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
         "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
         "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy",
-        "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess",
-        module.iam_policy["dev_node_group_policy"].policy_arn
+        "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
+        #module.iam_policy["dev_node_group_policy"].policy_arn
       ]
     }
     dev_ec2_eks_admin_role = {
@@ -389,7 +389,6 @@ locals {
         Owner = "ksj"
       }
     }
-
     dev_irsa_elb_controller_policy = {
       name = "dev_irsa_elb_controller_policy"
       description = "irsa for elb controller"
