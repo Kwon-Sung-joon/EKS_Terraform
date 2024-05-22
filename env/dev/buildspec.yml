@@ -9,6 +9,7 @@ phases:
     commands:
       - terraform --version
       - terraform init
-      - terraform apply -target module.k8s_karpenter -target module.iam_policy -target module.iam_role -target module.iam_irsa --auto-approve
-      - terraform apply -target module.subnets -target module.security_groups -target module.iam_policy -target module.iam_role --auto-approve
-      - terraform apply --auto-approve
+      - terraform apply -target module.iam_policy
+      - terraform apply -target module.k8s_karpenter -target module.iam_role -target module.iam_irsa --auto-approve
+      #- terraform apply -target module.subnets -target module.security_groups -target module.iam_policy -target module.iam_role --auto-approve
+      #- terraform apply --auto-approve
