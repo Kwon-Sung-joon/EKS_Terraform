@@ -659,7 +659,7 @@ locals {
         Owner = "ksj"
       }
       assume_role_policy = templatefile("${path.root}/template/EKS_IRSA_Trust_Policy.json",{
-        OIDC = "TEST"
+        OIDC = "${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}"
         NAMESPACE = "kube-system"
         SERVICE_ACCOUNT = "aws-load-balancer-controller"
       })
@@ -674,9 +674,9 @@ locals {
         Owner = "ksj"
       }
       assume_role_policy = templatefile("${path.root}/template/EKS_IRSA_Trust_Policy.json",{
-        OIDC = "TEST"
+        OIDC = "${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}"
         NAMESPACE = "kube-system"
-        SERVICE_ACCOUNT = "test"
+        SERVICE_ACCOUNT = "karpenter"
       })
       mgd_policies = [
         module.iam_policy["dev_irsa_karpenter_policy"].policy_arn,
