@@ -15,9 +15,9 @@ resource "aws_cloudwatch_event_rule" "event_rule" {
   description = each.value.description
   event_pattern = each.value.event_pattern
 
-#  name = var.karpenter_config.event_rule.name
-#  description = var.karpenter_config.event_rule.description
-#  event_pattern = var.karpenter_config.event_rule.event_pattern
+  #  name = var.karpenter_config.event_rule.name
+  #  description = var.karpenter_config.event_rule.description
+  #  event_pattern = var.karpenter_config.event_rule.event_pattern
 }
 resource "aws_cloudwatch_event_target" "event_target" {
   for_each = var.karpenter_config.event_rules

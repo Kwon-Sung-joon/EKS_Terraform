@@ -172,16 +172,35 @@ locals {
               "detail-type" : ["AWS Health Event"]
             })
         }
-        ScheduledChangeRule2 = {
-          name          = "ScheduledChangeRule2"
-          description   = "ScheduledChangeRule2"
+        SpotInterruptionRule = {
+          name          = "SpotInterruptionRule"
+          description   = "SpotInterruptionRule"
           event_pattern = jsonencode(
             {
-              "source" : ["aws.health"],
-              "detail-type" : ["AWS Health Event"]
+              "source" : ["aws.ec2"],
+              "detail-type" : ["EC2 Spot Instance Interruption Warning"]
+            })
+        }
+        RebalanceRule = {
+          name          = "RebalanceRule"
+          description   = "RebalanceRule"
+          event_pattern = jsonencode(
+            {
+              "source" : ["aws.ec2"],
+              "detail-type" : ["EC2 Instance Rebalance Recommendation"]
+            })
+        }
+        RebalanceRule = {
+          name          = "InstanceStateChangeRule"
+          description   = "InstanceStateChangeRule"
+          event_pattern = jsonencode(
+            {
+              "source" : ["aws.ec2"],
+              "detail-type" : ["EC2 Instance State-change Notification"]
             })
         }
       }
+
     }
   }
 }
@@ -366,7 +385,8 @@ locals {
     dev_irsa_karpenter_policy = {
       name = "dev_irsa_karpenter_policy"
       description = "irsa for karpenter controller"
-      policy = "${path.root}/template/KarpenterControllerPolicy.json"
+      #policy = "${path.root}/template/KarpenterControllerPolicy.json"
+      policy = data.aws_iam_policy_document.dev_cluster_1_karpenter_controller_policy.json
       tags = {
         Name = "dev_irsa_karpenter_policy"
         Owner = "ksj"
@@ -685,7 +705,11 @@ locals {
         ]
       })
       mgd_policies = [
-        module.iam_policy["dev_irsa_karpenter_policy"].policy_arn
+        module.iam_policy["dev_irsa_karpenter_policy"].policy_arn,
+        "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
+        "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
+        "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
+        "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
       ]
     }
   }
