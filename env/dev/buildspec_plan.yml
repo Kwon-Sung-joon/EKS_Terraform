@@ -8,4 +8,4 @@ phases:
   build:
     commands:
       - terraform init
-      - terraform plan
+      - terraform plan -target module.k8s_karpenter
