@@ -45,6 +45,7 @@ metadata:
   name: spring-app
   namespace: spring-app
   annotations:
+    alb.ingress.kubernetes.io/load-balancer-name: test-app-alb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/subnets: subnet-0fb2aac089d761f36, subnet-0fc68ee066aae298c
