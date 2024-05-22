@@ -658,7 +658,8 @@ locals {
         Name  = "irsa_aws_load_balancer_controller"
         Owner = "ksj"
       }
-      assume_role_policy = templatefile("${path.root}/template/IRSA_LB_Controler_Trust_Policy.json",{
+
+      assume_role_policy = templatefile("${path.root}/template/IRSA_LB_Controller_Trust_Policy.json",{
         OIDC = "qwe"
         NAMESPACE = "qwe"
         SERVICE_ACCOUNT = "qwe"
