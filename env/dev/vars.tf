@@ -163,8 +163,8 @@ locals {
         policy = data.aws_iam_policy_document.karpenter_sqs_policy.json
       }
       event_rule = {
-        name = "event_rule"
-        description = "test"
+        name = "ScheduledChangeRule"
+        description = "ScheduledChangeRule"
         event_pattern = jsonencode(
           {
             "source" : ["aws.health"],

@@ -12,8 +12,12 @@ resource "aws_cloudwatch_event_rule" "event_rule" {
   name = var.karpenter_config.event_rule.name
   description = var.karpenter_config.event_rule.description
   event_pattern = var.karpenter_config.event_rule.event_pattern
-  target_id = aws_sqs_queue.sqs.arn
 }
+resource "aws_cloudwatch_event_target" "event_target" {
+  arn  = aws_sqs_queue.sqs.arn
+  rule = aws_cloudwatch_event_rule.event_rule.name
+}
+
 
 /*
 resource "aws_iam_policy" "" {
