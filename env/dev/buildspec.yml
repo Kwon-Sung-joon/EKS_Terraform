@@ -10,7 +10,7 @@ phases:
       - terraform --version
       - terraform init
       - terraform apply -target module.k8s_karpenter,module.iam_policy --auto-approve
-#      - terraform apply -target module.subnets, module.security_groups --auto-approve
-#      - terraform apply -target module.iam_policy --auto-approve
-#      - terraform apply -target module.iam_role --auto-approve
-#      - terraform apply --auto-approve
+      - terraform apply -target module.subnets, module.security_groups --auto-approve
+      - terraform apply -target module.iam_policy --auto-approve
+      - terraform apply -target module.iam_role --auto-approve
+      - terraform apply --auto-approve

@@ -590,7 +590,7 @@ locals {
 */
       scaling_config = [
         {
-          desired_size = 2
+          desired_size = 1
           min_size     = 0
           max_size     = 3
 
@@ -658,6 +658,22 @@ locals {
         Name  = "irsa_aws_load_balancer_controller"
         Owner = "ksj"
       }
+      assume_role_policy = templatefile("${path.root}/template/IRSA_LB_Controler_Trust_Policy.json",{
+        OIDC = "qwe"
+        NAMESPACE = "qwe"
+        SERVICE_ACCOUNT = "qwe"
+      })
+      mgd_policies = [
+        "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+      ]
+    }
+    /*
+    irsa_aws_load_balancer_controller = {
+      name = "irsa_aws_load_balancer_controller"
+      tags = {
+        Name  = "irsa_aws_load_balancer_controller"
+        Owner = "ksj"
+      }
       assume_role_policy = jsonencode({
         Version   = "2012-10-17"
         Statement = [
@@ -714,6 +730,7 @@ locals {
         "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
       ]
     }
+    */
   }
 }
 /*
