@@ -342,8 +342,8 @@ locals {
         "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
         "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
         "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy",
-        "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
-        #module.iam_policy["dev_node_group_policy"].policy_arn
+        "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess",
+        module.iam_policy["dev_node_group_policy"].policy_arn
       ]
     }
     dev_ec2_eks_admin_role = {
@@ -358,22 +358,7 @@ locals {
         "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
       ]
     }
-    irsa_aws_load_balancer_controller = {
-      name = "irsa_aws_load_balancer_controller"
-      tags = {
-        Name  = "irsa_aws_load_balancer_controller"
-        Owner = "ksj"
-      }
-      assume_role_policy = templatefile("${path.root}/template/EKS_IRSA_Trust_Policy.json",{
-        OIDC = "TEST"
-        NAMESPACE = "kube-system"
-        SERVICE_ACCOUNT = "aws-load-balancer-controller"
-      })
-      mgd_policies = [
-        #       module.iam_policy["dev_irsa_elb_controller_policy"].policy_arn
-        "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
-      ]
-    }
+
   }
 }
 
@@ -679,8 +664,7 @@ locals {
         SERVICE_ACCOUNT = "aws-load-balancer-controller"
       })
       mgd_policies = [
- #       module.iam_policy["dev_irsa_elb_controller_policy"].policy_arn
-        "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+       module.iam_policy["dev_irsa_elb_controller_policy"].policy_arn
       ]
     }
     irsa_karpenter_controller = {
@@ -695,7 +679,7 @@ locals {
         SERVICE_ACCOUNT = "test"
       })
       mgd_policies = [
-#        module.iam_policy["dev_irsa_karpenter_policy"].policy_arn,
+        module.iam_policy["dev_irsa_karpenter_policy"].policy_arn,
         "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
         "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
         "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
