@@ -152,7 +152,7 @@ variable "k8s_karpenter" {
   }))
   default = {}
 }
-
+#KARPENTER
 locals {
   DEV_KARPENTER = {
     dev_karpenter_1 = {
@@ -200,7 +200,7 @@ locals {
             })
         }
       }
-
+      instance_profile = module.iam_role['dev_node_group_role'].iam_role_name
     }
   }
 }
@@ -358,7 +358,6 @@ locals {
         "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
       ]
     }
-
   }
 }
 
@@ -393,7 +392,6 @@ locals {
         Owner = "ksj"
       }
     }
-
   }
 }
 #SECURIT GROUPS
@@ -648,7 +646,6 @@ locals {
   }
 }
 
-
 #DEV_IAM_ROLE_IRSA
 locals {
   DEV_IAM_ROLE_IRSA = {
@@ -679,11 +676,7 @@ locals {
         SERVICE_ACCOUNT = "karpenter"
       })
       mgd_policies = [
-        module.iam_policy["dev_irsa_karpenter_policy"].policy_arn,
-        "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
-        "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
-        "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
-        "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+        module.iam_policy["dev_irsa_karpenter_policy"].policy_arn
       ]
     }
   }

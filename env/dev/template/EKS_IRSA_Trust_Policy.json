@@ -13,6 +13,17 @@
           "${OIDC}:sub": "system:serviceaccount:${NAMESPACE}:${SERVICE_ACCOUNT}"
         }
       }
+    },
+    {
+      "Sid": "AllowEksAuthToAssumeRoleForPodIdentity",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "pods.eks.amazonaws.com"
+      },
+      "Action": [
+        "sts:AssumeRole",
+        "sts:TagSession"
+      ]
     }
   ]
 }
