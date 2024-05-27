@@ -148,7 +148,8 @@ variable "k8s_service_account" {
 variable "k8s_karpenter" {
   type = map(object({
     sqs = any
-
+    event_rules = any
+    instance_profile = string
   }))
   default = {}
 }
