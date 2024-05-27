@@ -201,7 +201,7 @@ locals {
             })
         }
       }
-      instance_profile = module.iam_role['dev_node_group_role'].iam_role_name
+      instance_profile = module.iam_role["dev_node_group_role"].iam_role_name
     }
   }
 }
