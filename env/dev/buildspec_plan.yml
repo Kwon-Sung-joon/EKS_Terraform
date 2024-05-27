@@ -8,4 +8,5 @@ phases:
   build:
     commands:
       - terraform init
-      - terraform plan -target module.k8s_karpenter -target module.iam_policy -target module.iam_role
+      #- terraform plan -target module.k8s_karpenter -target module.iam_policy -target module.iam_role
+      - terraform plan
