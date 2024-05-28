@@ -2,9 +2,7 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - pwd
-      - ls -al
-      - cd ./env/dev/
+      - cd ./env/main/
   build:
     commands:
       - terraform --version

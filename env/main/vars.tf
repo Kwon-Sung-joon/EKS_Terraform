@@ -756,33 +756,3 @@ locals {
     }
   }
 }
-
-
-  /*
-  variable "ecr-repose-name" {
-    description = "ECR Repository Name"
-
-  }
-
-  variable "bastionAmi" {
-    description = "Bastion AMI"
-    default     = "ami-0cbec04a61be382d9"
-  }
-  variable "bastionKey" {
-    description = "Bastion Key Paire what you have."
-    default     = "TerraformTest"
-  }
-  */
-
-
-/*
-variable "launch_template" {
-  type = map(object({
-    ec2_type=string
-    ami=string
-    lt_name=string
-    userdata = any
-  }))
-  default = {}
-}
-*/
