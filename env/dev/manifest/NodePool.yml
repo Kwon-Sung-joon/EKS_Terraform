@@ -37,6 +37,6 @@ spec:
         Name: "dev-public-*"
   securityGroupSelectorTerms:
     - tags:
-        Name: '*'
+        Name: "eks-node-sg"
   amiSelectorTerms:
     - id: "ami-06aaf7c21e7e74e2a"
