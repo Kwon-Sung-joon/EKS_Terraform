@@ -35,7 +35,7 @@ karpenter oci://public.ecr.aws/karpenter/karpenter --version 0.35.2 \
 --set "serviceAccount.annotations.eks\.amazonaws\.com/role-arn=arn:aws:iam::<ACCOUNT_ID>:role/irsa_karpenter_controller" \
 --set settings.clusterName=dev_cluster_1 \
 --set settings.interruptionQueue=dev_karpenter_1_sqs \
---set settings.featureGates.drift= false
+--set settings.featureGates.drift=false \
 --set controller.resources.requests.cpu=1 \
 --set controller.resources.requests.memory=1Gi \
 --set controller.resources.limits.cpu=1 \
