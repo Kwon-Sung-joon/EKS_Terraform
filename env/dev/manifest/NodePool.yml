@@ -11,10 +11,12 @@ spec:
           values: ["linux"]
         - key: karpenter.sh/capacity-type
           operator: In
-          values: ["on-demand"]
+          values: ["spot"]
         - key: node.kubernetes.io/instance-type
           operator: In
           values: ["t3.medium","t3a.medium"]
+        - key: topology.kubernetes.io/zone
+          values: ["ap-northeast-2a","ap-northeast-2c"]
       nodeClassRef:
         apiVersion: karpenter.k8s.aws/v1beta1
         kind: EC2NodeClass
@@ -23,7 +25,9 @@ spec:
     cpu: 1000
   disruption:
     consolidationPolicy: WhenUnderutilized
-    expireAfter: 720h # 30 * 24h = 720h
+    # WhenEmpty
+    # consolidateAfter: 30s
+    expireAfter: 5m
 ---
 apiVersion: karpenter.k8s.aws/v1beta1
 kind: EC2NodeClass
@@ -31,6 +35,36 @@ metadata:
   name: AL2
 spec:
   amiFamily: AL2 # Amazon Linux 2
+  userData: |
+    #!/bin/bash
+    Content-Type: multipart/mixed; boundary="//"
+    MIME-Version: 1.0
+    --//
+    Content-Type: text/cloud-config; charset="us-ascii"
+    MIME-Version: 1.0
+    Content-Transfer-Encoding: 7bit
+    Content-Disposition: attachment; filename="cloud-config.txt"
+    #cloud-config
+    cloud_final_modules:
+    - [scripts-user, always]
+    - [users-groups, always]
+    
+    users:
+    - name : ec2-user
+    groups : [ wheel ]
+    shell : /bin/bash
+    lock_passwd : false
+    plain_text_passwd: 'admin0!'
+    
+    --//
+    Content-Type: text/x-shellscript; charset="us-ascii"
+    MIME-Version: 1.0
+    Content-Transfer-Encoding: 7bit
+    Content-Disposition: attachment; filename="userdata.txt"
+    #!/bin/bash
+    sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+    systemctl restart sshd
+
   role: "dev_node_group_role" # replace with your cluster name
   subnetSelectorTerms:
     - tags:
@@ -40,3 +74,10 @@ spec:
         Name: "eks-node-sg"
   amiSelectorTerms:
     - id: "ami-06aaf7c21e7e74e2a"
+  blockDeviceMappings:
+    - deviceName: /dev/xvda
+      ebs:
+        volumeSize: 10Gi
+        volumeType: gp3
+        encrypted: true
+  detailedMonitoring: true
