@@ -47,7 +47,6 @@ variable "iam_roles"{
   }))
   default = {}
   }
-
 variable "iam_policies" {
   type = map(object({
     name = string
@@ -120,7 +119,6 @@ variable "ec2_instance" {
   }))
   default = {}
 }
-
 variable "iam_oidc" {
   type = map(object({
     url = any
@@ -129,7 +127,6 @@ variable "iam_oidc" {
   }))
   default = {}
 }
-
 variable "helm_release" {
   type = map(object({
     chart = any
@@ -144,7 +141,6 @@ variable "k8s_service_account" {
   }))
   default = {}
 }
-
 variable "k8s_karpenter" {
   type = map(object({
     sqs = any
@@ -205,7 +201,6 @@ locals {
     }
   }
 }
-
 
 #VPC CIDR
 locals {
@@ -278,7 +273,6 @@ locals {
     }
   }
 }
-
 
 #ROUTE TABLES
 locals {
@@ -395,6 +389,7 @@ locals {
     }
   }
 }
+
 #SECURIT GROUPS
 locals {
   DEV_SECURITY_GROUPS = {
@@ -544,6 +539,7 @@ locals {
     }
   }
 }
+
 #LAUNCH TEMPLATES
 locals {
   DEV_LAUNCH_TEMPLATES = {
@@ -565,6 +561,7 @@ locals {
     }
   }
 }
+
 #EKS CLUSTERS
 locals {
   DEV_EKS_CLUSTER = {
@@ -591,6 +588,7 @@ locals {
     }
   }
 }
+
 #EKS NODE GROUP
 locals {
   DEV_EKS_NODE_GROUP = {
@@ -668,7 +666,7 @@ locals {
   }
 }
 
-#DEV_IAM_ROLE_IRSA
+#IAM_ROLE_IRSA
 locals {
   DEV_IAM_ROLE_IRSA = {
     irsa_aws_load_balancer_controller = {
@@ -703,6 +701,7 @@ locals {
     }
   }
 }
+
 /*
 #K8S SERVICE ACCOUNT
 locals {
