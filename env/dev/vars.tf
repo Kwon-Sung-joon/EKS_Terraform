@@ -438,6 +438,27 @@ locals {
           to_port     = 10250
           description = "inbound_10250"
         }
+        inbound_10250 = {
+          cidr_ipv4   = "0.0.0.0/0"
+          from_port   = 10250
+          ip_protocol = "tcp"
+          to_port     = 10250
+          description = "inbound_10250"
+        }
+        inbound_8081 = {
+          cidr_ipv4   = "0.0.0.0/0"
+          from_port   = 8081
+          ip_protocol = "tcp"
+          to_port     = 8081
+          description = "inbound_8081"
+        }
+        inbound_8000 = {
+          cidr_ipv4   = "0.0.0.0/0"
+          from_port   = 8000
+          ip_protocol = "tcp"
+          to_port     = 8000
+          description = "inbound_8000"
+        }
       }
       egress = {
         outbound_any = {
