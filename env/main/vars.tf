@@ -568,9 +568,9 @@ locals {
     dev_cluster_1 = {
       name = "dev_cluster_1"
       subnets = [module.subnets["pub1"].subnet_id,
-        module.subnets["pub2"].subnet_id
-#        module.subnets["pri1"].subnet_id,
-#        module.subnets["pri2"].subnet_id
+        module.subnets["pub2"].subnet_id,
+        module.subnets["pri1"].subnet_id,
+        module.subnets["pri2"].subnet_id
       ]
       tags = {
         Name = "ksj-dev-cluster-1"
@@ -602,7 +602,7 @@ locals {
       ]
       scaling_config = [
         {
-          desired_size = 1
+          desired_size = 2
           min_size     = 0
           max_size     = 3
         }

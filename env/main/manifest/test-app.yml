@@ -38,6 +38,16 @@ spec:
           name: spring-app
           ports:
             - containerPort: 8080
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - spring-app
+              topologyKey: "kubernetes.io/hostname"
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress

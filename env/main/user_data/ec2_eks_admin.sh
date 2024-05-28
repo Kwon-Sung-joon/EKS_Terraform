@@ -31,10 +31,9 @@ systemctl restart sshd
 dnf install -y docker
 systemctl start docker
 systemctl enable docker
-
 usermod -a -G docker ec2-user
-curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.26.12/2024-01-04/bin/linux/amd64/kubectl
 
+curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.26.12/2024-01-04/bin/linux/amd64/kubectl
 chmod +x ./kubectl
 
 HOME=/home/ec2-user
@@ -49,3 +48,6 @@ curl -fsSL -o /tmp/get_helm.sh https://raw.githubusercontent.com/helm/helm/main/
 chmod 700 /tmp/get_helm.sh
 sh +x /tmp/get_helm.sh
 rm -f /tmp/get_helm.sh
+
+curl -sL https://github.com/derailed/k9s/releases/download/v0.25.18/k9s_Linux_x86_64.tar.gz | sudo tar \
+ xfz - -C /usr/local/bin k9s

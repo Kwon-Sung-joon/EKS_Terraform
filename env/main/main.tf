@@ -125,8 +125,6 @@ module "k8s_karpenter" {
   karpenter_config = each.value
 }
 
-
-
 /*
 ##K8S Resources
 module "k8s_service_account" {
