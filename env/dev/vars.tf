@@ -530,7 +530,7 @@ locals {
       name = "dev-eks-ng-lt"
       image_id = "ami-06aaf7c21e7e74e2a"
       instance_type = "t3a.medium"
-      update_default_version = true
+      update_default_version = false
       vpc_security_group_ids = [module.security_groups["dev_eks_node_sg"].id]
       user_data = base64encode(templatefile("${path.module}/user_data/eks_node.sh",
         {
