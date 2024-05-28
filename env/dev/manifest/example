@@ -9,7 +9,7 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n ku
 
 
 #Install karpenter helm using IRSA
-helm upgrade --install --namespace kube-system --create-namespace \
+helm upgrade --install --namespace karpenter --create-namespace \
   karpenter oci://public.ecr.aws/karpenter/karpenter \
   --set "serviceAccount.annotations.eks\.amazonaws\.com/role-arn=arn:aws:iam::672956273056:role/irsa_karpenter_controller" \
   --set settings.clusterName=dev_cluster_1 \
@@ -21,6 +21,7 @@ helm upgrade --install --namespace kube-system --create-namespace \
   --set controller.resources.limits.memory=1Gi \
   --set logLevel=debug \
   --wait
+
 
 
 
