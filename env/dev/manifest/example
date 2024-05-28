@@ -7,20 +7,22 @@ helm repo add eks https://aws.github.io/eks-charts
 helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=dev_cluster_1 --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller
 
 
-#Create karpenter sa
-kubectl create sa karpenter -n kube-system
-kubectl annotate karpenter -n kube-system karpenter eks.amazonaws.com/role-arn=arn:aws:iam::672956273056:role/irsa_karpenter_controller
-
 
 #Install karpenter helm using IRSA
-helm install -n kube-system karpenter oci://public.ecr.aws/karpenter/karpenter \
-  --set serviceAccount.annotations."eks\.amazonaws\.com/role-arn"=arn:aws:iam::672956273056:role/irsa_karpenter_controller \
-  --version v0.28.0 \
-  --set settings.aws.clusterName=dev_cluster_1 \
-  --set settings.aws.clusterEndpoint=https://A1B0D85E82CD725E62953C7B5ED88F4C.gr7.ap-northeast-2.eks.amazonaws.com \
-  --set settings.aws.defaultInstanceProfile=dev_node_group_role \
-  --set settings.aws.interruptionQueueName=dev_karpenter_1_sqs\
+helm upgrade --install --namespace kube-system --create-namespace \
+  karpenter oci://public.ecr.aws/karpenter/karpenter \
+  --set "serviceAccount.annotations.eks\.amazonaws\.com/role-arn=arn:aws:iam::672956273056:role/irsa_karpenter_controller" \
+  --set settings.clusterName=dev_cluster_1 \
+  --set logLevel=debug \
+  --set settings.interruptionQueue=dev_karpenter_1_sqs \
+  --set controller.resources.requests.cpu=1 \
+  --set controller.resources.requests.memory=1Gi \
+  --set controller.resources.limits.cpu=1 \
+  --set controller.resources.limits.memory=1Gi \
+  --set logLevel=debug \
   --wait
+
+
 
 
 #Install karpenter helm using POD Identity
@@ -28,7 +30,7 @@ helm install -n kube-system karpenter oci://public.ecr.aws/karpenter/karpenter \
 1. aws eks create-addon --cluster-name my-cluster --addon-name eks-pod-identity-agent --addon-version v1.0.0-eksbuild.1
 2. aws eks create-pod-identity-association --cluster-name dev_cluster_1 --role-arn arn:aws:iam::111122223333:role/my-role --namespace kube-system --service-account karpenter
 
-helm upgrade --install karpenter oci://public.ecr.aws/karpenter/karpenter --version v0.28.0 --namespace kube-system --create-namespace \
+helm upgrade --install karpenter oci://public.ecr.aws/karpenter/karpenter --version v0.28.0 --namespace karpenter --create-namespace \
   --set "settings.clusterName=dev_cluster_1" \
   --set "settings.interruptionQueue=dev_cluster_1" \
   --set controller.resources.requests.cpu=1 \
@@ -38,10 +40,12 @@ helm upgrade --install karpenter oci://public.ecr.aws/karpenter/karpenter --vers
   --wait
 
 
+helm template karpenter oci://public.ecr.aws/karpenter/karpenter --namespace karpenter \
+    --set settings.aws.clusterName=dev_cluster_1 \
+    --set "serviceAccount.annotations.eks\.amazonaws\.com/role-arn=arn:aws:iam::672956273056:role/irsa_karpenter_controller" \
+    --set controller.resources.requests.cpu=1 \
+    --set controller.resources.requests.memory=1Gi \
+    --set controller.resources.limits.cpu=1 \
+    --set controller.resources.limits.memory=1Gi > karpenter.yaml
 
-helm upgrade --install --namespace kube-system --create-namespace \
-  karpenter oci://public.ecr.aws/karpenter/karpenter \
-  --set "serviceAccount.annotations.eks\.amazonaws\.com/role-arn=arn:aws:iam::672956273056:role/irsa_karpenter_controller" \
-  --set settings.clusterName=dev_cluster_1 \
-  --set settings.interruptionQueue=dev_karpenter_1_sqs \
-  --wait
+
