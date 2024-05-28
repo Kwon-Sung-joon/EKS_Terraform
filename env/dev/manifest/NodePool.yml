@@ -6,24 +6,15 @@ spec:
   template:
     spec:
       requirements:
-        - key: kubernetes.io/arch
-          operator: In
-          values: ["amd64"]
         - key: kubernetes.io/os
           operator: In
           values: ["linux"]
         - key: karpenter.sh/capacity-type
           operator: In
           values: ["on-demand"]
-        - key: karpenter.k8s.aws/instance-category
-          operator: In
-          values: ["t"]
-        - key: karpenter.k8s.aws/instance-generation
-          operator: Gt
-          values: ["2","3"]
         - key: node.kubernetes.io/instance-type
           operator: In
-          values: ["t3.medium","t2.medium"]
+          values: ["t3.medium","t3a.medium"]
       nodeClassRef:
         apiVersion: karpenter.k8s.aws/v1beta1
         kind: EC2NodeClass
@@ -40,7 +31,7 @@ metadata:
   name: AL2
 spec:
   amiFamily: AL2 # Amazon Linux 2
-  role: "KarpenterNodeRole-dev_cluster_1" # replace with your cluster name
+  role: "dev_node_group_role" # replace with your cluster name
   subnetSelectorTerms:
     - tags:
         Name: "dev-public-*"

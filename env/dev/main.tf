@@ -3,14 +3,14 @@ module "vpc" {
   for_each = merge(var.vpc_cidr,local.DEV_VPC)
   vpc_config=each.value
 }
-/*
+
 module "nat_gw" {
   source        = "../../module/nat"
   for_each = merge(var.nat_gw,local.DEV_NAT_GW)
   nat_config=each.value
   depends_on    = [module.vpc, module.subnets]
 }
-*/
+
 module "subnets" {
   source = "../../module/subnets"
   for_each = merge(var.subnets,local.DEV_SUBNETS)
