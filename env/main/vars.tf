@@ -596,22 +596,15 @@ locals {
       cluster_name = module.eks_cluster["dev_cluster_1"].cluster_name
       node_group_name = "${var.dev_name_tag}-eks-node-group-1"
       node_role_arn = module.iam_role["dev_node_group_role"].iam_role
-      subnet_ids = [module.subnets["pub1"].subnet_id,
-        module.subnets["pub2"].subnet_id
-      ]
-/*
-      subnet_ids = [module.subnets["pub1"].subnet_id,
-        module.subnets["pub2"].subnet_id,
+      subnet_ids = [
         module.subnets["pri1"].subnet_id,
         module.subnets["pri2"].subnet_id
       ]
-*/
       scaling_config = [
         {
-          desired_size = 2
+          desired_size = 1
           min_size     = 0
           max_size     = 3
-
         }
 
       ]
