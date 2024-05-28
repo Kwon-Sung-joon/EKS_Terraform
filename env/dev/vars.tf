@@ -387,7 +387,7 @@ locals {
       name = "dev_irsa_karpenter_policy"
       description = "irsa for karpenter controller"
       #policy = "${path.root}/template/KarpenterControllerPolicy.json"
-      policy = templatefile("${path.root}/template/KarpenterControllerPolicy.json", { CLUSTER_NAME = "dev_cluster_1" })
+      policy = templatefile("${path.root}/template/KarpenterControllerPolicy.json", { ClusterName = "dev_cluster_1" })
       tags = {
         Name = "dev_irsa_karpenter_policy"
         Owner = "ksj"

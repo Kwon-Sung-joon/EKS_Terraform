@@ -13,7 +13,6 @@ helm upgrade --install --namespace karpenter --create-namespace \
   karpenter oci://public.ecr.aws/karpenter/karpenter --version 0.35.2 \
   --set "serviceAccount.annotations.eks\.amazonaws\.com/role-arn=arn:aws:iam::672956273056:role/irsa_karpenter_controller" \
   --set settings.clusterName=dev_cluster_1 \
-  --set settings.clusterEndpoint=https://A56439F3541DCFE859CA5A2CEF7B7678.gr7.ap-northeast-2.eks.amazonaws.com \
   --set settings.interruptionQueue=dev_karpenter_1_sqs \
   --set logLevel=debug \
   --set controller.resources.requests.cpu=1 \
