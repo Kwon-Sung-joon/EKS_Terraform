@@ -73,3 +73,5 @@ spec:
                 name: spring-app
                 port:
                   number: 80
+nodeSelector:
+  eks:nodegroup-name: public=-
