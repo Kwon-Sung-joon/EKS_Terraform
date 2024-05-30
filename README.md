@@ -8,6 +8,15 @@
 - IAM 구성 (Terraform User)
 - S3 및 DynamoDB를 사용한 Terraform Backend 구성
 
+
+## metrics 서버 배포
+```bash
+cd ./env/dev/manifest
+kubectl apply -f metrics-server.yml
+```
+
+
+
 ## AWS-Load-Balancer-Controller 설치
 ```bash
 
@@ -20,13 +29,6 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n ku
  --set serviceAccount.create=false \
  --set serviceAccount.name=aws-load-balancer-controller
 ```
-
-## Test-app 배포
-```bash
-cd ./env/dev/manifest
-kubectl apply -f test-app.yml
-```
-
 
 ## Karpenter 설치
 ```bash

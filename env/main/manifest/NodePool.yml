@@ -6,9 +6,6 @@ spec:
   template:
     spec:
       requirements:
-        - key: kubernetes.io/os
-          operator: In
-          values: ["linux"]
         - key: karpenter.sh/capacity-type
           operator: In
           values: ["spot"]
@@ -20,19 +17,19 @@ spec:
       nodeClassRef:
         apiVersion: karpenter.k8s.aws/v1beta1
         kind: EC2NodeClass
-        name: AL2
+        name: al2
   limits:
     cpu: 1000
   disruption:
     consolidationPolicy: WhenUnderutilized
     # WhenEmpty
     # consolidateAfter: 30s
-    expireAfter: 5m
+    expireAfter: 1h
 ---
 apiVersion: karpenter.k8s.aws/v1beta1
 kind: EC2NodeClass
 metadata:
-  name: AL2
+  name: al2
 spec:
   amiFamily: AL2 # Amazon Linux 2
   userData: |
@@ -65,10 +62,10 @@ spec:
     sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
     systemctl restart sshd
 
-  role: "dev_node_group_role" # replace with your cluster name
+  role: "dev_node_group_role" # replace with your karpenter node role
   subnetSelectorTerms:
     - tags:
-        Name: "dev-private-*"
+        Name: "dev-*"
   securityGroupSelectorTerms:
     - tags:
         Name: "eks-node-sg"
@@ -77,7 +74,7 @@ spec:
   blockDeviceMappings:
     - deviceName: /dev/xvda
       ebs:
-        volumeSize: 10Gi
+        volumeSize: 8Gi
         volumeType: gp3
         encrypted: true
-  detailedMonitoring: true
+  detailedMonitoring: false
