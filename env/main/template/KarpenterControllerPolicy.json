@@ -169,7 +169,7 @@
     {
       "Sid": "AllowPassingInstanceRole",
       "Effect": "Allow",
-      "Resource": "arn:aws:iam::*:role/dev_node_group_role",
+      "Resource": "arn:aws:iam::*:role/${KarpenterNodeGroupRoleName}",
       "Action": "iam:PassRole",
       "Condition": {
         "StringEquals": {
