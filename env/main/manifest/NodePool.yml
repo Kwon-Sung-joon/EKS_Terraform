@@ -14,7 +14,7 @@ spec:
           values: ["spot"]
         - key: node.kubernetes.io/instance-type
           operator: In
-          values: ["t3.medium","t3a.medium"]
+          values: ["t3.medium","t3a.medium","t2.medium"]
         - key: topology.kubernetes.io/zone
           values: ["ap-northeast-2a","ap-northeast-2c"]
       nodeClassRef:
@@ -68,7 +68,7 @@ spec:
   role: "dev_node_group_role" # replace with your cluster name
   subnetSelectorTerms:
     - tags:
-        Name: "dev-public-*"
+        Name: "dev-private-*"
   securityGroupSelectorTerms:
     - tags:
         Name: "eks-node-sg"
