@@ -10,7 +10,7 @@ metadata:
   namespace: spring-app
 spec:
   ports:
-    - port: 80
+    - port: 8080
       targetPort: 8080
       protocol: TCP
   type: ClusterIP
@@ -49,9 +49,17 @@ spec:
                       - spring-app
               topologyKey: "kubernetes.io/hostname"
         nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              preference:
+                matchExpressions:
+                  - key: karpenter.sh/nodepool
+                    operator: In
+                    values:
+                      - dev-private-node
+            - weight: 100
+              preference:
+                matchExpressions:
                   - key: karpenter.sh/nodepool
                     operator: In
                     values:
@@ -63,10 +71,10 @@ metadata:
   name: spring-app
   namespace: spring-app
   annotations:
-    alb.ingress.kubernetes.io/load-balancer-name: test-app-alb
+    alb.ingress.kubernetes.io/load-balancer-name: public-alb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/subnets: subnet-0c95428cf9c1dd81a, subnet-05bb8be0de17db01f
+    alb.ingress.kubernetes.io/subnets: dev-public-1, dev-public-2
     alb.ingress.kubernetes.io/healthcheck-path: /actuator/health
     alb.ingress.kubernetes.io/group.name: spring-8080
 spec:
@@ -80,5 +88,4 @@ spec:
               service:
                 name: spring-app
                 port:
-                  number: 80
-
+                  number: 8080
