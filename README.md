@@ -29,7 +29,6 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n ku
  --set serviceAccount.create=false \
  --set serviceAccount.name=aws-load-balancer-controller
 ```
-
 ## Karpenter 설치
 ```bash
 helm upgrade --install --namespace kube-system --create-namespace \
@@ -45,10 +44,9 @@ karpenter oci://public.ecr.aws/karpenter/karpenter --version 0.35.2 \
 --set settings.featureGates.spotToSpotConsolidation=true \
 --wait
 
-kubectl apply -f ./env/dev/manifest/NodePool.yml
+kubectl apply -f ./env/dev/manifest/PublicNodePool.yml
+kubectl apply -f ./env/dev/manifest/PrivateNodePool.yml
 ```
-
-
 
 ##
 ```bash
@@ -64,6 +62,7 @@ karpenter oci://public.ecr.aws/karpenter/karpenter --version 0.35.2 \
 --set controller.resources.limits.memory=1Gi \
 --set settings.featureGates.spotToSpotConsolidation=true > karpenter.yml
 
+vi karpenter.yml
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -83,6 +82,8 @@ kubectl create -f \
     "https://raw.githubusercontent.com/aws/karpenter-provider-aws/v0.35.2/pkg/apis/crds/karpenter.k8s.aws_ec2nodeclasses.yaml"
 kubectl create -f \
     "https://raw.githubusercontent.com/aws/karpenter-provider-aws/v0.35.2/pkg/apis/crds/karpenter.sh_nodeclaims.yaml"
-
+    
+kubectl apply -f ./env/dev/manifest/PublicNodePool.yml
+kubectl apply -f ./env/dev/manifest/PrivateNodePool.yml
 
 ```

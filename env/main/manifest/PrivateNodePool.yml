@@ -1,7 +1,7 @@
 apiVersion: karpenter.sh/v1beta1
 kind: NodePool
 metadata:
-  name: default
+  name: dev-private-node
 spec:
   template:
     spec:
@@ -15,7 +15,7 @@ spec:
       nodeClassRef:
         apiVersion: karpenter.k8s.aws/v1beta1
         kind: EC2NodeClass
-        name: al2
+        name: dev-private-node
   limits:
     cpu: 1000
   disruption:
@@ -27,7 +27,7 @@ spec:
 apiVersion: karpenter.k8s.aws/v1beta1
 kind: EC2NodeClass
 metadata:
-  name: al2
+  name: dev-private-node
 spec:
   amiFamily: AL2 # Amazon Linux 2
   userData: |
@@ -43,7 +43,6 @@ spec:
     cloud_final_modules:
     - [scripts-user, always]
     - [users-groups, always]
-    
     users:
     - name : ec2-user
     groups : [ wheel ]
@@ -59,11 +58,10 @@ spec:
     #!/bin/bash
     sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
     systemctl restart sshd
-
   role: "dev_node_group_role" # replace with your karpenter node role
   subnetSelectorTerms:
     - tags:
-        Name: "dev-*"
+        Name: "dev-private*"
   securityGroupSelectorTerms:
     - tags:
         Name: "eks-node-sg"

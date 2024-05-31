@@ -628,7 +628,7 @@ locals {
       ]
       scaling_config = [
         {
-          desired_size = 2
+          desired_size = 1
           min_size     = 0
           max_size     = 3
         }

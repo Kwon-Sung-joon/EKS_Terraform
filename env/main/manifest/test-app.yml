@@ -48,15 +48,14 @@ spec:
                     values:
                       - spring-app
               topologyKey: "kubernetes.io/hostname"
-#        nodeAffinity:
-#          requiredDuringSchedulingIgnoredDuringExecution:
-#            nodeSelectorTerms:
-#              - matchExpressions:
-#                  - key: eks.amazonaws.com/nodegroup
-#                    operator: In
-#                    values:
-#                      - dev-dev_node_group_private
-
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: karpenter.sh/nodepool
+                    operator: In
+                    values:
+                      - dev-public-node
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
