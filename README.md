@@ -17,7 +17,7 @@ kubectl apply -f metrics-server.yml
 ## Karpenter 설치
 ```bash
 helm upgrade --install karpenter oci://public.ecr.aws/karpenter/karpenter --namespace kube-system --create-namespace \
---set "serviceAccount.annotations.eks\.amazonaws\.com/role-arn=arn:aws:iam::672956273056:role/irsa_karpenter_controller" \
+--set "serviceAccount.annotations.eks\.amazonaws\.com/role-arn=arn:aws:iam::<ACCOUNT_ID>:role/irsa_karpenter_controller" \
 --set settings.clusterName=dev_cluster_1 \
 --set settings.interruptionQueue=dev_karpenter_1_sqs \
 --set settings.featureGates.drift=false \
