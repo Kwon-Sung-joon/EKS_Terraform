@@ -12,7 +12,7 @@
 ## metrics 서버 배포
 ```bash
 cd ./env/dev/manifest
-kubectl apply -f metrics-server. 
+kubectl apply -f metrics-server.yml
 ```
 ## Karpenter 설치
 ```bash
