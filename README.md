@@ -14,23 +14,10 @@
 cd ./env/dev/manifest
 kubectl apply -f metrics-server.yml
 ```
-
-
-
-## AWS-Load-Balancer-Controller 설치
-```bash
-
-helm repo add eks https://aws.github.io/eks-charts
-helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system \
- --set clusterName=dev_cluster_1 \
- --set "serviceAccount.annotations.eks\.amazonaws\.com/role-arn=arn:aws:iam::<ACCOUNT_ID>:role/irsa_aws_load_balancer_controller"
-
-```
 ## Karpenter 설치
 ```bash
-helm template --namespace kube-system --create-namespace \
-karpenter oci://public.ecr.aws/karpenter/karpenter \
---set "serviceAccount.annotations.eks\.amazonaws\.com/role-arn=arn:aws:iam::<ACCOUNT_ID>:role/irsa_karpenter_controller" \
+helm upgrade --install karpenter oci://public.ecr.aws/karpenter/karpenter --namespace kube-system --create-namespace \
+--set "serviceAccount.annotations.eks\.amazonaws\.com/role-arn=arn:aws:iam::672956273056:role/irsa_karpenter_controller" \
 --set settings.clusterName=dev_cluster_1 \
 --set settings.interruptionQueue=dev_karpenter_1_sqs \
 --set settings.featureGates.drift=false \
@@ -38,35 +25,17 @@ karpenter oci://public.ecr.aws/karpenter/karpenter \
 --set controller.resources.requests.memory=512Mi \
 --set controller.resources.limits.cpu=0.5 \
 --set controller.resources.limits.memory=512Mi \
---set settings.featureGates.spotToSpotConsolidation=true > karpenter.yml
+--set settings.featureGates.spotToSpotConsolidation=true \
+--set "affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].weight=100" \
+--set "affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].preference.matchExpressions[0].key=karpenter.sh/nodepool" \
+--set "affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].preference.matchExpressions[0].operator=In" \
+--set "affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].preference.matchExpressions[0].values[0]=dev-private-node" \
+--set "affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[1].weight=1" \
+--set "affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[1].preference.matchExpressions[0].key=eks.amazonaws.com/nodegroup" \
+--set "affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[1].preference.matchExpressions[0].operator=In" \
+--set "affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[1].preference.matchExpressions[0].values[0]=dev-dev_node_group_private" \
+--set "affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution=null"
 
-vi karpenter.yml
-      affinity:
-        nodeAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 1
-            preference:
-              matchExpressions:
-              - key: karpenter.sh/nodepool
-                operator: DoesNotExist
-              - key: eks.amazonaws.com/nodegroup
-                operator: In
-                values:
-                - dev-dev_node_group_private  #구성된 노드 그룹 명
-          - weight: 50
-            preference:
-              matchExpressions:
-              - key: karpenter.sh/nodepool
-                operator: In
-                values:
-                - dev-private-node
-
-kubectl create -f \
-    "https://raw.githubusercontent.com/aws/karpenter-provider-aws/v0.35.2/pkg/apis/crds/karpenter.sh_nodepools.yaml"
-kubectl create -f \
-    "https://raw.githubusercontent.com/aws/karpenter-provider-aws/v0.35.2/pkg/apis/crds/karpenter.k8s.aws_ec2nodeclasses.yaml"
-kubectl create -f \
-    "https://raw.githubusercontent.com/aws/karpenter-provider-aws/v0.35.2/pkg/apis/crds/karpenter.sh_nodeclaims.yaml"
 
 kubectl applf -f karpenter.yml
 kubectl apply -f ./env/dev/manifest/PublicNodePool.yml
@@ -75,7 +44,25 @@ kubectl apply -f ./env/dev/manifest/PrivateNodePool.yml
 ## Karpenter NodePool 지정하여 Deploy 생성
 ```bash
 e.g. alb 타입 
+helm repo add eks https://aws.github.io/eks-charts
 
+helm upgrade --install aws-load-balancer-controller eks/aws-load-balancer-controller --namespace kube-system --create-namespace \
+  --set clusterName=dev_cluster_1 \
+  --set "serviceAccount.annotations.eks\.amazonaws\.com/role-arn=arn:aws:iam::<ACCOUNT_ID>:role/irsa_aws_load_balancer_controller" \
+  --set affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].key=karpenter.sh/nodepool \
+  --set affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].operator=In \
+  --set affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].values[0]=dev-public-node \
+  --set affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution.topologyKey=kubernetes.io/hostname
+  
+```
+
+## AWS-Load-Balancer-Controller 설치
+```bash
+
+helm repo add eks https://aws.github.io/eks-charts
+helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system \
+ --set clusterName=dev_cluster_1 \
+ --set "serviceAccount.annotations.eks\.amazonaws\.com/role-arn=arn:aws:iam::<ACCOUNT_ID>:role/irsa_aws_load_balancer_controller"
 
 ```
 

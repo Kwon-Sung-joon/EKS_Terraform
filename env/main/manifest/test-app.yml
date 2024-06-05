@@ -26,7 +26,7 @@ spec:
   selector:
     matchLabels:
       app: spring-app
-  replicas: 1
+  replicas: 2
   template:
     metadata:
       labels:
@@ -57,13 +57,7 @@ spec:
                     operator: In
                     values:
                       - dev-private-node
-            - weight: 100
-              preference:
-                matchExpressions:
-                  - key: karpenter.sh/nodepool
-                    operator: In
-                    values:
-                      - dev-public-node
+
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
