@@ -124,25 +124,26 @@ module "k8s_karpenter" {
   for_each = merge(var.k8s_karpenter,local.DEV_KARPENTER)
   karpenter_config = each.value
 }
-
+/*
 module "eks_cluster_addons" {
   source = "../../module/eks_cluster_add_on"
   for_each = merge(var.dev_eks_cluster_addons,local.DEV_EKS_CLUSTER_ADDONS)
   eks_cluster_addon_config = each.value
 }
+
 module "helm_release" {
   source = "../../module/helm"
   for_each = merge(var.helm_release,local.DEV_HELM)
   helm_release_config = each.value
   depends_on = [module.k8s_karpenter]
 }
-
+*/
 ##K8S Resources
 module "k8s_manifest" {
   source = "../../module/k8s_manifest"
   for_each = merge(var.k8s_manifest,local.DEV_K8S_MANIFEST)
   k8s_manifest_config = each.value
-  depends_on = [module.helm_release]
+  #depends_on = [module.helm_release]
 }
 
 

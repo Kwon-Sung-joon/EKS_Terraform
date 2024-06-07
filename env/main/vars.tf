@@ -902,11 +902,11 @@ locals {
     dev_k8s_metrics = {
       manifest = file("${path.root}/manifest/metrics-server.yaml")
     }
-    dev_karpenter_private_nodepool = {
-      manifest = file("${path.root}/manifest/PrivateNodePool.yml")
-    }
-    dev_karpenter_public_nodepool = {
-      manifest = file("${path.root}/manifest/PublicNodePool.yml")
-    }
+#    dev_karpenter_private_nodepool = {
+#      manifest = file("${path.root}/manifest/PrivateNodePool.yml")
+#    }
+#    dev_karpenter_public_nodepool = {
+#      manifest = file("${path.root}/manifest/PublicNodePool.yml")
+#    }
   }
 }
