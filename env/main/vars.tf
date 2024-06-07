@@ -763,6 +763,90 @@ locals {
   }
 }
 
+locals {
+  DEV_HELM = {
+    dev_karpenter_chart = {
+      repository = "oci://public.ecr.aws/karpenter/karpenter"
+      chart = "karpenter"
+      namespace = "kube-system"
+      name  = "karpenter"
+      set   = [
+        {
+          name  = "serviceAccount.annotations.eks.amazonaws.com/role-arn"
+          value = "arn:aws:iam::<ACCOUNT_ID>:role/irsa_karpenter_controller"
+        },
+        {
+          name  = "settings.clusterName"
+          value = "dev_cluster_1"
+        },
+        {
+          name  = "settings.interruptionQueue"
+          value = "dev_karpenter_1_sqs"
+        },
+        {
+          name  = "settings.featureGates.drift"
+          value = "false"
+        },
+        {
+          name  = "controller.resources.requests.cpu"
+          value = "0.5"
+        },
+        {
+          name  = "controller.resources.requests.memory"
+          value = "512Mi"
+        },
+        {
+          name  = "controller.resources.limits.cpu"
+          value = "0.5"
+        },
+        {
+          name  = "controller.resources.limits.memory"
+          value = "512Mi"
+        },
+        {
+          name  = "settings.featureGates.spotToSpotConsolidation"
+          value = "true"
+        },
+        {
+          name  = "affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].weight"
+          value = "100"
+        },
+        {
+          name  = "affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].preference.matchExpressions[0].key"
+          value = "karpenter.sh/nodepool"
+        },
+        {
+          name  = "affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].preference.matchExpressions[0].operator"
+          value = "In"
+        },
+        {
+          name  = "affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].preference.matchExpressions[0].values[0]"
+          value = "dev-private-node"
+        },
+        {
+          name  = "affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[1].weight"
+          value = "1"
+        },
+        {
+          name  = "affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[1].preference.matchExpressions[0].key"
+          value = "eks.amazonaws.com/nodegroup"
+        },
+        {
+          name  = "affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[1].preference.matchExpressions[0].operator"
+          value = "In"
+        },
+        {
+          name  = "affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[1].preference.matchExpressions[0].values[0]"
+          value = "dev-dev_node_group_private"
+        },
+        {
+          name  = "affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution"
+          value = "null"
+        }
+      ]
+    }
+  }
+}
 /*
 #K8S SERVICE ACCOUNT
 locals {
@@ -788,32 +872,5 @@ locals {
 }
 
 #HELM RELEASE
-locals {
-  DEV_HELM = {
-    dev_elb_controller_chart = {
-      repository = "https://aws.github.io/eks-charts"
-      chart = "aws-load-balancer-controller"
-      namespace = "kube-system"
-      name  = "aws-load-balancer-controller"
-      set   = [
-        {
-          name  = "region"
-          value = "ap-northeast-2"
-        },
-        {
-          name  = "serviceAccount.create"
-          value = false
-        },
-        {
-          name  = "serviceAccount.name"
-          value = "aws-load-balancer-controller"
-        },
-        {
-          name  = "clusterName"
-          value = "dev_cluster_1"
-        }
-      ]
-    }
-  }
-}
+
 */
