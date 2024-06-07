@@ -154,6 +154,7 @@ variable "helm_release" {
     chart = any
     name = string
     set = any
+    create_namespace = bool
   }))
   default = {}
 }
@@ -845,8 +846,9 @@ locals {
           value = "null"
         }
       ]
+      create_namespace = true
     }
-  }
+    }
 }
 /*
 #K8S SERVICE ACCOUNT

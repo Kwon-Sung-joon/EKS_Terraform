@@ -9,4 +9,5 @@ resource "helm_release" "release" {
       value = set.value.value
     }
   }
+  create_namespace=var.helm_release_config.create_namespace
 }
