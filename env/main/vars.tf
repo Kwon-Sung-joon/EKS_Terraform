@@ -97,10 +97,20 @@ variable "eks_cluster" {
   default = {}
 }
 variable "dev_eks_cluster_addons" {
+
   type = map(object({
     cluster_name =string
     addon_name = string
+    /*
+      check addon version
+      aws eks describe-addon-versions --kubernetes-version 1.29 --addon-name vpc-cni \ --query 'addons[].addonVersions[].{Version: addonVersion, Defaultversion: compatibilities[0].defaultVersion}' --output table
+    */
     addon_version = string
+    /*
+      NONE = Amazon EKS는 값을 변경하지 않습니다. 업데이트가 실패할 수 있습니다
+      OVERWRITE =  Amazon EKS는 변경된 값을 다시 Amazon EKS 기본값으로 덮어씁니다
+      PRESERVE = Amazon EKS가 값을 보존합니다. 이 옵션을 선택하는 경우 프로덕션 클러스터에서 추가 기능을 업데이트하기 전에 비프로덕션 클러스터에서 필드 및 값 변경 사항을 테스트하는 것이 좋습니다
+    */
     resolve_conflicts_on_create = string
     resolve_conflicts_on_update = string
   }))
@@ -737,12 +747,16 @@ locals {
     dev_core_dns = {
       cluster_name = "dev_cluster_1"
       addon_name = "coredns"
-      #aws eks describe-addon-versions --kubernetes-version 1.29 --addon-name vpc-cni \
-      #--query 'addons[].addonVersions[].{Version: addonVersion, Defaultversion: compatibilities[0].defaultVersion}' --output table
+      /*
+      check addon version
+      aws eks describe-addon-versions --kubernetes-version 1.29 --addon-name vpc-cni \ --query 'addons[].addonVersions[].{Version: addonVersion, Defaultversion: compatibilities[0].defaultVersion}' --output table
+      */
       addon_version = "v1.9.3-eksbuild.7"
-      #NONE = Amazon EKS는 값을 변경하지 않습니다. 업데이트가 실패할 수 있습니다
-      #OVERWRITE =  Amazon EKS는 변경된 값을 다시 Amazon EKS 기본값으로 덮어씁니다
-      #PRESERVE = Amazon EKS가 값을 보존합니다. 이 옵션을 선택하는 경우 프로덕션 클러스터에서 추가 기능을 업데이트하기 전에 비프로덕션 클러스터에서 필드 및 값 변경 사항을 테스트하는 것이 좋습니다
+      /*
+      NONE = Amazon EKS는 값을 변경하지 않습니다. 업데이트가 실패할 수 있습니다
+      OVERWRITE =  Amazon EKS는 변경된 값을 다시 Amazon EKS 기본값으로 덮어씁니다
+      PRESERVE = Amazon EKS가 값을 보존합니다. 이 옵션을 선택하는 경우 프로덕션 클러스터에서 추가 기능을 업데이트하기 전에 비프로덕션 클러스터에서 필드 및 값 변경 사항을 테스트하는 것이 좋습니다
+      */
       resolve_conflicts_on_create = "PRESERVE"
       resolve_conflicts_on_update = "PRESERVE"
     }
