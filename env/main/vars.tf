@@ -775,7 +775,7 @@ locals {
       set   = [
         {
           name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-          value = "arn:aws:iam::<ACCOUNT_ID>:role/irsa_karpenter_controller"
+          value = "arn:aws:iam::672956273056:role/irsa_karpenter_controller"
         },
         {
           name  = "settings.clusterName"
@@ -848,51 +848,51 @@ locals {
       ]
       create_namespace = true
     }
-    dev_load_balancer_controller_chart = {
-      repository = "https://aws.github.io/eks-charts"
-      chart = "aws-load-balancer-controller"
-      namespace = "kube-system"
-      name  = "aws-load-balancer-controller"
-      set   = [
-        {
-          name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-          value = "arn:aws:iam::<ACCOUNT_ID>:role/irsa_aws_load_balancer_controller"
-        },
-        {
-          name  = "settings.clusterName"
-          value = "dev_cluster_1"
-        },
-        {
-          name  = "affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].key"
-          value = "karpenter.sh/nodepool"
-        },
-        {
-          name  = "affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].operator"
-          value = "In"
-        },
-        {
-          name  = "affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].values[0]"
-          value = "dev-private-node"
-        },
-        {
-          name  = "affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].matchExpressions[0].key"
-          value = "app.kubernetes.io/name"
-        },
-        {
-          name  = "affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].matchExpressions[0].operator"
-          value = "In"
-        },
-        {
-          name  = "affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].matchExpressions[0].values[0]"
-          value = "aws-load-balancer-controller"
-        },
-        {
-          name  = "affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].topologyKey"
-          value = "kubernetes.io/hostname"
-        }
-      ]
-      create_namespace = true
-    }
+#    dev_load_balancer_controller_chart = {
+#      repository = "https://aws.github.io/eks-charts"
+#      chart = "aws-load-balancer-controller"
+#      namespace = "kube-system"
+#      name  = "aws-load-balancer-controller"
+#      set   = [
+#        {
+#          name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+#          value = "arn:aws:iam::<ACCOUNT_ID>:role/irsa_aws_load_balancer_controller"
+#        },
+#        {
+#          name  = "settings.clusterName"
+#          value = "dev_cluster_1"
+#        },
+#        {
+#          name  = "affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].key"
+#          value = "karpenter.sh/nodepool"
+#        },
+#        {
+#          name  = "affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].operator"
+#          value = "In"
+#        },
+#        {
+#          name  = "affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].values[0]"
+#          value = "dev-private-node"
+#        },
+#        {
+#          name  = "affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].matchExpressions[0].key"
+#          value = "app.kubernetes.io/name"
+#        },
+#        {
+#          name  = "affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].matchExpressions[0].operator"
+#          value = "In"
+#        },
+#        {
+#          name  = "affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].matchExpressions[0].values[0]"
+#          value = "aws-load-balancer-controller"
+#        },
+#        {
+#          name  = "affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].topologyKey"
+#          value = "kubernetes.io/hostname"
+#        }
+#      ]
+#      create_namespace = true
+#    }
     }
 }
 /*
