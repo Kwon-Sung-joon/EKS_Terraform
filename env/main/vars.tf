@@ -902,5 +902,11 @@ locals {
     dev_k8s_metrics = {
       yaml_body = templatefile("${path.root}/manifest/metrics-server.yaml",{} )
     }
+    dev_karpenter_private_nodepool = {
+      yaml_body = templatefile("${path.root}/manifest/PrivateNodePool.yml",{} )
+    }
+    dev_karpenter_public_nodepool = {
+      yaml_body = templatefile("${path.root}/manifest/PublicNodePool.yml",{} )
+    }
   }
 }
