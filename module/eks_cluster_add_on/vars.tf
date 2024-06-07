@@ -1,0 +1,1 @@
+variable "eks_cluster_addon_config" {}

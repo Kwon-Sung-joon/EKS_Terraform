@@ -125,6 +125,11 @@ module "k8s_karpenter" {
   karpenter_config = each.value
 }
 
+module "eks_cluster_addons" {
+  source = "../../module/eks_cluster_add_on"
+  for_each = merge(var.dev_eks_cluster_addons,local.DEV_EKS_CLUSTER_ADDONS)
+  eks_cluster_addon_config = each.value
+}
 /*
 ##K8S Resources
 module "k8s_service_account" {
