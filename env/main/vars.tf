@@ -763,10 +763,11 @@ locals {
   }
 }
 
+#HELM RELEASE
 locals {
   DEV_HELM = {
     dev_karpenter_chart = {
-      repository = "oci://public.ecr.aws/karpenter/karpenter"
+      repository = "oci://public.ecr.aws/karpenter"
       chart = "karpenter"
       namespace = "kube-system"
       name  = "karpenter"
@@ -871,6 +872,6 @@ locals {
   }
 }
 
-#HELM RELEASE
+
 
 */
