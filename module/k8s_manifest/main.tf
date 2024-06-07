@@ -1,3 +1,3 @@
-resource "kubectl_manifest" "k8s_manifest" {
-  yaml_body = var.k8s_manifest_config.yaml_body
+resource "kubernetes_manifest" "k8s_manifest" {
+  manifest  = var.k8s_manifest_config.manifest
 }

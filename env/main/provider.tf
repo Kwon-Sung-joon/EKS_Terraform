@@ -4,10 +4,6 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.3"
     }
-    kubectl = {
-      source  = "gavinbunney/kubectl"
-      version = "~> 5.3"
-    }
   }
   backend "s3" {
     bucket  = "ksj-terraform-state-bucket"
@@ -16,11 +12,12 @@ terraform {
     encrypt = true
   }
 }
-provider "kubectl" {
+provider "kubernetes" {
   host                   = module.eks_cluster["dev_cluster_1"].endpoint
   cluster_ca_certificate = base64decode(module.eks_cluster["dev_cluster_1"].kubeconfig-certificate-authority-data)
   config_path    = ""
   config_context = ""
+
   exec {
     api_version = "client.authentication.k8s.io/v1beta1"
     command     = "aws"

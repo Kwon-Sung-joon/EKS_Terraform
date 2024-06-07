@@ -160,7 +160,7 @@ variable "helm_release" {
 }
 variable "k8s_manifest" {
   type = map(object({
-    yaml_body = any
+    manifest = any
   }))
   default = {}
 }
@@ -900,13 +900,13 @@ locals {
 locals {
   DEV_K8S_MANIFEST = {
     dev_k8s_metrics = {
-      yaml_body = templatefile("${path.root}/manifest/metrics-server.yaml",{} )
+      manifest = yamldecode(file("${path.root}/manifest/metrics-server.yaml"))
     }
     dev_karpenter_private_nodepool = {
-      yaml_body = templatefile("${path.root}/manifest/PrivateNodePool.yml",{} )
+      manifest = yamldecode(file("${path.root}/manifest/PrivateNodePool.yml"))
     }
     dev_karpenter_public_nodepool = {
-      yaml_body = templatefile("${path.root}/manifest/PublicNodePool.yml",{} )
+      manifest = yamldecode(file("${path.root}/manifest/PublicNodePool.yml"))
     }
   }
 }
