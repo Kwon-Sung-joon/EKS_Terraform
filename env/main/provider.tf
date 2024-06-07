@@ -12,18 +12,18 @@ terraform {
     encrypt = true
   }
 }
-provider "kubernetes" {
+provider "kubectl" {
   host                   = module.eks_cluster["dev_cluster_1"].endpoint
   cluster_ca_certificate = base64decode(module.eks_cluster["dev_cluster_1"].kubeconfig-certificate-authority-data)
   config_path    = ""
   config_context = ""
-
   exec {
     api_version = "client.authentication.k8s.io/v1beta1"
     command     = "aws"
     args        = ["eks", "get-token", "--cluster-name", module.eks_cluster["dev_cluster_1"].cluster_name]
   }
 }
+
 provider "helm" {
   kubernetes {
     host                   = module.eks_cluster["dev_cluster_1"].endpoint

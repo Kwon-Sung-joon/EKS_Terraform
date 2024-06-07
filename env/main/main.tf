@@ -136,12 +136,11 @@ module "helm_release" {
   helm_release_config = each.value
 }
 
-/*
 ##K8S Resources
 module "k8s_service_account" {
-  source = "../../module/k8s_service_account"
-  for_each = merge(var.k8s_service_account,local.DEV_K8S_SERVICE_ACCOUNT)
-  k8s_service_account_config = each.value
+  source = "../../module/k8s_manifest"
+  for_each = merge(var.k8s_manifest,local.DEV_K8S_MANIFEST)
+  k8s_manifest_config = each.value
 }
 
 
