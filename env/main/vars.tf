@@ -900,13 +900,13 @@ locals {
 locals {
   DEV_K8S_MANIFEST = {
     dev_k8s_metrics = {
-      manifest = yamldecode(file("${path.module}/manifest/metrics-server.yaml"))
+      manifest = yamldecode(file("${path.root}/manifest/metrics-server.yaml"))
     }
     dev_karpenter_private_nodepool = {
-      manifest = yamldecode(file("${path.module}/manifest/PrivateNodePool.yml"))
+      manifest = yamldecode(file("${path.root}/manifest/PrivateNodePool.yml"))
     }
     dev_karpenter_public_nodepool = {
-      manifest = yamldecode(file("${path.module}/manifest/PublicNodePool.yml"))
+      manifest = yamldecode(file("${path.root}/manifest/PublicNodePool.yml"))
     }
   }
 }
