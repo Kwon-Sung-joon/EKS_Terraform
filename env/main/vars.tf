@@ -895,7 +895,7 @@ locals {
     }
     }
 }
-
+/*
 #K8S MANIFEST
 locals {
   DEV_K8S_MANIFEST = {
@@ -910,3 +910,4 @@ locals {
     }
   }
 }
+*/
