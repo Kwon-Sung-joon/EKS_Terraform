@@ -102,7 +102,6 @@ variable "dev_eks_cluster_addons" {
     addon_name = string
     addon_version = string
     resolve_conflicts_on_create = string
-    configuration_values = any
   }))
   default = {}
 }
@@ -744,9 +743,6 @@ locals {
       #OVERWRITE =  Amazon EKS는 변경된 값을 다시 Amazon EKS 기본값으로 덮어씁니다
       #PRESERVE = Amazon EKS가 값을 보존합니다. 이 옵션을 선택하는 경우 프로덕션 클러스터에서 추가 기능을 업데이트하기 전에 비프로덕션 클러스터에서 필드 및 값 변경 사항을 테스트하는 것이 좋습니다
       resolve_conflicts_on_create = "PRESERVE"
-      configuration_values = [{
-        configuration_value = null
-      }]
     }
   }
 }
