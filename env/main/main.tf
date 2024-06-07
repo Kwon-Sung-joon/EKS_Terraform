@@ -136,15 +136,15 @@ module "helm_release" {
   helm_release_config = each.value
   depends_on = [module.k8s_karpenter]
 }
-/*
+
 ##K8S Resources
-module "k8s_service_account" {
+module "k8s_manifest" {
   source = "../../module/k8s_manifest"
   for_each = merge(var.k8s_manifest,local.DEV_K8S_MANIFEST)
   k8s_manifest_config = each.value
   depends_on = [module.helm_release]
 }
-*/
+
 
 
 /*
