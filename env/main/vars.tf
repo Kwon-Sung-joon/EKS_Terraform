@@ -749,9 +749,9 @@ locals {
       addon_name = "coredns"
       /*
       check addon version
-      aws eks describe-addon-versions --kubernetes-version 1.29 --addon-name vpc-cni \ --query 'addons[].addonVersions[].{Version: addonVersion, Defaultversion: compatibilities[0].defaultVersion}' --output table
+      aws eks describe-addon-versions --kubernetes-version 1.26 --addon-name vpc-cni \ --query 'addons[].addonVersions[].{Version: addonVersion, Defaultversion: compatibilities[0].defaultVersion}' --output table
       */
-      addon_version = "v1.9.3-eksbuild.7"
+      addon_version = "v1.9.3-eksbuild.15"
       /*
       NONE = Amazon EKS는 값을 변경하지 않습니다. 업데이트가 실패할 수 있습니다
       OVERWRITE =  Amazon EKS는 변경된 값을 다시 Amazon EKS 기본값으로 덮어씁니다
