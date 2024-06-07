@@ -773,7 +773,7 @@ locals {
       name  = "karpenter"
       set   = [
         {
-          name  = "serviceAccount.annotations.eks.amazonaws.com/role-arn"
+          name  = "serviceAccount.annotations.eks\.amazonaws\.com/role-arn"
           value = "arn:aws:iam::<ACCOUNT_ID>:role/irsa_karpenter_controller"
         },
         {
