@@ -136,7 +136,7 @@ module "helm_release" {
   helm_release_config = each.value
   depends_on = [module.k8s_karpenter]
 }
-
+/*
 ##K8S Resources
 module "k8s_service_account" {
   source = "../../module/k8s_manifest"
@@ -144,7 +144,7 @@ module "k8s_service_account" {
   k8s_manifest_config = each.value
   depends_on = [module.helm_release]
 }
-
+*/
 
 
 /*
