@@ -606,7 +606,7 @@ locals {
       admin_role = module.iam_role["dev_ec2_eks_admin_role"].iam_role
       upload_kubeconfig = "s3://ksj-terraform-state-bucket/codebuild/dev/kubeconfig"
       endpoint_private_access = true
-      endpoint_public_access = true
+      endpoint_public_access = false
     }
   }
 }
