@@ -617,7 +617,7 @@ locals {
   DEV_EKS_NODE_GROUP = {
     dev_node_group_private = {
       cluster_name = module.eks_cluster["dev_cluster_1"].cluster_name
-      node_group_name = "${var.dev_name_tag}-dev_node_group_private"
+      node_group_name = "dev_node_group_private"
       node_role_arn = module.iam_role["dev_node_group_role"].iam_role
       subnet_ids = [
         module.subnets["pri1"].subnet_id,
@@ -637,7 +637,7 @@ locals {
         }
       ]
       tags= {
-        Name  = "${var.dev_name_tag}-dev_node_group_private",
+        Name  = "dev_node_group_private",
         Owner = "ksj"
       }
     }
