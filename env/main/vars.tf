@@ -859,7 +859,7 @@ locals {
           value = "arn:aws:iam::<ACCOUNT_ID>:role/irsa_aws_load_balancer_controller"
         },
         {
-          name  = "settings.clusterName"
+          name  = "clusterName"
           value = "dev_cluster_1"
         },
         {
