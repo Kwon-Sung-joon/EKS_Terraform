@@ -71,6 +71,8 @@ metadata:
     alb.ingress.kubernetes.io/subnets: dev-public-1, dev-public-2
     alb.ingress.kubernetes.io/healthcheck-path: /actuator/health
     alb.ingress.kubernetes.io/group.name: shared-alb
+  finalizers:
+    - ingress.k8s.aws/resources
 spec:
   ingressClassName: alb
   rules:
