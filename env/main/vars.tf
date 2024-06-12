@@ -775,7 +775,7 @@ locals {
       set   = [
         {
           name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-          value = "arn:aws:iam::672956273056:role/irsa_karpenter_controller"
+          value = "arn:aws:iam::<ACCOUNT_ID>:role/irsa_karpenter_controller"
         },
         {
           name  = "settings.clusterName"
