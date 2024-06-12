@@ -37,8 +37,6 @@ helm upgrade --install karpenter oci://public.ecr.aws/karpenter/karpenter --name
 --set "affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution=null"
 
 
-kubectl applf -f karpenter.yml
-kubectl apply -f ./env/dev/manifest/PublicNodePool.yml
 kubectl apply -f ./env/dev/manifest/PrivateNodePool.yml
 ```
 ## AWS-Load-Balancer-Controller 설치
@@ -56,7 +54,6 @@ helm upgrade --install aws-load-balancer-controller eks/aws-load-balancer-contro
   --set "affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].matchExpressions[0].operator=In" \
   --set "affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].matchExpressions[0].values[0]=aws-load-balancer-controller" \
   --set "affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].topologyKey=kubernetes.io/hostname"
-
 ```
 
 

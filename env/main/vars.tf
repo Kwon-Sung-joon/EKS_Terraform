@@ -839,7 +839,7 @@ locals {
         },
         {
           name  = "affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[1].preference.matchExpressions[0].values[0]"
-          value = "dev-dev_node_group_private"
+          value = "dev_node_group_private"
         },
         {
           name  = "affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution"
