@@ -138,6 +138,7 @@ module "helm_release" {
   depends_on = [module.k8s_karpenter]
 }
 
+
 # ##K8S Resources
 # module "k8s_manifest" {
 #   source = "../../module/k8s_manifest"
