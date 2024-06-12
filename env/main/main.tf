@@ -124,7 +124,7 @@ module "k8s_karpenter" {
   for_each = merge(var.k8s_karpenter,local.DEV_KARPENTER)
   karpenter_config = each.value
 }
-/*
+
 module "eks_cluster_addons" {
   source = "../../module/eks_cluster_add_on"
   for_each = merge(var.dev_eks_cluster_addons,local.DEV_EKS_CLUSTER_ADDONS)
@@ -137,7 +137,7 @@ module "helm_release" {
   helm_release_config = each.value
   depends_on = [module.k8s_karpenter]
 }
-*/
+
 ##K8S Resources
 module "k8s_manifest" {
   source = "../../module/k8s_manifest"
@@ -145,22 +145,3 @@ module "k8s_manifest" {
   k8s_manifest_config = each.value
   #depends_on = [module.helm_release]
 }
-
-
-
-/*
-module "ecr_repos" {
-  source         = "../../module/ecr"
-  ecr-repos-name = var.ecr-repose-name
-}
-
-module "bastion" {
-  source       = "../../module/bastion"
-  alltag       = var.alltag
-  subnet_id1   = module.public_subnet1.subnet_id
-  ami_id       = var.bastionAmi
-  keypair_name = var.bastionKey
-  vpc_id       = module.vpc.vpc_id
-  user_data    = "./user_data/install_docker.sh"
-}
-*/
