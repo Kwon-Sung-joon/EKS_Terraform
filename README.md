@@ -66,5 +66,4 @@ helm upgrade --install aws-load-balancer-controller eks/aws-load-balancer-contro
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
-
 ```
