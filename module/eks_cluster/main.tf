@@ -5,8 +5,8 @@ resource "aws_eks_cluster" "eks-cluster" {
 
   vpc_config {
     subnet_ids              = var.eks_cluster_config.subnets
-    endpoint_private_access = true
-    endpoint_public_access  = true
+    endpoint_private_access = var.eks_cluster_config.endpoint_private_access
+    endpoint_public_access  = var.eks_cluster_config.endpoint_public_access
     security_group_ids      = var.eks_cluster_config.sg_ids
   }
   kubernetes_network_config {
