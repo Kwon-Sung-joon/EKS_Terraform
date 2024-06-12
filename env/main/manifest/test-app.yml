@@ -70,7 +70,7 @@ metadata:
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/subnets: dev-public-1, dev-public-2
     alb.ingress.kubernetes.io/healthcheck-path: /actuator/health
-    alb.ingress.kubernetes.io/group.name: spring-8080
+    alb.ingress.kubernetes.io/group.name: shared-alb
 spec:
   ingressClassName: alb
   rules:
