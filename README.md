@@ -75,6 +75,7 @@ helm upgrade --install aws-load-balancer-controller eks/aws-load-balancer-contro
 ```bash
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+argocd server ssl disable 참고 : https://dev.to/nulldutra/disabling-tls-in-argocd-server-4jij
+
 ```
