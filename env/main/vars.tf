@@ -38,7 +38,6 @@ variable "route_tables" {
   }))
   default = {}
 }
-
 variable "iam_roles"{
   type=map(object({
     name=any
@@ -116,7 +115,6 @@ variable "dev_eks_cluster_addons" {
   }))
   default = {}
 }
-
 variable "eks_node_group" {
   type = map(object({
     cluster_name = string
@@ -224,7 +222,6 @@ locals {
     }
   }
 }
-
 #VPC CIDR
 locals {
   DEV_VPC={
@@ -237,7 +234,6 @@ locals {
     }
   }
 }
-
 #NAT GW
 locals {
   DEV_NAT_GW ={
@@ -250,7 +246,6 @@ locals {
     }
   }
 }
-
 #SUBNETS
 locals {
   DEV_SUBNETS= {
@@ -296,7 +291,6 @@ locals {
     }
   }
 }
-
 #ROUTE TABLES
 locals {
   DEV_ROUTE_TABLE = {
@@ -331,7 +325,6 @@ locals {
     }
   }
 }
-
 #IAM ROLES
 locals {
   DEV_IAM_ROLE = {
@@ -378,7 +371,6 @@ locals {
     }
   }
 }
-
 #IAM POLICY
 locals {
   DEV_IAM_POLICY = {
@@ -412,7 +404,6 @@ locals {
     }
   }
 }
-
 #SECURIT GROUPS
 locals {
   DEV_SECURITY_GROUPS = {
@@ -562,7 +553,6 @@ locals {
     }
   }
 }
-
 #LAUNCH TEMPLATES
 locals {
   DEV_LAUNCH_TEMPLATES = {
@@ -584,7 +574,6 @@ locals {
     }
   }
 }
-
 #EKS CLUSTERS
 locals {
   DEV_EKS_CLUSTER = {
@@ -611,7 +600,6 @@ locals {
     }
   }
 }
-
 #EKS NODE GROUP
 locals {
   DEV_EKS_NODE_GROUP = {
@@ -669,7 +657,6 @@ locals {
 #    }
   }
 }
-
 #EC2 INSTANCE
 locals {
   DEV_EC2_INSTANCE = {
@@ -693,7 +680,6 @@ locals {
     }
   }
 }
-
 #IAM OIDC
 locals {
   DEV_IAM_OIDC = {
@@ -704,7 +690,6 @@ locals {
     }
   }
 }
-
 #IAM_ROLE_IRSA
 locals {
   DEV_IAM_ROLE_IRSA = {
@@ -740,8 +725,6 @@ locals {
     }
   }
 }
-
-
 #EKS CLUSTER ADDONS
 locals {
   DEV_EKS_CLUSTER_ADDONS = {
@@ -763,7 +746,6 @@ locals {
     }
   }
 }
-
 #HELM RELEASE
 locals {
   DEV_HELM = {
@@ -895,7 +877,6 @@ locals {
     }
     }
 }
-
 #K8S MANIFEST
 locals {
   DEV_K8S_MANIFEST = {
