@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   annotations:
     alb.ingress.kubernetes.io/healthcheck-path: /
-    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTPS
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":8001}]'
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
@@ -19,7 +19,7 @@ spec:
   rules:
     - http:
         paths:
-          - path: /argo*
+          - path: /argo
             pathType: Prefix
             backend:
               service:
