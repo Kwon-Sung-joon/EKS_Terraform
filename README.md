@@ -28,7 +28,7 @@ aws eks describe-addon --cluster-name dev_cluster_1 --addon-name coredns --query
 
 
 ## Karpenter 설치
-#### coredns 버전 v1.9.3-eksbuild.9 이상에서 정상 동작
+#### 정상 동작하지 않을 시 coredns deploy restart
 ```bash
 helm upgrade --install karpenter oci://public.ecr.aws/karpenter/karpenter --namespace kube-system --create-namespace \
 --set "serviceAccount.annotations.eks\.amazonaws\.com/role-arn=arn:aws:iam::<ACCOUNT_ID>:role/irsa_karpenter_controller" \
