@@ -9,8 +9,6 @@ terraform {
 provider "aws" {
   region = "ap-northeast-2"
 }
-
-
 resource "aws_dynamodb_table" "ksj-tf-state-lock" {
   name           = "ksj-tf-state-lock"
   read_capacity  = 5
@@ -21,14 +19,11 @@ resource "aws_dynamodb_table" "ksj-tf-state-lock" {
     type = "S"
   }
 }
-
 resource "aws_s3_bucket" "ksj-tf-logs" {
   bucket = "ksj-tf-bcknd"
   acl    = "log-delivery-write"
 
 }
-
-
 resource "aws_s3_bucket" "ksj-tf-state" {
   bucket = "ksj-tf-state"
   acl    = "private"

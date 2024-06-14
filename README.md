@@ -17,8 +17,18 @@
 cd ./env/dev/manifest
 kubectl apply -f metrics-server.yml
 ```
+## coredns addon 설치
+```bash
+# 현재 버전 확인
+kubectl describe deployment coredns --namespace kube-system | grep coredns: | cut -d : -f 3
+
+#
+aws eks describe-addon --cluster-name dev_cluster_1 --addon-name coredns --query addon.addonVersion --output text
+```
+
 
 ## Karpenter 설치
+#### coredns 버전 v1.9.3-eksbuild.9 이상에서 정상 동작
 ```bash
 helm upgrade --install karpenter oci://public.ecr.aws/karpenter/karpenter --namespace kube-system --create-namespace \
 --set "serviceAccount.annotations.eks\.amazonaws\.com/role-arn=arn:aws:iam::<ACCOUNT_ID>:role/irsa_karpenter_controller" \
