@@ -8,12 +8,13 @@
 - IAM 구성 (Terraform User)
 - S3 및 DynamoDB를 사용한 Terraform Backend 구성
 
-
 ## metrics 서버 배포
 ```bash
 cd ./env/dev/manifest
 kubectl apply -f metrics-server.yml
 ```
+
+
 ## Karpenter 설치
 ```bash
 helm upgrade --install karpenter oci://public.ecr.aws/karpenter/karpenter --namespace kube-system --create-namespace \
@@ -35,7 +36,6 @@ helm upgrade --install karpenter oci://public.ecr.aws/karpenter/karpenter --name
 --set "affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[1].preference.matchExpressions[0].operator=In" \
 --set "affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[1].preference.matchExpressions[0].values[0]=dev_node_group_private" \
 --set "affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution=null"
-
 
 kubectl apply -f ./env/dev/manifest/PrivateNodePool.yml
 ```
@@ -64,5 +64,4 @@ kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
-
 ```

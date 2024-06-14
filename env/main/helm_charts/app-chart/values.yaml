@@ -1,0 +1,24 @@
+namespace:
+  name: spring-app
+
+service:
+  name: spring-app
+  port: 8080
+
+deployment:
+  name: spring-app
+  replicas: 2
+  image:
+    repository: 672956273056.dkr.ecr.ap-northeast-2.amazonaws.com/ksj-apps
+    tag: spring-8080-x64-v2
+    pullPolicy: Always
+
+ingress:
+  name: spring-app
+  annotations:
+    alb.ingress.kubernetes.io/load-balancer-name: public-alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/subnets: dev-public-1, dev-public-2
+    alb.ingress.kubernetes.io/healthcheck-path: /actuator/health
+    alb.ingress.kubernetes.io/group.name: shared-alb
