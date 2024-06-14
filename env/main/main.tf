@@ -126,6 +126,8 @@ module "k8s_karpenter" {
 }
 
 /*
+
+## it takes 15 minutes to create addon
 module "eks_cluster_addons" {
   source = "../../module/eks_cluster_add_on"
   for_each = merge(var.dev_eks_cluster_addons,local.DEV_EKS_CLUSTER_ADDONS)
