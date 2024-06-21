@@ -26,12 +26,11 @@ kubectl describe deployment coredns --namespace kube-system | grep coredns: | cu
 aws eks describe-addon --cluster-name dev_cluster_1 --addon-name coredns --query addon.addonVersion --output text
 ```
 
-
 ## Karpenter 설치
 #### 정상 동작하지 않을 시 coredns deploy restart
 ```bash
 helm upgrade --install karpenter oci://public.ecr.aws/karpenter/karpenter --namespace kube-system --create-namespace \
---set "serviceAccount.annotations.eks\.amazonaws\.com/role-arn=arn:aws:iam::<ACCOUNT_ID>:role/irsa_karpenter_controller" \
+--set "serviceAccount.annotations.eks\.amazonaws\.com/role-arn=arn:aws:iam::$ACCOUNT_ID:role/irsa_karpenter_controller" \
 --set settings.clusterName=dev_cluster_1 \
 --set settings.interruptionQueue=dev_karpenter_1_sqs \
 --set settings.featureGates.drift=false \
@@ -59,7 +58,7 @@ kubectl apply -f ./env/dev/manifest/PrivateNodePool.yml
 helm repo add eks https://aws.github.io/eks-charts
 helm upgrade --install aws-load-balancer-controller eks/aws-load-balancer-controller --namespace kube-system --create-namespace \
   --set clusterName=dev_cluster_1 \
-  --set "serviceAccount.annotations.eks\.amazonaws\.com/role-arn=arn:aws:iam::<ACCOUNT_ID>:role/irsa_aws_load_balancer_controller" \
+  --set "serviceAccount.annotations.eks\.amazonaws\.com/role-arn=arn:aws:iam::$ACCOUNT_ID:role/irsa_aws_load_balancer_controller" \
   --set "affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].key=karpenter.sh/nodepool" \
   --set "affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].operator=In" \
   --set "affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].values[0]=dev-private-node" \
@@ -76,6 +75,19 @@ helm upgrade --install aws-load-balancer-controller eks/aws-load-balancer-contro
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
-argocd server ssl disable 참고 : https://dev.to/nulldutra/disabling-tls-in-argocd-server-4jij
+``` 
+
+## Argocd server ssl 비활성화
+
+```yaml
+#edit configmap : argocd-cmd-params-cm
+apiVersion: v1
+data:
+  server.insecure: "true"
+kind: ConfigMap
+metadata:
+...
+
+kubectl rollout restart deployment argocd-server -n argocd
 
 ```

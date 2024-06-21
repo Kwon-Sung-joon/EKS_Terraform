@@ -613,7 +613,7 @@ locals {
       ]
       scaling_config = [
         {
-          desired_size = 1
+          desired_size = 0
           min_size     = 0
           max_size     = 3
         }
@@ -721,6 +721,21 @@ locals {
       })
       mgd_policies = [
         module.iam_policy["dev_irsa_karpenter_policy"].policy_arn
+      ]
+    }
+    irsa_aws_prometheus = {
+      name = "amp-iamproxy-ingest-role"
+      tags = {
+        Name  = "irsa_aws_prometheus"
+        Owner = "ksj"
+      }
+      assume_role_policy = templatefile("${path.root}/template/EKS_IRSA_Trust_Policy.json",{
+        OIDC = "${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}"
+        NAMESPACE = "kube-system"
+        SERVICE_ACCOUNT = "aws-load-balancer-controller"
+      })
+      mgd_policies = [
+        module.iam_policy["dev_irsa_elb_controller_policy"].policy_arn
       ]
     }
   }
