@@ -91,3 +91,33 @@ metadata:
 kubectl rollout restart deployment argocd-server -n argocd
 
 ```
+
+## Promethues 설치
+```bash
+
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo add kube-state-metrics https://kubernetes.github.io/kube-state-metrics
+
+
+cat >> prometheus_values.yaml
+serviceAccounts:
+  server:
+    name: amp-iamproxy-ingest-service-account
+    annotations: 
+      eks.amazonaws.com/role-arn: ${IAM_PROXY_PROMETHEUS_ROLE_ARN}
+server:
+  remoteWrite:
+    - url: https://aps-workspaces.${REGION}.amazonaws.com/workspaces/${WORKSPACE_ID}/api/v1/remote_write
+      sigv4:
+        region: ${REGION}
+      queue_config:
+        max_samples_per_send: 1000
+        max_shards: 200
+        capacity: 2500
+
+helm install prometheus prometheus-community/prometheus -n kube-system \
+-f prometheus_values.yaml
+
+
+#참조 https://aws.amazon.com/ko/blogs/korea/amazon-managed-service-for-prometheus-collector-provides-agentless-metric-collection-for-amazon-eks/
+```
