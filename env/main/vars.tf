@@ -629,32 +629,6 @@ locals {
         Owner = "ksj"
       }
     }
-#    dev_node_group_public = {
-#      cluster_name = module.eks_cluster["dev_cluster_1"].cluster_name
-#      node_group_name = "${var.dev_name_tag}-dev_node_group_public"
-#      node_role_arn = module.iam_role["dev_node_group_role"].iam_role
-#      subnet_ids = [
-#        module.subnets["pub1"].subnet_id,
-#        module.subnets["pub2"].subnet_id
-#      ]
-#      scaling_config = [
-#        {
-#          desired_size = 1
-#          min_size     = 0
-#          max_size     = 3
-#        }
-#      ]
-#      launch_template = [
-#        {
-#          version = "$Default"
-#          id = module.launch_template["dev_eks_node_groups_lt"].id
-#        }
-#      ]
-#      tags= {
-#        Name  = "${var.dev_name_tag}-dev_node_group_public",
-#        Owner = "ksj"
-#      }
-#    }
   }
 }
 #EC2 INSTANCE
@@ -913,11 +887,8 @@ locals {
     dev_k8s_metrics = {
       manifest = file("${path.root}/manifest/metrics-server.yaml")
     }
-#    dev_karpenter_private_nodepool = {
-#      manifest = file("${path.root}/manifest/PrivateNodePool.yml")
-#    }
-#    dev_karpenter_public_nodepool = {
-#      manifest = file("${path.root}/manifest/PublicNodePool.yml")
-#    }
+    dev_karpenter_private_nodepool = {
+      manifest = file("${path.root}/manifest/PrivateNodePool.yml")
+    }
   }
 }
