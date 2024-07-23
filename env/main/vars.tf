@@ -723,6 +723,21 @@ locals {
         module.iam_policy["dev_irsa_karpenter_policy"].policy_arn
       ]
     }
+    irsa_efs_csi_driver = {
+      name = "irsa_efs_csi_driver"
+      tags = {
+        Name  = "irsa_efs_csi_driver"
+        Owner = "ksj"
+      }
+      assume_role_policy = templatefile("${path.root}/template/AWS_EFS_CSI_Driver_Trust_Policy.json",{
+        OIDC = "${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}"
+        NAMESPACE = "kube-system"
+        SERVICE_ACCOUNT = "efs-csi-*"
+      })
+      mgd_policies = [
+        "arn:aws:iam::aws:policy/service-role/AmazonEFSCSIDriverPolicy"
+      ]
+    }
     irsa_aws_prometheus = {
       name = "amp-iamproxy-ingest-role"
       tags = {

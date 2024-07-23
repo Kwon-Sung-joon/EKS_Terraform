@@ -1,0 +1,18 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "arn:aws:iam::672956273056:oidc-provider/${OIDC}"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringLike": {
+          "${OIDC}:aud": "sts.amazonaws.com",
+          "${OIDC}:sub": "system:serviceaccount:${NAMESPACE}:${SERVICE_ACCOUNT}"
+        }
+      }
+    }
+  ]
+}
