@@ -468,6 +468,13 @@ locals {
           to_port     = 8000
           description = "inbound_8000"
         }
+        inbound_6379 = {
+          cidr_ipv4   = "0.0.0.0/0"
+          from_port   = 6379
+          ip_protocol = "tcp"
+          to_port     = 6379
+          description = "inbound_6379"
+        }
       }
       egress = {
         outbound_any = {
@@ -579,8 +586,7 @@ locals {
   DEV_EKS_CLUSTER = {
     dev_cluster_1 = {
       name = "dev_cluster_1"
-      subnets = [module.subnets["pub1"].subnet_id,
-        module.subnets["pub2"].subnet_id,
+      subnets = [
         module.subnets["pri1"].subnet_id,
         module.subnets["pri2"].subnet_id
       ]

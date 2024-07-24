@@ -21,7 +21,6 @@ kubectl apply -f metrics-server.yml
 ```bash
 # 현재 버전 확인
 kubectl describe deployment coredns --namespace kube-system | grep coredns: | cut -d : -f 3
-
 #
 aws eks describe-addon --cluster-name dev_cluster_1 --addon-name coredns --query addon.addonVersion --output text
 ```
