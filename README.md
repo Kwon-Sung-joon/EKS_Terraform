@@ -14,7 +14,7 @@
 
 ## metrics 서버 배포
 ```bash
-cd ./env/dev/manifest
+cd ./env/main/manifest
 kubectl apply -f metrics-server.yml
 ```
 ## coredns addon 설치
@@ -48,7 +48,7 @@ helm upgrade --install karpenter oci://public.ecr.aws/karpenter/karpenter --name
 --set "affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[1].preference.matchExpressions[0].values[0]=dev_node_group_private" \
 --set "affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution=null"
 
-kubectl apply -f ./env/dev/manifest/PrivateNodePool.yml
+kubectl apply -f ./env/main/manifest/PrivateNodePool.yml
 ```
 ## AWS-Load-Balancer-Controller 설치
 ### Karpenter NodePool 지정하여 생성
@@ -71,9 +71,26 @@ helm upgrade --install aws-load-balancer-controller eks/aws-load-balancer-contro
 
 ## Argo 설치
 ```bash
-kubectl create namespace argocd
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+
+helm repo add argo-cd https://argoproj.github.io/argo-helm
+helm upgrade --install argo-cd argo-cd/argo-cd --namespace argo-cd --create-namespace \
+  --set "configs.params.server.insecure=true" \
+  --set "server.ingress.enabled=true" \
+  --set "server.ingress.enabled=aws" \
+  --set "server.ingress.annotations.alb.ingress.kubernetes.io/healthcheck-path=/" \
+  --set "server.ingress.annotations.alb.ingress.kubernetes.io/healthcheck-protocol=HTTP" \
+  --set "server.ingress.annotations.alb.ingress.kubernetes.io/scheme=internet-facing" \
+  --set "server.ingress.annotations.alb.ingress.kubernetes.io/target-type=ip" \
+  --set "server.ingress.annotations.alb.ingress.kubernetes.io/load-balancer-name=public-alb" \
+  --set "server.ingress.annotations.alb.ingress.kubernetes.io/subnets=dev-public-1,dev-publis-2" \
+  --set "server.ingress.annotations.alb.ingress.kubernetes.io/group\.name= shared-alb" \
+  --set "server.ingress.ingressClassName=alb" \
+  
+  
+  
+  
+   
+  
 ``` 
 
 ## Argocd server ssl 비활성화
