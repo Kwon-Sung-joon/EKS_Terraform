@@ -69,7 +69,7 @@ spec:
     - tags:
         Name: "eks-node-sg"
   amiSelectorTerms:
-    - id: "ami-06aaf7c21e7e74e2a"
+    - id: "ami-0c970162f407cdfd0"
   blockDeviceMappings:
     - deviceName: /dev/xvda
       ebs:

@@ -565,7 +565,7 @@ locals {
   DEV_LAUNCH_TEMPLATES = {
     dev_eks_node_groups_lt = {
       name = "dev-eks-ng-lt"
-      image_id = "ami-06aaf7c21e7e74e2a"
+      image_id = "ami-0c970162f407cdfd0"
       instance_type = "t3a.medium"
       update_default_version = false
       vpc_security_group_ids = [module.security_groups["dev_eks_node_sg"].id]
@@ -596,7 +596,7 @@ locals {
       }
       service_ipv4_cidr = "10.100.0.0/16"
       cluster_role = module.iam_role["dev_cluster_role"].iam_role
-      cluster_version = 1.26
+      cluster_version = 1.29
       sg_ids = [module.security_groups["dev_eks_cluster_sg"].id]
       node_group_role = module.iam_role["dev_node_group_role"].iam_role
       admin_role = module.iam_role["dev_ec2_eks_admin_role"].iam_role
