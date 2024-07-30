@@ -12,7 +12,7 @@ metadata:
   finalizers:
     - ingress.k8s.aws/resources
   name: argocd-ingress
-  namespace: argocd
+  namespace: argo-cd
 spec:
   ingressClassName: alb
   rules:
@@ -22,7 +22,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: argocd-server
+                name: argo-cd-argocd-server
                 port:
                   number: 80
     - http:
@@ -31,6 +31,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: argocd-server
+                name: argo-cd-argocd-server
                 port:
                   number: 80

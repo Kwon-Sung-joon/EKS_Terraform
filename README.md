@@ -73,67 +73,26 @@ helm upgrade --install aws-load-balancer-controller eks/aws-load-balancer-contro
 ```bash
 
 helm repo add argo-cd https://argoproj.github.io/argo-helm
-helm upgrade --install argo-cd argo-cd/argo-cd --namespace argo-cd --create-namespace \
-  --set "configs.params.server.insecure=true" \
-  --set "server.ingress.enabled=true" \
-  --set "server.ingress.enabled=aws" \
-  --set "server.ingress.annotations.alb.ingress.kubernetes.io/healthcheck-path=/" \
-  --set "server.ingress.annotations.alb.ingress.kubernetes.io/healthcheck-protocol=HTTP" \
-  --set "server.ingress.annotations.alb.ingress.kubernetes.io/scheme=internet-facing" \
-  --set "server.ingress.annotations.alb.ingress.kubernetes.io/target-type=ip" \
-  --set "server.ingress.annotations.alb.ingress.kubernetes.io/load-balancer-name=public-alb" \
-  --set "server.ingress.annotations.alb.ingress.kubernetes.io/subnets=dev-public-1,dev-publis-2" \
-  --set "server.ingress.annotations.alb.ingress.kubernetes.io/group\.name= shared-alb" \
-  --set "server.ingress.ingressClassName=alb" \
-  
-  
-  
-  
-   
-  
-``` 
+helm upgrade --install argo-cd argo-cd/argo-cd --namespace argo-cd --create-namespace -f custom-values.yaml
 
-## Argocd server ssl 비활성화
+kubectl apply -f ./env/main/manifest/argo_ingress.yml
 
-```yaml
-#edit configmap : argocd-cmd-params-cm
-apiVersion: v1
-data:
-  server.insecure: "true"
-kind: ConfigMap
-metadata:
-...
-
-kubectl rollout restart deployment argocd-server -n argocd
+#custom-values.yml
+configs:
+  params:
+    server:
+      insecure: true  
 
 ```
 
-## Promethues 설치
+## NTH 설치
 ```bash
-
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm repo add kube-state-metrics https://kubernetes.github.io/kube-state-metrics
-
-
-cat >> prometheus_values.yaml
-serviceAccounts:
-  server:
-    name: amp-iamproxy-ingest-service-account
-    annotations: 
-      eks.amazonaws.com/role-arn: ${IAM_PROXY_PROMETHEUS_ROLE_ARN}
-server:
-  remoteWrite:
-    - url: https://aps-workspaces.${REGION}.amazonaws.com/workspaces/${WORKSPACE_ID}/api/v1/remote_write
-      sigv4:
-        region: ${REGION}
-      queue_config:
-        max_samples_per_send: 1000
-        max_shards: 200
-        capacity: 2500
-
-helm install prometheus prometheus-community/prometheus -n kube-system \
--f prometheus_values.yaml
-
-
-#참조 https://aws.amazon.com/ko/blogs/korea/amazon-managed-service-for-prometheus-collector-provides-agentless-metric-collection-for-amazon-eks/
+#참고 https://github.com/aws/aws-node-termination-handler
+helm upgrade --install --namespace kube-system aws-node-termination-handler oci://public.ecr.aws/aws-ec2/helm/aws-node-termination-handler --version v1.22.0 \
+  --set "serviceAccount.annotations.eks\.amazonaws\.com/role-arn=arn:aws:iam::$ACCOUNT_ID:role/irsa_karpenter_controller" \
+  --set "enableSqsTerminationDraining=true" \
+  --set "queueURL=" \
+  --set "awsRegion=ap-northerast-2" \
+  --set "checkASGTagBeforeDraining=false" \
+  --set "enableSpotInterruptionDraining=true"
 ```
