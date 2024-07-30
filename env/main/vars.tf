@@ -749,10 +749,10 @@ locals {
         module.iam_policy["dev_irsa_elb_controller_policy"].policy_arn
       ]
     }
-    irsa_aws_keda = {
-      name = "irsa_aws_keda"
+    irsa_keda = {
+      name = "irsa_keda"
       tags = {
-        Name  = "irsa_aws_keda"
+        Name  = "irsa_keda"
         Owner = "ksj"
       }
       assume_role_policy = templatefile("KEDA_IRSA_Trust_Policy.json",{

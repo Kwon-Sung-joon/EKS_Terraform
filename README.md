@@ -107,7 +107,7 @@ helm upgrade --install keda kedacore/keda \
   --namespace keda \
   --create-namespace \
   --set "podIdentity.aws.irsa.enabled=true" \
-  --set "podIdentity.aws.irsa.roleArn=${KEDA_ROLE_ARN}" \
+  --set "podIdentity.aws.irsa.roleArn=arn:aws:iam::$ACCOUNT_ID:role/irsa_keda" \
   --wait
 
 ```
