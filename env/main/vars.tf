@@ -402,6 +402,7 @@ locals {
         Owner = "ksj"
       }
     }
+
   }
 }
 #SECURIT GROUPS
@@ -746,6 +747,21 @@ locals {
       })
       mgd_policies = [
         module.iam_policy["dev_irsa_elb_controller_policy"].policy_arn
+      ]
+    }
+    irsa_aws_keda = {
+      name = "irsa_aws_keda"
+      tags = {
+        Name  = "irsa_aws_keda"
+        Owner = "ksj"
+      }
+      assume_role_policy = templatefile("KEDA_IRSA_Trust_Policy.json",{
+        OIDC = "${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}"
+        NAMESPACE = "keda"
+        SERVICE_ACCOUNT = "keda-operator"
+      })
+      mgd_policies = [
+        "arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess"
       ]
     }
   }

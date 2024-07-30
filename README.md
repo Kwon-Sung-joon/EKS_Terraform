@@ -96,3 +96,18 @@ helm upgrade --install --namespace kube-system aws-node-termination-handler oci:
   --set "checkASGTagBeforeDraining=false" \
   --set "enableSpotInterruptionDraining=true"
 ```
+
+## KEDA 설치
+```bash
+#https://github.com/kedacore/keda
+helm repo add kedacore https://kedacore.github.io/charts
+
+helm upgrade --install keda kedacore/keda \
+  --version "${KEDA_CHART_VERSION}" \
+  --namespace keda \
+  --create-namespace \
+  --set "podIdentity.aws.irsa.enabled=true" \
+  --set "podIdentity.aws.irsa.roleArn=${KEDA_ROLE_ARN}" \
+  --wait
+
+```
