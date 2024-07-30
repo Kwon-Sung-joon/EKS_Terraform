@@ -126,7 +126,6 @@ module "k8s_karpenter" {
 }
 
 /*
-
 ## it takes 15 minutes to create addon
 module "eks_cluster_addons" {
   source = "../../module/eks_cluster_add_on"
