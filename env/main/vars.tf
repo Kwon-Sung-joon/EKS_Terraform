@@ -755,7 +755,7 @@ locals {
         Name  = "irsa_keda"
         Owner = "ksj"
       }
-      assume_role_policy = templatefile("KEDA_IRSA_Trust_Policy.json",{
+      assume_role_policy = templatefile("${path.root}/template/KEDA_IRSA_Trust_Policy.json",{
         OIDC = "${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}"
         NAMESPACE = "keda"
         SERVICE_ACCOUNT = "keda-operator"
