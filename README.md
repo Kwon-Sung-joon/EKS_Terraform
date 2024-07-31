@@ -33,11 +33,8 @@ helm upgrade --install karpenter oci://public.ecr.aws/karpenter/karpenter --name
 --set settings.clusterName=dev_cluster_1 \
 --set settings.interruptionQueue=dev_karpenter_1_sqs \
 --set settings.featureGates.drift=false \
---set controller.resources.requests.cpu=0.5 \
---set controller.resources.requests.memory=512Mi \
---set controller.resources.limits.cpu=0.5 \
---set controller.resources.limits.memory=512Mi \
 --set settings.featureGates.spotToSpotConsolidation=true \
+--set dnsPolicy=Default \
 --set "affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].weight=100" \
 --set "affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].preference.matchExpressions[0].key=karpenter.sh/nodepool" \
 --set "affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].preference.matchExpressions[0].operator=In" \
@@ -65,6 +62,7 @@ helm upgrade --install aws-load-balancer-controller eks/aws-load-balancer-contro
   --set "affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].matchExpressions[0].operator=In" \
   --set "affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].matchExpressions[0].values[0]=aws-load-balancer-controller" \
   --set "affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].topologyKey=kubernetes.io/hostname"
+  
 ```
 
 ## Argo 설치

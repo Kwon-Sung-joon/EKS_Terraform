@@ -25,8 +25,6 @@ spec:
     # WhenEmpty
     # consolidateAfter: 30s
     expireAfter: 1h
-  interruptionHandling:
-    queueName: dev_karpenter_1_sqs
 ---
 apiVersion: karpenter.k8s.aws/v1beta1
 kind: EC2NodeClass

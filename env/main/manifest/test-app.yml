@@ -46,10 +46,10 @@ spec:
           resources:
             requests:
               memory: "4G"
-              cpu: "2"
+              cpu: "1"
             limits:
               memory: "4G"
-              cpu: "2"
+              cpu: "1"
 
       affinity:
         podAntiAffinity:

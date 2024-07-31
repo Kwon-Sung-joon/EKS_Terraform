@@ -559,6 +559,40 @@ locals {
         Owner = "ksj"
       }
     }
+    dev_eks_ingress_sg = {
+      name = "dev_eks_ingress_sg"
+      description = "dev_eks_ingress_sg"
+      vpc_id = module.vpc["dev_vpc_1"].vpc_id
+      ingress = {
+        inbound_80 = {
+          cidr_ipv4   = "0.0.0.0/0"
+          from_port   = 80
+          ip_protocol = "tcp"
+          to_port     = 80
+          description = "inbound_80"
+        }
+        inbound_443 = {
+          cidr_ipv4   = "0.0.0.0/0"
+          from_port   = 443
+          ip_protocol = "tcp"
+          to_port     = 443
+          description = "inbound_443"
+        }
+      }
+      egress = {
+        outbound_any = {
+          cidr_ipv4   = "0.0.0.0/0"
+          from_port   = 0
+          ip_protocol = "tcp"
+          to_port     = 65535
+          description = "outbound_any"
+        }
+      }
+      tags= {
+        Name  = "dev_eks_ingress_sg",
+        Owner = "ksj"
+      }
+    }
   }
 }
 #LAUNCH TEMPLATES

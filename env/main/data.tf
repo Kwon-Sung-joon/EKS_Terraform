@@ -48,5 +48,6 @@ data "aws_iam_policy_document" "karpenter_sqs_policy"{
       identifiers = ["events.amazonaws.com", "sqs.amazonaws.com"]
       type        = "Service"
     }
+    resources =["arn:aws:sqs:ap-northeast-2:672956273056:dev_karpenter_1_sqs"]
   }
 }
