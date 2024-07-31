@@ -1,0 +1,30 @@
+global:
+  affinity:
+    nodeAffinity:
+        - matchExpressions:
+          - key: karpenter.sh/nodepool
+            operator: In
+            values:
+            - dev-private-node-on-demand
+configs:
+  params:
+    server.insecure: true
+server:
+  ingress:
+    enabled: true
+    controller: aws
+    ingressClassName: alb
+    annotations:
+      alb.ingress.kubernetes.io/healthcheck-path: /
+      alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+      alb.ingress.kubernetes.io/scheme: internet-facing
+      alb.ingress.kubernetes.io/target-type: ip
+      alb.ingress.kubernetes.io/backend-protocol: HTTP
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
+      alb.ingress.kubernetes.io/load-balancer-name: public-alb
+      alb.ingress.kubernetes.io/subnets: dev-public-1, dev-public-2
+      alb.ingress.kubernetes.io/group.name: shared-alb
+      alb.ingress.kubernetes.io/security-groups: dev_eks_ingress_sg
+    aws:
+      serviceType: ClusterIP
+      backendProtocolVersion: HTTP1

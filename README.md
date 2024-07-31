@@ -63,17 +63,14 @@ helm upgrade --install aws-load-balancer-controller eks/aws-load-balancer-contro
   --set "affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].matchExpressions[0].operator=In" \
   --set "affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].matchExpressions[0].values[0]=aws-load-balancer-controller" \
   --set "affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].topologyKey=kubernetes.io/hostname"
-  
 ```
 
 ## Argo 설치
 ```bash
+#참고 https://artifacthub.io/packages/helm/argo/argo-cd
 helm repo add argo-cd https://argoproj.github.io/argo-helm
-helm upgrade --install argo-cd argo-cd/argo-cd --namespace argo-cd --create-namespace \
- --set "configs.params.server\.insecure=true"
- 
+helm upgrade --install argo-cd argo-cd/argo-cd --namespace argo-cd --create-namespace -f argo-custom-values.yaml
 kubectl -n argo-cd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
-
 
 ```
 
