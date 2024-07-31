@@ -67,8 +67,6 @@ helm upgrade --install aws-load-balancer-controller eks/aws-load-balancer-contro
   --set "affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].topologyKey=kubernetes.io/hostname"
 ```
 
-
-
 ## Argo 설치
 ```bash
 
@@ -81,20 +79,8 @@ kubectl apply -f ./env/main/manifest/argo_ingress.yml
 configs:
   params:
     server:
-      insecure: true  
+      insecure: true
 
-```
-
-## NTH 설치
-```bash
-#참고 https://github.com/aws/aws-node-termination-handler
-helm upgrade --install --namespace kube-system aws-node-termination-handler oci://public.ecr.aws/aws-ec2/helm/aws-node-termination-handler --version v1.22.0 \
-  --set "serviceAccount.annotations.eks\.amazonaws\.com/role-arn=arn:aws:iam::$ACCOUNT_ID:role/irsa_karpenter_controller" \
-  --set "enableSqsTerminationDraining=true" \
-  --set "queueURL=" \
-  --set "awsRegion=ap-northerast-2" \
-  --set "checkASGTagBeforeDraining=false" \
-  --set "enableSpotInterruptionDraining=true"
 ```
 
 ## KEDA 설치
