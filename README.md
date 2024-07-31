@@ -50,6 +50,7 @@ kubectl apply -f ./env/main/manifest/PrivateNodePool.yml
 ## AWS-Load-Balancer-Controller 설치
 ### Karpenter NodePool 지정하여 생성
 ```bash
+#참고 https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.2/guide/ingress/annotations/
 
 helm repo add eks https://aws.github.io/eks-charts
 helm upgrade --install aws-load-balancer-controller eks/aws-load-balancer-controller --namespace kube-system --create-namespace \
@@ -67,17 +68,12 @@ helm upgrade --install aws-load-balancer-controller eks/aws-load-balancer-contro
 
 ## Argo 설치
 ```bash
-
 helm repo add argo-cd https://argoproj.github.io/argo-helm
-helm upgrade --install argo-cd argo-cd/argo-cd --namespace argo-cd --create-namespace -f custom-values.yaml
+helm upgrade --install argo-cd argo-cd/argo-cd --namespace argo-cd --create-namespace \
+ --set "configs.params.server\.insecure=true"
+ 
+kubectl -n argo-cd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
 
-kubectl apply -f ./env/main/manifest/argo_ingress.yml
-
-#custom-values.yml
-configs:
-  params:
-    server:
-      insecure: true
 
 ```
 

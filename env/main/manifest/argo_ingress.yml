@@ -9,6 +9,7 @@ metadata:
     alb.ingress.kubernetes.io/load-balancer-name: public-alb
     alb.ingress.kubernetes.io/subnets: dev-public-1, dev-public-2
     alb.ingress.kubernetes.io/group.name: shared-alb
+    alb.ingress.kubernetes.io/security-groups: dev_eks_ingress_sg
   finalizers:
     - ingress.k8s.aws/resources
   name: argocd-ingress
