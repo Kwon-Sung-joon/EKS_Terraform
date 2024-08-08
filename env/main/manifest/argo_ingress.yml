@@ -19,15 +19,6 @@ spec:
   rules:
     - http:
         paths:
-          - path: /argo
-            pathType: Prefix
-            backend:
-              service:
-                name: argo-cd-argocd-server
-                port:
-                  number: 80
-    - http:
-        paths:
           - path: /
             pathType: Prefix
             backend:

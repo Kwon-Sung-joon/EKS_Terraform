@@ -30,11 +30,11 @@ helm upgrade --install karpenter oci://public.ecr.aws/karpenter/karpenter --name
 --set "affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].weight=100" \
 --set "affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].preference.matchExpressions[0].key=karpenter.sh/nodepool" \
 --set "affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].preference.matchExpressions[0].operator=In" \
---set "affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].preference.matchExpressions[0].values[0]=dev-private-node" \
+--set "affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].preference.matchExpressions[0].values[0]=dev-private-node-on-demand" \
 --set "affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[1].weight=1" \
 --set "affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[1].preference.matchExpressions[0].key=eks.amazonaws.com/nodegroup" \
 --set "affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[1].preference.matchExpressions[0].operator=In" \
---set "affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[1].preference.matchExpressions[0].values[0]=dev_node_group_private" \
+--set "affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[1].preference.matchExpressions[0].values[0]=dev-private-node-on-demand" \
 --set "affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution=null"
 
 kubectl apply -f ./env/main/manifest/PrivateNodePool.yml
@@ -62,7 +62,16 @@ helm upgrade --install aws-load-balancer-controller eks/aws-load-balancer-contro
 #참고 https://artifacthub.io/packages/helm/argo/argo-cd
 helm repo add argo-cd https://argoproj.github.io/argo-helm
 helm upgrade --install argo-cd argo-cd/argo-cd --namespace argo-cd --create-namespace -f argo-custom-values.yaml
+
 kubectl -n argo-cd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+
+#argocd cli install
+# Download the binary
+curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
+rm argocd-linux-amd64
+
+argocd login http://argo-cd.com --username admin --password el2E3xR1J8rTLL5r --insecure
 
 ```
 

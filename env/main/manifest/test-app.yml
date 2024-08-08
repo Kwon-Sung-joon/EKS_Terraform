@@ -50,7 +50,6 @@ spec:
             limits:
               memory: "1G"
               cpu: "1"
-
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:

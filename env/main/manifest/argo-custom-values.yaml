@@ -1,11 +1,12 @@
 global:
+  domain: argo-cd.com
   affinity:
     nodeAffinity:
-        - matchExpressions:
-          - key: karpenter.sh/nodepool
-            operator: In
-            values:
-            - dev-private-node-on-demand
+        matchExpressions:
+        - key: karpenter.sh/nodepool
+          operator: In
+          values:
+          - dev-private-node-on-demand
 configs:
   params:
     server.insecure: true
@@ -20,11 +21,12 @@ server:
       alb.ingress.kubernetes.io/scheme: internet-facing
       alb.ingress.kubernetes.io/target-type: ip
       alb.ingress.kubernetes.io/backend-protocol: HTTP
+      alb.ingress.kubernetes.io/backend-protocol-version: HTTP1
       alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
       alb.ingress.kubernetes.io/load-balancer-name: public-alb
       alb.ingress.kubernetes.io/subnets: dev-public-1, dev-public-2
       alb.ingress.kubernetes.io/group.name: shared-alb
       alb.ingress.kubernetes.io/security-groups: dev_eks_ingress_sg
     aws:
-      serviceType: ClusterIP
       backendProtocolVersion: HTTP1
+      serviceType: ClusterIP
