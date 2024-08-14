@@ -402,7 +402,125 @@ locals {
         Owner = "ksj"
       }
     }
-
+    dev_irsa_cluster_autoscaler_policy = {
+      name = "dev_irsa_cluster_autoscaler_policy"
+      description = "irsa for ca "
+      policy = templatefile("${path.root}/template/ClusterAutoScalerPolicy.json", {})
+      tags = {
+        Name = "dev_irsa_cluster_autoscaler_policy"
+        Owner = "ksj"
+      }
+    }
+  }
+}
+#IAM_ROLE_IRSA
+locals {
+  DEV_IAM_ROLE_IRSA = {
+    irsa_aws_load_balancer_controller = {
+      name = "irsa_aws_load_balancer_controller"
+      tags = {
+        Name  = "irsa_aws_load_balancer_controller"
+        Owner = "ksj"
+      }
+      assume_role_policy = templatefile("${path.root}/template/EKS_IRSA_Trust_Policy.json",{
+        OIDC = "${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}"
+        NAMESPACE = "kube-system"
+        SERVICE_ACCOUNT = "aws-load-balancer-controller"
+      })
+      mgd_policies = [
+        module.iam_policy["dev_irsa_elb_controller_policy"].policy_arn
+      ]
+    }
+    irsa_karpenter_controller = {
+      name = "irsa_karpenter_controller"
+      tags = {
+        Name  = "irsa_karpenter_controller"
+        Owner = "ksj"
+      }
+      assume_role_policy = templatefile("${path.root}/template/EKS_IRSA_Trust_Policy.json",{
+        OIDC = "${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}"
+        NAMESPACE = "kube-system"
+        SERVICE_ACCOUNT = "karpenter"
+      })
+      mgd_policies = [
+        module.iam_policy["dev_irsa_karpenter_policy"].policy_arn
+      ]
+    }
+    irsa_efs_csi_driver = {
+      name = "irsa_efs_csi_driver"
+      tags = {
+        Name  = "irsa_efs_csi_driver"
+        Owner = "ksj"
+      }
+      assume_role_policy = templatefile("${path.root}/template/AWS_EFS_CSI_Driver_Trust_Policy.json",{
+        OIDC = "${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}"
+        NAMESPACE = "kube-system"
+        SERVICE_ACCOUNT = "efs-csi-*"
+      })
+      mgd_policies = [
+        "arn:aws:iam::aws:policy/service-role/AmazonEFSCSIDriverPolicy"
+      ]
+    }
+    irsa_ebs_csi_driver = {
+      name = "irsa_ebs_csi_driver"
+      tags = {
+        Name  = "irsa_ebs_csi_driver"
+        Owner = "ksj"
+      }
+      assume_role_policy = templatefile("${path.root}/template/AWS_EBS_CSI_Driver_Trust_Policy.json",{
+        OIDC = "${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}"
+        NAMESPACE = "kube-system"
+        SERVICE_ACCOUNT = "ebs-csi-controller-sa"
+      })
+      mgd_policies = [
+        "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+      ]
+    }
+    irsa_aws_prometheus = {
+      name = "amp-iamproxy-ingest-role"
+      tags = {
+        Name  = "irsa_aws_prometheus"
+        Owner = "ksj"
+      }
+      assume_role_policy = templatefile("${path.root}/template/EKS_IRSA_Trust_Policy.json",{
+        OIDC = "${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}"
+        NAMESPACE = "kube-system"
+        SERVICE_ACCOUNT = "aws-load-balancer-controller"
+      })
+      mgd_policies = [
+        module.iam_policy["dev_irsa_elb_controller_policy"].policy_arn
+      ]
+    }
+    irsa_keda = {
+      name = "irsa_keda"
+      tags = {
+        Name  = "irsa_keda"
+        Owner = "ksj"
+      }
+      assume_role_policy = templatefile("${path.root}/template/KEDA_IRSA_Trust_Policy.json",{
+        OIDC = "${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}"
+        NAMESPACE = "keda"
+        SERVICE_ACCOUNT = "keda-operator"
+      })
+      mgd_policies = [
+        "arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess"
+      ]
+    }
+    irsa_cluster_autoscaler = {
+      name = "irsa_cluster_autoscaler"
+      tags = {
+        Name  = "irsa_cluster_autoscaler"
+        Owner = "ksj"
+      }
+      assume_role_policy = templatefile("${path.root}/template/EKS_IRSA_Trust_Policy.json",{
+        OIDC = "${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}"
+        NAMESPACE = "kube-system"
+        SERVICE_ACCOUNT = "cluster-autoscaler"
+      })
+      mgd_policies = [
+        module.iam_policy["dev_irsa_cluster_autoscaler_policy"].policy_arn
+      ]
+    }
   }
 }
 #SECURIT GROUPS
@@ -705,101 +823,7 @@ locals {
     }
   }
 }
-#IAM_ROLE_IRSA
-locals {
-  DEV_IAM_ROLE_IRSA = {
-    irsa_aws_load_balancer_controller = {
-      name = "irsa_aws_load_balancer_controller"
-      tags = {
-        Name  = "irsa_aws_load_balancer_controller"
-        Owner = "ksj"
-      }
-      assume_role_policy = templatefile("${path.root}/template/EKS_IRSA_Trust_Policy.json",{
-        OIDC = "${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}"
-        NAMESPACE = "kube-system"
-        SERVICE_ACCOUNT = "aws-load-balancer-controller"
-      })
-      mgd_policies = [
-       module.iam_policy["dev_irsa_elb_controller_policy"].policy_arn
-      ]
-    }
-    irsa_karpenter_controller = {
-      name = "irsa_karpenter_controller"
-      tags = {
-        Name  = "irsa_karpenter_controller"
-        Owner = "ksj"
-      }
-      assume_role_policy = templatefile("${path.root}/template/EKS_IRSA_Trust_Policy.json",{
-        OIDC = "${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}"
-        NAMESPACE = "kube-system"
-        SERVICE_ACCOUNT = "karpenter"
-      })
-      mgd_policies = [
-        module.iam_policy["dev_irsa_karpenter_policy"].policy_arn
-      ]
-    }
-    irsa_efs_csi_driver = {
-      name = "irsa_efs_csi_driver"
-      tags = {
-        Name  = "irsa_efs_csi_driver"
-        Owner = "ksj"
-      }
-      assume_role_policy = templatefile("${path.root}/template/AWS_EFS_CSI_Driver_Trust_Policy.json",{
-        OIDC = "${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}"
-        NAMESPACE = "kube-system"
-        SERVICE_ACCOUNT = "efs-csi-*"
-      })
-      mgd_policies = [
-        "arn:aws:iam::aws:policy/service-role/AmazonEFSCSIDriverPolicy"
-      ]
-    }
-    irsa_ebs_csi_driver = {
-      name = "irsa_ebs_csi_driver"
-      tags = {
-        Name  = "irsa_ebs_csi_driver"
-        Owner = "ksj"
-      }
-      assume_role_policy = templatefile("${path.root}/template/AWS_EBS_CSI_Driver_Trust_Policy.json",{
-        OIDC = "${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}"
-        NAMESPACE = "kube-system"
-        SERVICE_ACCOUNT = "ebs-csi-controller-sa"
-      })
-      mgd_policies = [
-        "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
-      ]
-    }
-    irsa_aws_prometheus = {
-      name = "amp-iamproxy-ingest-role"
-      tags = {
-        Name  = "irsa_aws_prometheus"
-        Owner = "ksj"
-      }
-      assume_role_policy = templatefile("${path.root}/template/EKS_IRSA_Trust_Policy.json",{
-        OIDC = "${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}"
-        NAMESPACE = "kube-system"
-        SERVICE_ACCOUNT = "aws-load-balancer-controller"
-      })
-      mgd_policies = [
-        module.iam_policy["dev_irsa_elb_controller_policy"].policy_arn
-      ]
-    }
-    irsa_keda = {
-      name = "irsa_keda"
-      tags = {
-        Name  = "irsa_keda"
-        Owner = "ksj"
-      }
-      assume_role_policy = templatefile("${path.root}/template/KEDA_IRSA_Trust_Policy.json",{
-        OIDC = "${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}"
-        NAMESPACE = "keda"
-        SERVICE_ACCOUNT = "keda-operator"
-      })
-      mgd_policies = [
-        "arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess"
-      ]
-    }
-  }
-}
+
 #EKS CLUSTER ADDONS
 locals {
   DEV_EKS_CLUSTER_ADDONS = {

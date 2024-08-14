@@ -39,6 +39,22 @@ helm upgrade --install karpenter oci://public.ecr.aws/karpenter/karpenter --name
 
 kubectl apply -f ./env/main/manifest/PrivateNodePool.yml
 ```
+
+## ClusterAutoScaler 설치
+```bash
+helm repo add autoscaler https://kubernetes.github.io/autoscaler
+helm upgrade --install cluster-autoscaler autoscaler/cluster-autoscaler \
+  --namespace "kube-system" \
+  --set "autoDiscovery.clusterName=${EKS_CLUSTER_NAME}" \
+  --set "awsRegion=${AWS_REGION}" \
+  --set "image.tag=v${CLUSTER_AUTOSCALER_IMAGE_TAG}" \
+  --set "rbac.serviceAccount.name=cluster-autoscaler" \
+  --set "rbac.serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"="$CLUSTER_AUTOSCALER_ROLE" \
+  --wait
+
+```
+
+
 ## AWS-Load-Balancer-Controller 설치
 ### Karpenter NodePool 지정하여 생성
 ```bash
