@@ -31,3 +31,49 @@ spec:
 #  - name: test-volume
 #    persistentVolumeClaim:
 #      claimName: test-pvc
+
+
+
+
+
+#efs
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: efs-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    path: /path/to/efs
+    server: fs-0137e7ad458d437b4.efs.ap-northeast-2.amazonaws.com
+  storageClassName: efs-sc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: efs-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-app
+spec:
+  containers:
+    - name: test-app
+      image: nginx
+      volumeMounts:
+        - mountPath: /mnt/efs
+          name: efs-storage
+  volumes:
+    - name: efs-storage
+      persistentVolumeClaim:
+        claimName: efs-pvc
