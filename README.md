@@ -46,8 +46,7 @@ helm repo add autoscaler https://kubernetes.github.io/autoscaler
 helm upgrade --install cluster-autoscaler autoscaler/cluster-autoscaler \
   --namespace "kube-system" \
   --set "autoDiscovery.clusterName=${EKS_CLUSTER_NAME}" \
-  --set "awsRegion=${AWS_REGION}" \
-  --set "image.tag=v${CLUSTER_AUTOSCALER_IMAGE_TAG}" \
+  --set "awsRegion=ap-northeast-2" \
   --set "rbac.serviceAccount.name=cluster-autoscaler" \
   --set "rbac.serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"="$CLUSTER_AUTOSCALER_ROLE" \
   --wait

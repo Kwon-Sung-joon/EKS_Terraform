@@ -5,7 +5,8 @@ metadata:
 provisioner: ebs.csi.aws.com
 parameters:
   type: gp3
-reclaimPolicy: Retain
+  encrypted: "true" | "false"
+reclaimPolicy: Retain | Delete | Recycle
 volumeBindingMode: WaitForFirstConsumer
 
 ---
@@ -26,7 +27,7 @@ spec:
 #spec.containers.volumeMounts:
 #  - mountPath: /data
 #    name: test-volume
-#volumes:
+#spec.volumes
 #  - name: test-volume
 #    persistentVolumeClaim:
 #      claimName: test-pvc
