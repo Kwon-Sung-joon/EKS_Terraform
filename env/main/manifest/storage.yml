@@ -1,7 +1,7 @@
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: ebs-sc
+  name: test-sc
 provisioner: ebs.csi.aws.com
 parameters:
   type: gp3
@@ -12,11 +12,21 @@ volumeBindingMode: WaitForFirstConsumer
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: ebs-gp3-argo-server
+  name: test-pvc
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
       storage: 10Gi
-  storageClassName: ebs-sc
+  storageClassName: test-sc
+
+
+#mount pvc
+#spec.containers.volumeMounts:
+#  - mountPath: /data
+#    name: test-volume
+#volumes:
+#  - name: test-volume
+#    persistentVolumeClaim:
+#      claimName: test-pvc
