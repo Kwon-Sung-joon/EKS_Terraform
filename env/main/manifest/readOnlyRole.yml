@@ -1,0 +1,39 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: read-only
+rules:
+  - apiGroups:
+      - '*'
+    resources:
+      - '*'
+    verbs:
+      - get
+      - list
+      - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: read-only
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: read-only
+subjects:
+  - kind: Group
+    name: read-only
+    apiGroup: rbac.authorization.k8s.io
+---
+#aws-auth configmap
+apiVersion: v1
+data:
+  mapRoles: |
+    null
+  mapUsers: |
+    ...
+    - groups:
+      - read-only
+      userarn:  arn:aws:iam::751732153713:user/test
+      username: test
+kind: ConfigMap

@@ -20,7 +20,7 @@ kubectl apply -f metrics-server.yml
 
 ## Karpenter 설치
 ```bash
-helm upgrade --install karpenter oci://public.ecr.aws/karpenter/karpenter --namespace kube-system --create-namespace \
+helm upgrade --install karpenter oci://public.ecr.aws/karpenter/karpenter --version 0.37.0 --namespace kube-system --create-namespace \
 --set "serviceAccount.annotations.eks\.amazonaws\.com/role-arn=arn:aws:iam::$ACCOUNT_ID:role/irsa_karpenter_controller" \
 --set settings.clusterName=dev_cluster_1 \
 --set settings.interruptionQueue=dev_karpenter_1_sqs \
@@ -77,7 +77,6 @@ helm upgrade --install aws-load-balancer-controller eks/aws-load-balancer-contro
 #참고 https://artifacthub.io/packages/helm/argo/argo-cd
 helm repo add argo-cd https://argoproj.github.io/argo-helm
 helm upgrade --install argo-cd argo-cd/argo-cd --namespace argo-cd --create-namespace -f argo-custom-values.yaml
-
 kubectl -n argo-cd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
 
 #argocd cli install
@@ -85,7 +84,6 @@ kubectl -n argo-cd get secret argocd-initial-admin-secret -o jsonpath="{.data.pa
 curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
 sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
 rm argocd-linux-amd64
-
 argocd login http://argo-cd.com --username admin --password el2E3xR1J8rTLL5r --insecure
 
 ```
