@@ -85,7 +85,9 @@ curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/lat
 sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
 rm argocd-linux-amd64
 argocd login http://argo-cd.com --username admin --password el2E3xR1J8rTLL5r --insecure
+argocd account update-password
 
+argocd repo add https://Git주소 --username <계정> --password 로그인키등록
 ```
 
 ## KEDA 설치
