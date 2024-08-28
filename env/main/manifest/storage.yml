@@ -37,43 +37,50 @@ spec:
 
 
 #efs
+#pv.yaml
+---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: efs-pv
 spec:
   capacity:
-    storage: 1Gi
+    storage: 5Gi
+  volumeMode: Filesystem
   accessModes:
-    - ReadWriteMany
-  nfs:
-    path: /path/to/efs
-    server: fs-0137e7ad458d437b4.efs.ap-northeast-2.amazonaws.com
-  storageClassName: efs-sc
+    - ReadWriteOnce
+  storageClassName: ""
+  persistentVolumeReclaimPolicy: Retain
+  csi:
+    driver: efs.csi.aws.com
+    volumeHandle: fs-073d77123471b2917
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: efs-pvc
+  name: efs-claim
 spec:
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
+  storageClassName: ""
   resources:
     requests:
-      storage: 1Gi
+      storage: 5Gi
 ---
 apiVersion: v1
 kind: Pod
 metadata:
-  name: test-app
+  name: efs-app
 spec:
   containers:
-    - name: test-app
-      image: nginx
+    - name: app
+      image: centos
+      command: ["/bin/sh"]
+      args: ["-c", "while true; do echo $(date -u) >> /data/out.txt; sleep 2; done"]
       volumeMounts:
-        - mountPath: /mnt/efs
-          name: efs-storage
+        - name: persistent-storage
+          mountPath: /data
   volumes:
-    - name: efs-storage
+    - name: persistent-storage
       persistentVolumeClaim:
-        claimName: efs-pvc
+        claimName: efs-claim
