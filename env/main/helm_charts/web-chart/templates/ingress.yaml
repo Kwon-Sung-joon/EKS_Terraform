@@ -4,12 +4,9 @@ metadata:
   name: {{ .Values.ingress.name }}
   namespace: {{ .Values.namespace.name }}
   annotations:
-    alb.ingress.kubernetes.io/load-balancer-name: public-alb
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/subnets: dev-public-1, dev-public-2
-    alb.ingress.kubernetes.io/healthcheck-path: /actuator/health
-    alb.ingress.kubernetes.io/group.name: shared-alb
+    {{- with .Values.ingress.annotations }}
+      {{ toYaml . | nindent 4 }}
+      {{- end }}
 spec:
   ingressClassName: alb
   rules:

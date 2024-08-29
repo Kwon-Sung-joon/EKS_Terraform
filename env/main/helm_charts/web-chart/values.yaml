@@ -1,5 +1,5 @@
 namespace:
-  name: test-app
+  name: test-web
 
 service:
   name: test-web
@@ -38,3 +38,4 @@ ingress:
     alb.ingress.kubernetes.io/subnets: dev-public-1, dev-public-2
     alb.ingress.kubernetes.io/healthcheck-path: /actuator/health
     alb.ingress.kubernetes.io/group.name: shared-alb
+    alb.ingress.kubernetes.io/security-groups: dev_eks_ingress_sg
