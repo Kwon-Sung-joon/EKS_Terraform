@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.configmap.name }}
+  namespace: {{ .Values.namespace.name }}
+data:
+  nginx.conf: |
+    {{ .Values.configmap.config | indent 4 }}
