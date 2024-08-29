@@ -19,7 +19,11 @@ spec:
           imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.service.port }}
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
       volumes:
         - name: nginx-config
           configMap:
-            name: {{ include "}}
+            name: {{ .Values.configmap.name }}

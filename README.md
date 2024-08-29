@@ -105,15 +105,31 @@ helm upgrade --install keda kedacore/keda \
 
 ```
 
-## Istio 설치
+## Observability
 ```bash
+# prometheus
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 
-helm repo add istio https://istio-release.storage.googleapis.com/charts
-kubectl create namespace istio-system
-helm upgrade --install istio-base istio/base -n istio-system --create-namespace
-helm upgrade --install istiod istio/istiod -n istio-system --create-namespace
-helm upgrade --install istio-ingressgateway istio/gateway -n istio-ingress --create-namespace
+helm upgrade --install prometheus prometheus-community/prometheus \
+    --namespace prometheus \
+    --create-namespace \
+    --set alertmanager.persistentVolume.storageClass="gp3" \
+    --set server.persistentVolume.storageClass="gp3"
 
-kubectl rollout restart deployment istio-ingress -n istio-ingress
+kubectl apply -f prometheus-server-ingress.yml 
 
+
+# grafana
+helm repo add grafana https://grafana.github.io/helm-charts
+
+helm upgrade --install grafana grafana/grafana \
+    --namespace grafana --create-namespace \
+    --set persistence.storageClassName="gp3" \
+    --set persistence.enabled=true \
+    --set adminPassword='admin0!' \
+    -f grafana.yaml
+
+#Pixie
 ```
+
+
