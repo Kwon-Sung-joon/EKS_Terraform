@@ -9,23 +9,31 @@ deployment:
   name: test-web
   replicas: 2
   image:
-    repository: 672956273056.dkr.ecr.ap-northeast-2.amazonaws.com/ksj-apps
-    tag: spring-8080-x64-v2
+    repository: nginx
+    tag: latest
     pullPolicy: Always
+
+backend:
+  name: test-app
+  namespace: test-app
 
 configmap:
   name: nginx-config
   config: |
-    server {
+    events {
+      worker_connections 1024;
+    }
+    http {
+      server {
         listen 80;
-
         location / {
-            proxy_pass http://test-app.test-app.svc.cluster.local;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
-        }
+          proxy_pass http://test-app.test-app.svc.cluster.local:8080;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+       } 
+     }
     }
 
 
@@ -35,7 +43,6 @@ ingress:
     alb.ingress.kubernetes.io/load-balancer-name: public-alb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/subnets: dev-public-1, dev-public-2
+    alb.ingress.kubernetes.io/subnets: subnet1, subnet2
     alb.ingress.kubernetes.io/healthcheck-path: /actuator/health
     alb.ingress.kubernetes.io/group.name: shared-alb
-    alb.ingress.kubernetes.io/security-groups: dev_eks_ingress_sg

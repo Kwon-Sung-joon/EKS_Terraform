@@ -114,5 +114,6 @@ helm upgrade --install istio-base istio/base -n istio-system --create-namespace
 helm upgrade --install istiod istio/istiod -n istio-system --create-namespace
 helm upgrade --install istio-ingressgateway istio/gateway -n istio-ingress --create-namespace
 
+kubectl rollout restart deployment istio-ingress -n istio-ingress
 
 ```
