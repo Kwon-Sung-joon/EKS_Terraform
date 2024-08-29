@@ -13,10 +13,6 @@ deployment:
     tag: spring-8080-x64-v2
     pullPolicy: Always
 
-backend:
-  name: test-app
-  namespace: test-app
-
 configmap:
   name: nginx-config
   config: |
@@ -24,7 +20,7 @@ configmap:
         listen 80;
 
         location / {
-            proxy_pass http://{{ .Values.backend.name }}.{{ .Values.backend.namespace }}.svc.cluster.local;
+            proxy_pass http://test-app.test-app.svc.cluster.local;
             proxy_set_header Host $host;
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

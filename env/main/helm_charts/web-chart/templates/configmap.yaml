@@ -5,4 +5,4 @@ metadata:
   namespace: {{ .Values.namespace.name }}
 data:
   nginx.conf: |
-    {{ .Values.configmap.config | indent 4 }}
+    {{ .Values.configmap.config | nindent 4 }}
