@@ -72,6 +72,26 @@ helm upgrade --install aws-load-balancer-controller eks/aws-load-balancer-contro
   --set "affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution[0].topologyKey=kubernetes.io/hostname"
 ```
 
+## Nginx Ingress Controller 설치
+
+```bash
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+
+#custom_values.yml
+controller:
+  service:
+    annotations:
+      service.beta.kubernetes.io/aws-load-balancer-name: "nlb-name"
+      service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
+      service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
+      service.beta.kubernetes.io/aws-load-balancer-type: nlb
+      service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp
+      service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: '60'
+
+helm upgrade -i ingress-nginx ingress-nginx/ingress-nginx  --namespace kube-system -f custom_values.yml
+```
+
+
 ## Argo 설치
 ```bash
 #참고 https://artifacthub.io/packages/helm/argo/argo-cd
