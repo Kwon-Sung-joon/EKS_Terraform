@@ -531,68 +531,19 @@ locals {
       description = "eks-node-sg"
       vpc_id = module.vpc["dev_vpc_1"].vpc_id
       ingress = {
-        inbound_80 = {
+        inbound_tcp = {
           cidr_ipv4   = "0.0.0.0/0"
-          from_port   = 80
+          from_port   = 0
           ip_protocol = "tcp"
-          to_port     = 80
-          description = "inbound_80"
+          to_port     = 65535
+          description = "inbound_tcp"
         }
-        inbound_443 = {
+        inbound_dns = {
           cidr_ipv4   = "0.0.0.0/0"
-          from_port   = 443
-          ip_protocol = "tcp"
-          to_port     = 443
-          description = "inbound_443"
-        }
-        inbound_9443 = {
-          cidr_ipv4   = "0.0.0.0/0"
-          from_port   = 9443
-          ip_protocol = "tcp"
-          to_port     = 9443
-          description = "inbound_9443"
-        }
-        inbound_8080 = {
-          cidr_ipv4   = "0.0.0.0/0"
-          from_port   = 8080
-          ip_protocol = "tcp"
-          to_port     = 8080
-          description = "inbound_8080"
-        }
-        inbound_10250 = {
-          cidr_ipv4   = "0.0.0.0/0"
-          from_port   = 10250
-          ip_protocol = "tcp"
-          to_port     = 10250
-          description = "inbound_10250"
-        }
-        inbound_10250 = {
-          cidr_ipv4   = "0.0.0.0/0"
-          from_port   = 10250
-          ip_protocol = "tcp"
-          to_port     = 10250
-          description = "inbound_10250"
-        }
-        inbound_8081 = {
-          cidr_ipv4   = "0.0.0.0/0"
-          from_port   = 8081
-          ip_protocol = "tcp"
-          to_port     = 8081
-          description = "inbound_8081"
-        }
-        inbound_8000 = {
-          cidr_ipv4   = "0.0.0.0/0"
-          from_port   = 8000
-          ip_protocol = "tcp"
-          to_port     = 8000
-          description = "inbound_8000"
-        }
-        inbound_6379 = {
-          cidr_ipv4   = "0.0.0.0/0"
-          from_port   = 6379
-          ip_protocol = "tcp"
-          to_port     = 6379
-          description = "inbound_6379"
+          from_port   = 53
+          ip_protocol = "udp"
+          to_port     = 53
+          description = "inbound_dns"
         }
       }
       egress = {
@@ -602,6 +553,13 @@ locals {
           ip_protocol = "tcp"
           to_port     = 65535
           description = "outbound_any"
+        }
+        outbound_dns = {
+          cidr_ipv4   = "0.0.0.0/0"
+          from_port   = 53
+          ip_protocol = "udp"
+          to_port     = 53
+          description = "outbound_dns"
         }
       }
       tags= {
@@ -648,19 +606,12 @@ locals {
       description = "dev_eks_cluster_sg"
       vpc_id = module.vpc["dev_vpc_1"].vpc_id
       ingress = {
-        inbound_80 = {
+        inbound_tcp = {
           cidr_ipv4   = "0.0.0.0/0"
-          from_port   = 80
+          from_port   = 0
           ip_protocol = "tcp"
-          to_port     = 80
-          description = "inbound_80"
-        }
-        inbound_443 = {
-          cidr_ipv4   = "0.0.0.0/0"
-          from_port   = 443
-          ip_protocol = "tcp"
-          to_port     = 443
-          description = "inbound_443"
+          to_port     = 65535
+          description = "inbound_tcp"
         }
       }
       egress = {
@@ -670,6 +621,13 @@ locals {
           ip_protocol = "tcp"
           to_port     = 65535
           description = "outbound_any"
+        }
+        outbound_dns = {
+          cidr_ipv4   = "0.0.0.0/0"
+          from_port   = 53
+          ip_protocol = "udp"
+          to_port     = 53
+          description = "outbound_dns"
         }
       }
       tags= {
