@@ -46,3 +46,4 @@ ingress:
     alb.ingress.kubernetes.io/subnets: subnet1, subnet2
     alb.ingress.kubernetes.io/healthcheck-path: /actuator/health
     alb.ingress.kubernetes.io/group.name: shared-alb
+    alb.ingress.kubernetes.io/success-codes: 200-302
