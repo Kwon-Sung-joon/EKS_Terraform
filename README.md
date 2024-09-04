@@ -108,7 +108,24 @@ argocd login http://argo-cd.com --username admin --password el2E3xR1J8rTLL5r --i
 argocd account update-password
 
 argocd repo add https://Git주소 --username <계정> --password 로그인키등록
+
 ```
+## Argo Image Update 설치
+```bash
+helm repo add argo https://argoproj.github.io/argo-helm
+helm upgrade --install argocd-image-updater argo/argocd-image-updater  --namespace argo-cd --create-namespace -f argocd-image-updater-custom-value.yml
+
+#ArgoCD Account 생성, RBAC 권한 부여 후 토큰 발급하여 secret 생성
+#ArgoCD Application Annotation 설정
+#argocd-image-updater.argoproj.io/image-list = test-app=<ACCOUNT-ID>.dkr.ecr.ap-northeast-2.amazonaws.com/test
+#argocd-image-updater.argoproj.io/test-app.helm.image-name=deployment.image.name <Helm 변수>
+#argocd-image-updater.argoproj.io/test-app.helm.image-tag=deployment.image.tag <Helm 변수>
+#argocd-image-updater.argoproj.io/test-app.update-strategy=newest-build
+
+
+```
+
+
 
 ## KEDA 설치
 ```bash
@@ -148,7 +165,6 @@ helm upgrade --install grafana grafana/grafana \
     --set persistence.enabled=true \
     --set adminPassword='admin0!' \
     -f grafana.yaml
-
 #Pixie
 ```
 
