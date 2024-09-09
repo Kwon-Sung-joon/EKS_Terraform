@@ -8,7 +8,8 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/subnets: dev-public-1, dev-public-2
-    alb.ingress.kubernetes.io/healthcheck-path: /
+    alb.ingress.kubernetes.io/healthcheck-path: /graph
+    alb.ingress.kubernetes.io/success-codes: 200-302
     alb.ingress.kubernetes.io/group.name: shared-alb
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":9090}]'
     alb.ingress.kubernetes.io/security-groups: dev_eks_ingress_sg
