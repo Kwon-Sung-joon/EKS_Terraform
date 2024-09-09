@@ -11,9 +11,11 @@ configs:
   params:
     server.insecure: true
 notifications:
+  secret:
+    slack-token: <YOUR-TOKEN>
   notifiers:
     service.slack: |
-      token: $your-token
+      token: $slack-token
 server:
   ingress:
     enabled: true
