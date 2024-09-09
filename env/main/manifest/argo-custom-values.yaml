@@ -10,7 +10,10 @@ global:
 configs:
   params:
     server.insecure: true
-
+notifications:
+  notifiers:
+    service.slack: |
+      token: $your-token
 server:
   ingress:
     enabled: true
