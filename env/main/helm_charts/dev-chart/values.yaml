@@ -1,0 +1,63 @@
+namespace:
+  name: dev-front
+
+service:
+  name: dev-front
+  port: 8080
+
+deployment:
+  name: dev-front
+  replicas: 2
+  rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  image:
+    name: <image>
+    tag: latest
+    pullPolicy: Always
+  livenessProbe:
+    httpGet:
+      path: /actuator/health
+      port: 8080
+    failureThreshold: 3
+    periodSeconds: 20
+  readinessProbe:
+    httpGet:
+      path: /actuator/health
+      port: 8080
+    initialDelaySeconds: 5
+    periodSeconds: 3
+    failureThreshold: 3
+
+ingress:
+  name: test-web
+  annotations:
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/backend-protocol-version: HTTP1
+    alb.ingress.kubernetes.io/group.name: internal-alb
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP":80}]'
+    alb.ingress.kubernetes.io/healthcheck-path: /
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+    alb.ingress.kubernetes.io/certificate-arn: <acm>
+    alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=30
+    alb.ingress.kubernetes.io/target-type: ip
+  rules:
+  - host: dev-test.com
+    http:
+      paths:
+        - backend:
+            service:
+              name: dev-front
+              port:
+                number: 8080
+          path: /
+          pathType: Prefix
+  - http:
+      paths:
+        - backend:
+            service:
+              name: dev-front
+              port:
+                number: 8080
+          path: /login
+          pathType: Prefix
