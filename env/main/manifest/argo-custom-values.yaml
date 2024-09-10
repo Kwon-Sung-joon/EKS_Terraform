@@ -10,6 +10,7 @@ global:
 configs:
   params:
     server.insecure: true
+  timeout.reconciliation: 10s
 notifications:
   secret:
     slack-token: <YOUR-TOKEN>
