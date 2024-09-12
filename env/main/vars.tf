@@ -151,6 +151,7 @@ variable "helm_release" {
   type = map(object({
     chart = any
     name = string
+    values = any
     set = any
     create_namespace = bool
   }))
@@ -808,6 +809,7 @@ locals {
   DEV_HELM = {
     dev_karpenter_chart = {
       repository = "oci://public.ecr.aws/karpenter"
+      values=[]
       chart = "karpenter"
       namespace = "kube-system"
       name  = "karpenter"
@@ -818,11 +820,11 @@ locals {
         },
         {
           name  = "settings.clusterName"
-          value = "dev_cluster_1"
+          value = "eks-front-dev"
         },
         {
           name  = "settings.interruptionQueue"
-          value = "dev_karpenter_1_sqs"
+          value = "eks-front-dev"
         },
         {
           name  = "settings.featureGates.drift"
@@ -890,6 +892,7 @@ locals {
     dev_load_balancer_controller_chart = {
       repository = "https://aws.github.io/eks-charts"
       chart = "aws-load-balancer-controller"
+      values=[]
       namespace = "kube-system"
       name  = "aws-load-balancer-controller"
       set   = [
@@ -899,7 +902,7 @@ locals {
         },
         {
           name  = "clusterName"
-          value = "dev_cluster_1"
+          value = "eks-front-dev"
         },
         {
           name  = "affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].key"
@@ -932,7 +935,41 @@ locals {
       ]
       create_namespace = true
     }
+    dev_argo-cd = {
+      repository = "https://argoproj.github.io/argo-helm"
+      chart = "argo-cd"
+      namespace = "kube-system"
+      name  = "argo-cd"
+      values=[file("${path.root}/manifest/argo-custom-values.yaml")]
+      create_namespace = true
     }
+    dev_argocd-image-updater = {
+      repository = "https://argoproj.github.io/argo-helm"
+      chart = "argocd-image-updater"
+      namespace = "kube-system"
+      name  = "argocd-image-updater"
+      values=["./env/main/manifest/argo-image-updater-custom-value.yaml"]
+      create_namespace = true
+    }
+    dev_prometheus = {
+      repository = "https://prometheus-community.github.io/helm-charts"
+      values=[]
+      chart = "prometheus"
+      namespace = "prometheus"
+      name  = "prometheus"
+      create_namespace = true
+      set   = [
+        {
+          name  = "alertmanager.enabled"
+          value = "false"
+        },
+        {
+          name  = "server.persistentVolume.storageClass"
+          value = "gp3"
+        }
+      ]
+    }
+  }
 }
 #K8S MANIFEST
 locals {
