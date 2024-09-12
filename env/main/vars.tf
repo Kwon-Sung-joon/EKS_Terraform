@@ -1,6 +1,3 @@
-variable "account_id" {
-  default = "672956273056"
-}
 variable "dev_name_tag" {
   default = "dev"
 }
@@ -982,3 +979,4 @@ locals {
     }
   }
 }
+
