@@ -4,6 +4,7 @@ resource "helm_release" "release" {
   name  = var.helm_release_config.name
   namespace = var.helm_release_config.namespace
   values = [var.helm_release_config.values]
+  upgrade_install = var.helm_release_config.upgrade_install
   dynamic "set" {
     for_each = var.helm_release_config.set
     content {

@@ -148,6 +148,7 @@ variable "helm_release" {
   type = map(object({
     chart = any
     name = string
+    upgrade_install = bool
     values = any
     set = any
     create_namespace = bool
@@ -808,6 +809,7 @@ locals {
       repository = "oci://public.ecr.aws/karpenter"
       values=[]
       chart = "karpenter"
+      upgrade_install=true
       namespace = "kube-system"
       name  = "karpenter"
       set   = [
@@ -891,6 +893,7 @@ locals {
       chart = "aws-load-balancer-controller"
       values=[]
       namespace = "kube-system"
+      upgrade_install=true
       name  = "aws-load-balancer-controller"
       set   = [
         {
@@ -937,6 +940,7 @@ locals {
       chart = "argo-cd"
       namespace = "kube-system"
       name  = "argo-cd"
+      upgrade_install=true
       values=[file("${path.root}/manifest/argo-custom-values.yaml")]
       create_namespace = true
     }
@@ -946,11 +950,13 @@ locals {
       namespace = "kube-system"
       name  = "argocd-image-updater"
       values=["./env/main/manifest/argo-image-updater-custom-value.yaml"]
+      upgrade_install=true
       create_namespace = true
     }
     dev_prometheus = {
       repository = "https://prometheus-community.github.io/helm-charts"
       values=[]
+      upgrade_install=true
       chart = "prometheus"
       namespace = "prometheus"
       name  = "prometheus"
