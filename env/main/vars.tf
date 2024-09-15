@@ -1,3 +1,7 @@
+variable "account_id" {
+  default = "<ACCOUNT_ID>"
+}
+
 variable "dev_name_tag" {
   default = "dev"
 }
@@ -815,7 +819,7 @@ locals {
       set   = [
         {
           name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-          value = "arn:aws:iam::<ACCOUNT_ID>:role/irsa_karpenter_controller"
+          value = "arn:aws:iam::${var.account_id}:role/irsa_karpenter_controller"
         },
         {
           name  = "settings.clusterName"
@@ -898,7 +902,7 @@ locals {
       set   = [
         {
           name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-          value = "arn:aws:iam::<ACCOUNT_ID>:role/irsa_aws_load_balancer_controller"
+          value = "arn:aws:iam::${var.account_id}:role/irsa_aws_load_balancer_controller"
         },
         {
           name  = "clusterName"
@@ -971,6 +975,16 @@ locals {
           value = "gp3"
         }
       ]
+    }
+    dev_fluent_bit = {
+      repository = "https://aws.github.io/eks-charts"
+      chart = "aws-for-fluent-bit"
+      namespace = "kube-system"
+      name  = "aws-for-fluent-bit"
+      upgrade_install=true
+      values=[file("${path.root}/manifest/fluent-bit.yml")]
+      create_namespace = true
+      set = []
     }
   }
 }
