@@ -911,6 +911,10 @@ locals {
       name  = "aws-load-balancer-controller"
       set   = [
         {
+          name = "vpcId"
+          value = module.vpc["dev_vpc_1"].vpc_id
+        },
+        {
           name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
           value = "arn:aws:iam::${var.account_id}:role/irsa_aws_load_balancer_controller"
         },
