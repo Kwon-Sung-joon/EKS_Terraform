@@ -156,6 +156,7 @@ variable "helm_release" {
     upgrade_install=bool
     set = any
     create_namespace = bool
+    version= any
   }))
   default = {}
 }
@@ -819,6 +820,7 @@ locals {
     dev_karpenter_chart = {
       repository = "oci://public.ecr.aws/karpenter"
       values=[]
+      version=""
       chart = "karpenter"
       upgrade_install=true
       namespace = "kube-system"
@@ -902,6 +904,7 @@ locals {
     dev_load_balancer_controller_chart = {
       repository = "https://aws.github.io/eks-charts"
       chart = "aws-load-balancer-controller"
+      version=""
       values=[]
       namespace = "kube-system"
       upgrade_install=true
@@ -950,6 +953,7 @@ locals {
       repository = "https://argoproj.github.io/argo-helm"
       chart = "argo-cd"
       namespace = "kube-system"
+      version=""
       name  = "argo-cd"
       upgrade_install=true
       values=[file("${path.root}/manifest/argo-custom-values.yaml")]
@@ -959,6 +963,7 @@ locals {
       repository = "https://argoproj.github.io/argo-helm"
       chart = "argocd-image-updater"
       namespace = "kube-system"
+      version=""
       name  = "argocd-image-updater"
       values=["./env/main/manifest/argo-image-updater-custom-value.yaml"]
       upgrade_install=true
@@ -968,6 +973,7 @@ locals {
       repository = "https://prometheus-community.github.io/helm-charts"
       values=[]
       upgrade_install=true
+      version=""
       chart = "prometheus"
       namespace = "prometheus"
       name  = "prometheus"
@@ -988,6 +994,7 @@ locals {
       chart = "aws-for-fluent-bit"
       namespace = "kube-system"
       name  = "aws-for-fluent-bit"
+      version=""
       upgrade_install=true
       values=[file("${path.root}/manifest/fluent-bit.yml")]
       create_namespace = true
