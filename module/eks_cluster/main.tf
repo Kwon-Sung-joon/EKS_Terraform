@@ -13,6 +13,10 @@ resource "aws_eks_cluster" "eks-cluster" {
     service_ipv4_cidr = var.eks_cluster_config.service_ipv4_cidr
   }
   tags = var.eks_cluster_config.tags
+  access_config {
+    authentication_mode                         = "API_AND_CONFIG_MAP"
+    bootstrap_cluster_creator_admin_permissions = true
+  }
 
   provisioner "local-exec" {
     command = <<-EOT
