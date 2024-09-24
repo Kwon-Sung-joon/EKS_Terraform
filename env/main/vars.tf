@@ -152,7 +152,6 @@ variable "helm_release" {
   type = map(object({
     chart = any
     name = string
-    upgrade_install = bool
     values = any
     upgrade_install=bool
     set = any
@@ -430,6 +429,7 @@ locals {
         OIDC = "${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}"
         NAMESPACE = "kube-system"
         SERVICE_ACCOUNT = "aws-load-balancer-controller"
+        ACCOUNT_ID=""
       })
       mgd_policies = [
         module.iam_policy["dev_irsa_elb_controller_policy"].policy_arn
@@ -445,6 +445,7 @@ locals {
         OIDC = "${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}"
         NAMESPACE = "kube-system"
         SERVICE_ACCOUNT = "karpenter"
+        ACCOUNT_ID=""
       })
       mgd_policies = [
         module.iam_policy["dev_irsa_karpenter_policy"].policy_arn
@@ -460,6 +461,7 @@ locals {
         OIDC = "${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}"
         NAMESPACE = "kube-system"
         SERVICE_ACCOUNT = "efs-csi-*"
+        ACCOUNT_ID=""
       })
       mgd_policies = [
         "arn:aws:iam::aws:policy/service-role/AmazonEFSCSIDriverPolicy"
@@ -475,6 +477,7 @@ locals {
         OIDC = "${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}"
         NAMESPACE = "kube-system"
         SERVICE_ACCOUNT = "ebs-csi-controller-sa"
+        ACCOUNT_ID=""
       })
       mgd_policies = [
         "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
@@ -490,6 +493,7 @@ locals {
         OIDC = "${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}"
         NAMESPACE = "kube-system"
         SERVICE_ACCOUNT = "aws-load-balancer-controller"
+        ACCOUNT_ID=""
       })
       mgd_policies = [
         module.iam_policy["dev_irsa_elb_controller_policy"].policy_arn
@@ -505,6 +509,7 @@ locals {
         OIDC = "${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}"
         NAMESPACE = "keda"
         SERVICE_ACCOUNT = "keda-operator"
+        ACCOUNT_ID=""
       })
       mgd_policies = [
         "arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess"
@@ -520,6 +525,7 @@ locals {
         OIDC = "${module.eks_cluster["dev_cluster_1"].cluster_oidc_without_url}"
         NAMESPACE = "kube-system"
         SERVICE_ACCOUNT = "cluster-autoscaler"
+        ACCOUNT_ID=""
       })
       mgd_policies = [
         module.iam_policy["dev_irsa_cluster_autoscaler_policy"].policy_arn
