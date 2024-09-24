@@ -1,3 +1,7 @@
+variable "account_id" {
+  default = "<ACCOUNT_ID>"
+}
+
 variable "dev_name_tag" {
   default = "dev"
 }
@@ -148,6 +152,7 @@ variable "helm_release" {
   type = map(object({
     chart = any
     name = string
+    upgrade_install = bool
     values = any
     upgrade_install=bool
     set = any
@@ -809,12 +814,13 @@ locals {
       repository = "oci://public.ecr.aws/karpenter"
       values=[]
       chart = "karpenter"
+      upgrade_install=true
       namespace = "kube-system"
       name  = "karpenter"
       set   = [
         {
           name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-          value = "arn:aws:iam::<ACCOUNT_ID>:role/irsa_karpenter_controller"
+          value = "arn:aws:iam::${var.account_id}:role/irsa_karpenter_controller"
         },
         {
           name  = "settings.clusterName"
@@ -892,11 +898,12 @@ locals {
       chart = "aws-load-balancer-controller"
       values=[]
       namespace = "kube-system"
+      upgrade_install=true
       name  = "aws-load-balancer-controller"
       set   = [
         {
           name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-          value = "arn:aws:iam::<ACCOUNT_ID>:role/irsa_aws_load_balancer_controller"
+          value = "arn:aws:iam::${var.account_id}:role/irsa_aws_load_balancer_controller"
         },
         {
           name  = "clusterName"
@@ -938,6 +945,7 @@ locals {
       chart = "argo-cd"
       namespace = "kube-system"
       name  = "argo-cd"
+      upgrade_install=true
       values=[file("${path.root}/manifest/argo-custom-values.yaml")]
       create_namespace = true
     }
@@ -947,11 +955,13 @@ locals {
       namespace = "kube-system"
       name  = "argocd-image-updater"
       values=["./env/main/manifest/argo-image-updater-custom-value.yaml"]
+      upgrade_install=true
       create_namespace = true
     }
     dev_prometheus = {
       repository = "https://prometheus-community.github.io/helm-charts"
       values=[]
+      upgrade_install=true
       chart = "prometheus"
       namespace = "prometheus"
       name  = "prometheus"
@@ -966,6 +976,16 @@ locals {
           value = "gp3"
         }
       ]
+    }
+    dev_fluent_bit = {
+      repository = "https://aws.github.io/eks-charts"
+      chart = "aws-for-fluent-bit"
+      namespace = "kube-system"
+      name  = "aws-for-fluent-bit"
+      upgrade_install=true
+      values=[file("${path.root}/manifest/fluent-bit.yml")]
+      create_namespace = true
+      set = []
     }
   }
 }

@@ -1,0 +1,12 @@
+cloudWatchLogs:
+  region: "ap-northeast-2"
+  logGroupName: "/aws/eks-front-dev/fluentbit-logs/"
+  logRetentionDays: 7
+  metricNamespace: eks-frond-dev-fluentbit
+  logStreamTemplate: $kubernetes['pod_name'].$kubernetes['container_name']
+  #logKey: log
+
+
+input:
+  enabled: true
+  path: /var/log/containers/*.log
