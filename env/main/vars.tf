@@ -149,6 +149,7 @@ variable "helm_release" {
     chart = any
     name = string
     values = any
+    upgrade_install=bool
     set = any
     create_namespace = bool
   }))
