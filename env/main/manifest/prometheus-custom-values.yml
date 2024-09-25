@@ -1,0 +1,35 @@
+alertmanager:
+  enabled: false
+
+server:
+  persistentVolume:
+    storageClass: gp3
+    size: 100Gi
+  affinity:
+    nodeAffinity:
+      matchExpressions:
+        - key: karpenter.sh/nodepool
+          operator: In
+          values:
+            - system
+  ingress:
+    enabled: true
+    ingressClassName: alb
+    annotations:
+      alb.ingress.kubernetes.io/backend-protocol: HTTP
+      alb.ingress.kubernetes.io/load-balancer-name: eks-front-prod-internal-alb
+      alb.ingress.kubernetes.io/backend-protocol-version: HTTP1
+      alb.ingress.kubernetes.io/group.name: internal-alb
+      alb.ingress.kubernetes.io/healthcheck-path: /graph
+      alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+      alb.ingress.kubernetes.io/certificate-arn: <your-acm>
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":9090}]'
+      alb.ingress.kubernetes.io/subnets: NAT-Private_WAS_C_mig, NAT-Private_WAS_A_mig
+      alb.ingress.kubernetes.io/security-groups: eks_front_prod_eks_internal_ingress_sg
+      alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=30
+      alb.ingress.kubernetes.io/target-type: ip
+      alb.ingress.kubernetes.io/success-codes: 200,302
+    hosts:
+      - prometheus.test.com
+    path: /
+    pathType: Prefix
