@@ -1,7 +1,8 @@
 # EKS_Terraform
 
 - Terraform 기반 EKS 구성  
-![image](https://github.com/user-attachments/assets/8d1ccd36-6719-4381-acd5-607c17607c8f)
+![image](https://github.com/user-attachments/assets/1b370bdb-91e5-4e77-941d-938c5ceeb72e)
+
 
 
 ## 사전 조건
