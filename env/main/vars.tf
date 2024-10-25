@@ -1006,15 +1006,3 @@ locals {
     }
   }
 }
-#K8S MANIFEST
-locals {
-  DEV_K8S_MANIFEST = {
-    dev_k8s_metrics = {
-      manifest = file("${path.root}/manifest/metrics-server.yaml")
-    }
-    dev_karpenter_private_nodepool = {
-      manifest = file("${path.root}/manifest/PrivateNodePool.yml")
-    }
-  }
-}
-
