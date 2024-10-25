@@ -11,12 +11,26 @@
 - S3 및 DynamoDB를 사용한 Terraform Backend 구성
 - ECR 및 테스트 앱
 
+## 디렉토리 구성
+- env : terraform 백엔드 및 main 파일 구성
+- module : terraform 커스텀 모듈 및 manifest 구성
+
 ## 모듈 변수 구성
-- 각 모듈의 구성의 변수는 map(object({})) 타입으로 구성
+- 각 모듈 구성의 변수는 map(object({})) 타입으로 구성
 
-## metrics 서버 배포
-```bash
-cd ./env/main/manifest
-kubectl apply -f metrics-server.yml
+## helm 구성
+- Karpenter
+- AWS Load Balancer Controller
+- ArgoCD
+- ArgoCD Image Updater
+- Promethues
+- Fluent Bit
+
+## 사용 방법
+
+- module.helm_release 의 local 변수 중 Karpenter를 제외 한 나머지 변수는 주석 처리 하여 최초 terraform apply
+```text
+최초 apply 후 karpenter 구성 전은 AutoScalingGroup 및 EC2 Launch Template을 사용하기 떄문에
+초기 구성 이후 NodePool, EC2NodeClass 설정을 통하여 Karpenter 노드 구성 
 ```
-
+- module.eks_node_group 주석 처리 후 최초 apply 시 주석 처리 한 module.helm_release의 local 변수 주석 해제 후 terraform apply

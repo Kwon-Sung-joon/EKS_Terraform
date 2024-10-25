@@ -79,7 +79,6 @@ module "launch_template" {
   ]
 }
 
-
 module "eks_node_group" {
   source = "../../module/eks_node_groups"
   for_each = merge(var.eks_node_group,local.DEV_EKS_NODE_GROUP)
@@ -131,21 +130,9 @@ module "helm_release" {
   helm_release_config = each.value
   depends_on = [module.k8s_karpenter]
 }
-/*
-## it takes 15 minutes to create addon
+
 module "eks_cluster_addons" {
   source = "../../module/eks_cluster_add_on"
   for_each = merge(var.dev_eks_cluster_addons,local.DEV_EKS_CLUSTER_ADDONS)
   eks_cluster_addon_config = each.value
-}
-
-
-*/
-
-##K8S Resources
-module "k8s_manifest" {
-  source = "../../module/k8s_manifest"
-  for_each = merge(var.k8s_manifest,local.DEV_K8S_MANIFEST)
-  k8s_manifest_config = each.value
-  #depends_on = [module.helm_release]
 }
