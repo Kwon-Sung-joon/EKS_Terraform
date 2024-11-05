@@ -1004,5 +1004,16 @@ locals {
       create_namespace = true
       set = []
     }
+    k8s_dashboard = {
+      repository = "https://kubernetes.github.io/dashboard"
+      chart = "kubernetes-dashboard"
+      namespace = "kubernetes-dashboard"
+      version="7.8.0"
+      name  = "kubernetes-dashboard"
+      upgrade_install=true
+      values=[file("${path.root}/manifest/kubernetes-dashboard.yaml")]
+      create_namespace = true
+      set = []
+    }
   }
 }

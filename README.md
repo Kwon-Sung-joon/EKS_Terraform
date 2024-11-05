@@ -34,3 +34,16 @@
 초기 구성 이후 NodePool, EC2NodeClass 설정을 통하여 Karpenter 노드 구성 
 ```
 - module.eks_node_group 주석 처리 후 최초 apply 시 주석 처리 한 module.helm_release의 local 변수 주석 해제 후 terraform apply
+
+
+
+## Kubernetes Dashboard Install
+```bash
+kubectl apply -f kubernetes-dashboard-token.yml -n kubernetes-dashboard
+
+kubectl get secret dashboard-user -n kubernetes-dashboard -o jsonpath={".data.token"} | base64 -d
+#해당 값으로 configmap/kubernetes-dashboard-proxy 수정
+
+kubectl apply -f kubernetes-dashboard-proxy.yml -n kubernetes-dashboard
+
+```
