@@ -558,7 +558,7 @@ server:
       alb.ingress.kubernetes.io/group.name: internal-alb
       alb.ingress.kubernetes.io/security-groups: eks_front_dev_eks_ingress_sg
       alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=30
-      alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:751732153713:certificate/992d3936-6301-45eb-b062-ef0f501f7ed5
+      #alb.ingress.kubernetes.io/certificate-arn:
     aws:
       backendProtocolVersion: HTTP1
       serviceType: ClusterIP
